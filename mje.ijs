@@ -17,7 +17,6 @@ NB.cocurrent'mje'
 coinsert 'kvm' [ load 'tangentstorm/j-kvm'
 load 'tok.ijs data/sqlite'
 load'tangentstorm/j-kvm/ui'
-load'code-edit.ijs'
 load'worlds.ijs'
 
 NB. todo: move this to kvm
@@ -37,7 +36,7 @@ load '~/ver/j-talks/preztool/org.ijs'
 NB. org_slides defines locale variables: title=:.. and slides=:..
 open =: {{
   emit_vm_ =: ]
-  org_slides org_path=: 'e3/sandpiles-j.org'
+  org_slides org_path=: '~/ver/j-talks/e3/sandpiles-j.org'
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
   index =: 0 0 $ 0
   world =: ,<'WORLD0'

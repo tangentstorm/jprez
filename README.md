@@ -38,4 +38,4 @@ install'github:tangentstorm/j-kvm@work'  NB. dev branch. not main!!
 Code for the dependencies are at:
 
   * http://github.com/tangentstorm/j-lex/
-  * http://github.com/tangentstorm/j-kvm/branches/work
+  * https://github.com/tangentstorm/j-kvm/tree/work

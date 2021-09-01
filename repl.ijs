@@ -24,4 +24,4 @@ macro =: 'h_h_h_h_h_h_h__l_l_l_lh_h_h_h_h_______________________________________
 
 do__ed macro
 
-render__app loop_kvm_ >ed
+step__app loop_kvm_ >ed

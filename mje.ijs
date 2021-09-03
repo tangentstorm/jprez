@@ -5,7 +5,12 @@ NB. over to my new console-based libraries, token editor
 NB. components, etc. It is something of a scratchpad and
 NB. not well organized at the moment, but important enough
 NB. that I should probably have it under version control.
-(<'z') copath 'base'
+(<'z') copath 'base' NB. clear previous path
+coinsert 'kvm' [ load 'tangentstorm/j-kvm'
+load 'tok.ijs data/sqlite'
+load'tangentstorm/j-kvm/ui'
+load'worlds.ijs'
+load 'tangentstorm/j-lex org.ijs'
 
 copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
@@ -13,11 +18,6 @@ copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 dbg 1
 
 NB. main code
-NB.cocurrent'mje'
-coinsert 'kvm' [ load 'tangentstorm/j-kvm'
-load 'tok.ijs data/sqlite'
-load'tangentstorm/j-kvm/ui'
-load'worlds.ijs'
 
 NB. todo: move this to kvm
 cocurrent 'kvm'
@@ -30,8 +30,6 @@ db =: sqlopen_psqlite_'~/b4/sql/syndir.sdb'
 cocurrent'base'
 
 NB. org-mode stuff
-load 'tangentstorm/j-lex'
-load '~/ver/j-talks/preztool/org.ijs'
 
 NB. org_slides defines locale variables: title=:.. and slides=:..
 open =: {{

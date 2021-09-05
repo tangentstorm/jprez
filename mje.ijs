@@ -63,7 +63,7 @@ open =: {{
   NB. emit_vm_ =: emit0_vm_
   0 0$0}}
 
-
+
 open''
 echo<'done loading j-talk. press enter.'
 rkey''
@@ -83,15 +83,22 @@ list =: 'UiList' conew~ heads
 H__list =: (ymax'')-Y_META
 XY__list =: 0,Y_META
 
+NB. the detailed text of the screenplay (also macro commands)
 cmds =: 'UiList' conew~ a:
 W__cmds =: (xmax'')-32
 H__cmds =: 32
 XY__cmds =: 33 0 + XY__list
+V__cmds =: 0
 
 NB. ted is the token editor in the 'on-camera' repl
 ted =: 'TokEd' conew~ ''
 H__ted =: 1
 W__ted =: W_HIST-3
+
+NB. led is the line editor for editing a line of text in the outline
+led =: 'UiEditWidget' conew~ ''
+XY__led =: XY__cmds
+W__led =: W__cmds
 
 NB. except for now, i will just use a normal editor for editing the repl.
 NB. this is just to avoid blocking video production until the token
@@ -100,12 +107,6 @@ red =: 'UiEditWidget' conew~ ''
 V__red =: 0
 H__red =: 1
 W__red =: W_HIST-3
-
-NB. led is the line editor for editing the text
-led =: 'UiEditWidget' conew~ ''
-XY__led =: XY__cmds
-W__led =: W__cmds
-V__led =: 0
 
 hist =: 'UiWidget' conew~ ''
 H__hist =: H_HIST
@@ -142,7 +143,7 @@ draw_hist =: {{
     goxy X_HIST, line_index
     puts RESET,(>line),RESET,CEOL
   end. }}
-
+
 render__hist =: {{
   red =. red_base_ [ ted =. ted_base_
   cmds =. cmds_base_
@@ -196,7 +197,7 @@ edrepl =: {{
   V__red =: R__red =: 1 NB.[ MODE__ted =: 'i'
   C__red =: 0 [ B__red =: 2}.>val__cmds__BASE''
   keymode__BASE 'replkeys' }}
-
+
 insline =: edline@'' put_text@'' @ ins__cmds@''
 k_O =: insline
 k_o =: insline@fwd__cmds

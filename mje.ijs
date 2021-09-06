@@ -88,7 +88,6 @@ cmds =: 'UiList' conew~ a:
 W__cmds =: (xmax'')-32
 H__cmds =: 32
 XY__cmds =: 33 0 + XY__list
-V__cmds =: 0
 
 NB. ted is the token editor in the 'on-camera' repl
 ted =: 'TokEd' conew~ ''
@@ -99,6 +98,7 @@ NB. led is the line editor for editing a line of text in the outline
 led =: 'UiEditWidget' conew~ ''
 XY__led =: XY__cmds
 W__led =: W__cmds
+V__led =: 0
 
 NB. except for now, i will just use a normal editor for editing the repl.
 NB. this is just to avoid blocking video production until the token
@@ -131,37 +131,34 @@ render__editor =: {{
     end.
   end. R =: 0 }}
 
+
 hist_lines =: {{
   w =. world pick~ index I. C__list, C__cmds
   NB. H_HIST-1 to leave one line at bottom for next repl input
   (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
 
-draw_hist =: {{
-  NB. the repl output includes vt escape codes because of j-kvm/vm,
-  NB. and I do not yet have a parser for these.
-  for_line. hist_lines'' do.
-    goxy X_HIST, line_index
-    puts RESET,(>line),RESET,CEOL
-  end. }}
-
 render__hist =: {{
   red =. red_base_ [ ted =. ted_base_
   cmds =. cmds_base_
   NB. draw token editor on the last line
   XY__red =: XY__ted =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB. 3-space prompt
   if. ':' {.@E. val =. >val__cmds'' do. B__ted =: jcut_jlex_ 2}.val
-  else. B__ted =: a: end. }}
+  else. B__ted =: a: end.
+
+  NB. draw actual history
+  for_line. hist_lines_base_'' do.
+    reset''
+    goxy 0, line_index
+    vputs >line
+  end.
+  R =: 0 }}
 
 app =: (editor,list,cmds,hist,ted,red,led) conew 'UiApp'
-
-draw_app =: {{
-  render__app''
-  draw_hist'' }}
 
 
 NB. keyboard control
 goto =: {{
- R__editor =: 1
+ R__editor =: R__hist =: 1
  L__cmds =: text cur =: y
  S__cmds =: C__cmds =: 0 }}
 
@@ -209,11 +206,15 @@ k_k =: k_p =: {{
   if. (at0__cmds > at0__list)'' do.
     goto bak__list''
     goz__cmds''
-  else. bak__cmds'' end. }}
+  else. bak__cmds'' end.
+  R__hist =: 1
+  }}
 
 k_j =: k_n =: {{
   if. atz__cmds'' do. goto fwd__list''
-  else. fwd__cmds'' end. }}
+  else. fwd__cmds'' end.
+  R__hist =: 1
+  }}
 
 k_N =: {{
   if. -. a: = cmd =. val__cmds'' do.
@@ -271,10 +272,9 @@ copop''
 NB. event loop
 mje =: {{
   9!:29]0  NB. disable infinite loop on error
-  NB. clear the display
+  goto 0 NB. slide 0
   cscr @ bg 24 [ curs 0
-  draw_app goto 0
-  draw_app loop_kvm_'base'
+  render__app loop_kvm_'base'
   reset''
   0$0}}
 

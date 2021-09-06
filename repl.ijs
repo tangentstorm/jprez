@@ -11,8 +11,13 @@ XY__ted =: 3 0
 
 render__ed =: {{
   cscr'' [ bg BG [ fg FG
-  B__ted =: jcut_jlex_ B
-  render__ted''
+  try.
+    B__ted =: jcut_jlex_ B
+    render__ted''
+  catch.
+    goxy 0 0
+    puts B
+  end.
   render_cursor ''
   bg BG [ fg FG  }}
 

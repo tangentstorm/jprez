@@ -37,8 +37,7 @@ open =: {{
   org_slides org_path=: '~/ver/j-talks/e3/sandpiles-j.org'
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
   index =: 0 0 $ 0
-  world =: ,<'WORLD0'
-  ihist =: iline =: ''
+  world =: ,<'WORLD0' NB. so we can see HISTL0/HISTL1 in (i{world)
   init_world_''
   for_slide. slides do. i =. slide_index
     for_line. text i do. j =. line_index
@@ -48,8 +47,6 @@ open =: {{
           if. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
             NB. TODO : execute macro
           else.
-            ihist =: ihist,<line
-            iline =: line_index
             ehlen =. #ehist_world_     NB. length of the history
             exec_world_ line           NB. execute code in repl
             ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_

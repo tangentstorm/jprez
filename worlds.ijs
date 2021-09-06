@@ -59,6 +59,7 @@ exec =: {{ NB. run code in the current 'world'
   NB. so.. we will rewrite 'x','y', etc to ('y'in_world_)...
   NB. BUT we do NOT want to dot this inside a direct definition, so
   NB. we use 'depth' as a mask.
+  ihist =: ihist,<y
   try.
     exec_mut =. ('=:';'=.')&(+./@e.) exec_toks =. ;: y
     exec_toks =.  ]`('=:'"_)@.('=.'&-:)L:0 exec_toks

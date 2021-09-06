@@ -33,7 +33,11 @@ accept =: {{
 
 NB. B__ed =: '{{ i. y }}"0 ] 5'
 NB. macro =: '$XXXXXXXXXXXXXXXX?hello world?b?,?$'
-cocurrent'base'
-repl =: 'UiRepl' conew~ ''
-app_z_ =: 'UiApp' conew~ ,repl   NB. in z so loop_kvm can see it
-step__app loop_kvm_ >ed__repl
+
+NB. standalone app (if not inside 'load' from some other file)
+{{y
+  cocurrent'base'
+  repl =: 'UiRepl' conew~ ''
+  app_z_ =: 'UiApp' conew~ ,repl   NB. in z so loop_kvm can see it
+  step__app loop_kvm_ >ed__repl
+}}^:('repl.ijs' {.@E.&.|. >{.}.ARGV)''

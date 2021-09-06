@@ -6,16 +6,12 @@ NB. components, etc. It is something of a scratchpad and
 NB. not well organized at the moment, but important enough
 NB. that I should probably have it under version control.
 (<'z') copath 'base' NB. clear previous path
-coinsert 'kvm' [ load 'tangentstorm/j-kvm'
-load 'tok.ijs data/sqlite'
-load'tangentstorm/j-kvm/ui'
-load'worlds.ijs'
-load 'tangentstorm/j-lex org.ijs'
+load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
+load'worlds.ijs org.ijs tok.ijs'
+coinsert 'kvm'
 
 copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
-
-dbg 1
 
 NB. main code
 
@@ -26,7 +22,6 @@ cwc=. [: [:^:(16=]) 'krgybmcwKRGYBMCW' i. ]
 ischr=. 2 = 3!:0
 cwfg=: ([: fgc cwc^:ischr) f.
 cwbg=: ([: bgc cwc^:ischr) f.
-db =: sqlopen_psqlite_'~/b4/sql/syndir.sdb'
 cocurrent'base'
 
 NB. org-mode stuff

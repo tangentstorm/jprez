@@ -36,9 +36,8 @@ render =: {{
   if. MJE do.  NB. mje-specific features
     cmds =. cmds_base_
     NB. draw token editor on the last line
-    XY__ed =: =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB.   3-space prompt
-    if. ':' {.@E. val =. >val__cmds'' do. B__ted =: jcut_jlex_ 2}.val
-    else. B__ted =: a: end.
+    XY__ed =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB. 3-space prompt
+    if. ': ' {.@E. val =. >val__cmds'' do. B__ed =: 2}.val end.
     NB. draw actual history
     for_line. hist_lines_base_'' do.
       reset''

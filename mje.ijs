@@ -7,7 +7,7 @@ NB. not well organized at the moment, but important enough
 NB. that I should probably have it under version control.
 (<'z') copath 'base' NB. clear previous path
 load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
-load'worlds.ijs org.ijs tok.ijs'
+load'worlds.ijs org.ijs tok.ijs repl.ijs'
 coinsert 'kvm'
 
 copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
@@ -32,7 +32,7 @@ open =: {{
   org_slides org_path=: '~/ver/j-talks/e3/sandpiles-j.org'
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
   index =: 0 0 $ 0
-  world =: ,<'WORLD0' NB. so we can see HISTL0/HISTL1 in (i{world)
+  olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
   init_world_''
   for_slide. slides do. i =. slide_index
     for_line. text i do. j =. line_index
@@ -48,7 +48,7 @@ open =: {{
           end.
         end.
         index =: index, i,j
-        world =: world,<this_world_''
+        olw =: olw,<this_world_''
       end.
     end.
   end.
@@ -81,10 +81,6 @@ W__cmds =: (xmax'')-32
 H__cmds =: 32
 XY__cmds =: 33 0 + XY__list
 
-NB. ted is the token editor in the 'on-camera' repl
-ted =: 'TokEd' conew~ ''
-H__ted =: 1
-W__ted =: W_HIST-3
 
 NB. led is the line editor for editing a line of text in the outline
 led =: 'UiEditWidget' conew~ ''
@@ -92,18 +88,12 @@ XY__led =: XY__cmds
 W__led =: W__cmds
 V__led =: 0
 
-NB. except for now, i will just use a normal editor for editing the repl.
-NB. this is just to avoid blocking video production until the token
-NB. editor is working.
-red =: 'UiEditWidget' conew~ ''
-V__red =: 0
-H__red =: 1
-W__red =: W_HIST-3
-
-hist =: 'UiWidget' conew~ ''
-H__hist =: H_HIST
-W__hist =: W_HIST
-XY__hist=: X_HIST,0
+repl =: 'UiRepl' conew~ ''
+H__repl =: H_HIST
+W__repl =: W_HIST
+XY__repl=: X_HIST,0
+MJE__repl =: 1
+red =: ed__repl
 
 editor =: 'UiWidget' conew~ ''
 XY__editor =: 0 0
@@ -124,33 +114,20 @@ render__editor =: {{
   end. R =: 0 }}
 
 
+NB. returns the list of echo history lines that should currently
+NB. appear on the screen, based on the cursor positions within the
+NB. outline.
 hist_lines =: {{
-  w =. world pick~ index I. C__list, C__cmds
+  w =. olw pick~ index I. C__list, C__cmds
   NB. H_HIST-1 to leave one line at bottom for next repl input
   (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
 
-render__hist =: {{
-  red =. red_base_ [ ted =. ted_base_
-  cmds =. cmds_base_
-  NB. draw token editor on the last line
-  XY__red =: XY__ted =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB. 3-space prompt
-  if. ':' {.@E. val =. >val__cmds'' do. B__ted =: jcut_jlex_ 2}.val
-  else. B__ted =: a: end.
-
-  NB. draw actual history
-  for_line. hist_lines_base_'' do.
-    reset''
-    goxy 0, line_index
-    vputs >line
-  end.
-  R =: 0 }}
-
-app =: (editor,list,cmds,hist,ted,red,led) conew 'UiApp'
+app =: (editor,list,cmds,led,repl) conew 'UiApp'
 
 
 NB. keyboard control
 goto =: {{
- R__editor =: R__hist =: 1
+ R__editor =: R__repl =: 1
  L__cmds =: text cur =: y
  S__cmds =: C__cmds =: 0 }}
 
@@ -183,7 +160,7 @@ edline =: {{
   keymode__BASE 'edkeys'}}
 
 edrepl =: {{
-  V__red =: R__red =: 1 NB.[ MODE__ted =: 'i'
+  V__red =: R__red =: 1
   C__red =: 0 [ B__red =: 2}.>val__cmds__BASE''
   keymode__BASE 'replkeys' }}
 
@@ -199,13 +176,13 @@ k_k =: k_p =: {{
     goto bak__list''
     goz__cmds''
   else. bak__cmds'' end.
-  R__hist =: 1
+  R__repl =: 1
   }}
 
 k_j =: k_n =: {{
   if. atz__cmds'' do. goto fwd__list''
   else. fwd__cmds'' end.
-  R__hist =: 1
+  R__repl =: 1
   }}
 
 k_N =: {{
@@ -245,7 +222,7 @@ red =: red__BASE
 
 kc_m =: {{
   keymode__BASE 'outkeys'
-  V__red =: 0 [ R__red =: R__hist =: 1
+  V__red =: 0 [ R__red =: R__repl =: 1
   NB. TODO:
 }}
 

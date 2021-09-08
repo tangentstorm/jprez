@@ -2,27 +2,50 @@ NB. repl ui widget, including history display
 load 'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
 load 'tok.ijs worlds.ijs'
 
+coclass 'UiSyntaxLine' extends 'UiEditWidget'
+
+create =: {{
+  create_UiEditWidget_ f. y
+  ted =: '' conew 'TokEd'  NB. for syntax highlighting
+}}
+
+render =: {{
+  bg BG [ fg FG
+  try.
+    B__ted =: jcut_jlex_ B
+    render__ted y
+  catch.
+    render_UiEditWidget_ f. y
+  end.
+  render_cursor '' }}
+
 coclass 'UiRepl' extends 'UiWidget'
 coinsert 'kvm'
 
 create =: {{
   'H W' =: gethw_vt_''
-  ed =: conew 'UiEditWidget'
-  ted =: '' conew 'TokEd'  NB. for syntax highlighting
-  XY__ed =: XY__ted =: 0 0  NB. initial position of prompt
+  MJE =: 0
+  ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted editor
+  XY__ed =: 3 0  NB. initial position of prompt
   kc_m__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
   0 0$0 }}
 
 render =: {{
-  bg BG__ed [ fg FG__ed
-  try.
-    B__ted =: jcut_jlex_ B__ed
-    render__ted''
-  catch.
-    render__ed''
+  if. MJE do.  NB. mje-specific features
+    cmds =. cmds_base_
+    NB. draw token editor on the last line
+    XY__ed =: =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB.   3-space prompt
+    if. ':' {.@E. val =. >val__cmds'' do. B__ted =: jcut_jlex_ 2}.val
+    else. B__ted =: a: end.
+    NB. draw actual history
+    for_line. hist_lines_base_'' do.
+      reset''
+      goxy 0, line_index
+      vputs >line
+    end.
   end.
-  render_cursor__ed ''
-  bg BG__ed [ fg FG__ed  }}
+  termdraw__ed''
+  R =: 1 }}
 
 NB. event handler for accepting the finished input line
 accept =: {{

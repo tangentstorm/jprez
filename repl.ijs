@@ -30,6 +30,8 @@ create =: {{
   kc_m__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
   0 0$0 }}
 
+update =: {{ R =: R +. R__ed }}
+
 render =: {{
   if. MJE do.  NB. mje-specific features
     cmds =. cmds_base_

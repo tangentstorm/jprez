@@ -176,13 +176,13 @@ k_k =: k_p =: {{
     goto bak__list''
     goz__cmds''
   else. bak__cmds'' end.
-  R__repl =: 1
+  R__red =: 1
   }}
 
 k_j =: k_n =: {{
   if. atz__cmds'' do. goto fwd__list''
   else. fwd__cmds'' end.
-  R__repl =: 1
+  R__red =: 1
   }}
 
 k_N =: {{

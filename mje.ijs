@@ -89,7 +89,7 @@ W__led =: W__cmds
 V__led =: 0
 
 repl =: 'UiRepl' conew~ ''
-H__repl =: H_HIST
+H__repl =: H_HIST+1
 W__repl =: W_HIST
 XY__repl=: X_HIST,0
 MJE__repl =: 1
@@ -101,6 +101,31 @@ H__editor =: H_HIST
 W__editor =: X_HIST-2
 
 
+
+NB. allow changing the repl line as we navigate through the outline
+new_repl_line =: {{
+  if. ': ' {.@E. val =. >val__cmds'' do. 2}.val else. '' end. }}
+
+A__repl =: 1
+OLD__repl =: ''
+update__repl =: {{
+  R =: R +. R__ed
+  new =. new_repl_line_base_''
+  if. -. new -: OLD do.
+    setval__ed OLD =: new
+    R =: 1
+  end. }}
+
+hist_lines =: {{
+  NB. returns the list of echo history lines that should currently
+  NB. appear on the screen, based on the cursor positions within the
+  NB. outline.
+  w =. olw pick~ index I. C__list, C__cmds
+  NB. H_HIST-1 to leave one line at bottom for next repl input
+  (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
+
+hist_lines__repl =: {{ hist_lines_base_''}}
+
 render__editor =: {{
   cc =. code_base_ cur_base_
   NB. draw the code editor
@@ -112,15 +137,6 @@ render__editor =: {{
       if. line ~: a: do.  (put_tok_TokEd_ :: ]) L:1 "1 > line end.
     end.
   end. R =: 0 }}
-
-
-NB. returns the list of echo history lines that should currently
-NB. appear on the screen, based on the cursor positions within the
-NB. outline.
-hist_lines =: {{
-  w =. olw pick~ index I. C__list, C__cmds
-  NB. H_HIST-1 to leave one line at bottom for next repl input
-  (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
 
 app =: (editor,list,cmds,led,repl) conew 'UiApp'
 
@@ -211,6 +227,8 @@ kc_e =: eol__led
 kc_b =: bak__led
 kc_f =: fwd__led
 kc_t =: swp__led
+kc_a =: bol__led
+kc_k =: keol__led
 
 copop''
 
@@ -229,10 +247,12 @@ kc_m =: {{
 k_asc =: {{ R__red =: 1 [ ins__red y }}
 kc_d =: del__red
 kc_h =: k_bksp =: bsp__red
-kc_e =: eol__red
 kc_b =: bak__red
 kc_f =: fwd__red
 kc_t =: swp__red
+kc_e =: eol__red
+kc_a =: bol__red
+kc_k =: keol__red
 
 copop''
 
@@ -243,7 +263,7 @@ mje =: {{
   9!:29]0  NB. disable infinite loop on error
   goto 0 NB. slide 0
   cscr @ bg 24 [ curs 0
-  render__app loop_kvm_'base'
+  step__app loop_kvm_'base'
   reset''
   0$0}}
 

@@ -24,7 +24,6 @@ coinsert 'kvm'
 
 create =: {{
   'H W' =: gethw_vt_''
-  MJE =: 0
   ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted editor
   XY__ed =: 3 0  NB. initial position of prompt
   kc_m__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
@@ -32,27 +31,26 @@ create =: {{
 
 update =: {{ R =: R +. R__ed }}
 
+NB. make this work after we start scrolling.
+hist_lines =: {{
+  if. -.*#ehist_world_ do. return. 0$a:  end.
+  (H-1) {. ('HISTL1' in_world_)~ {. ehist_world_ }}
+
 render =: {{
-  if. MJE do.  NB. mje-specific features
-    cmds =. cmds_base_
-    NB. draw token editor on the last line
-    XY__ed =: 3 0 + X_HIST_base_, #hist_lines_base_'' NB. 3-space prompt
-    if. ': ' {.@E. val =. >val__cmds'' do. B__ed =: 2}.val end.
-    NB. draw actual history
-    for_line. hist_lines_base_'' do.
-      reset''
-      goxy 0, line_index
-      vputs >line
-    end.
+  hist =. hist_lines''
+  for_line. hist do.
+    reset''
+    goxy 0, line_index
+    vputs :. ] >line
   end.
-  termdraw__ed''
-  R =: 1 }}
+  NB. draw line editor / prompt on the last line, with 3-space prompt
+  XY__ed =: 3 0 + (0, # hist)
+  termdraw__ed'' }}
 
 NB. event handler for accepting the finished input line
 accept =: {{
   exec_world_ B__ed
-  setval__ed'' [ R__ed =: 1
-  break_kvm_ =: 1 }}
+  setval__ed'' [ R =: R__ed =: 1 }}
 
 
 NB. B__ed =: '{{ i. y }}"0 ] 5'
@@ -61,6 +59,7 @@ NB. macro =: '$XXXXXXXXXXXXXXXX?hello world?b?,?$'
 NB. standalone app (if not inside 'load' from some other file)
 {{y
   cocurrent'base'
+  init_world_''
   repl =: 'UiRepl' conew~ ''
   app_z_ =: 'UiApp' conew~ ,repl   NB. in z so loop_kvm can see it
   step__app loop_kvm_ >ed__repl

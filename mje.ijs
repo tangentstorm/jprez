@@ -15,6 +15,8 @@ copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
 NB. main code
 
+ORG_PATH =: './screenplay.org'
+
 NB. todo: move this to kvm
 cocurrent 'kvm'
 NB. 'colorwrite' stuff
@@ -29,7 +31,7 @@ NB. org-mode stuff
 NB. org_slides defines locale variables: title=:.. and slides=:..
 open =: {{
   emit_vm_ =: ]
-  org_slides org_path=: '~/ver/j-talks/e3/sandpiles-j.org'
+  org_slides org_path=: ORG_PATH
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
   index =: 0 0 $ 0
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)

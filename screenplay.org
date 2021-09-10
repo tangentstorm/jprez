@@ -1,0 +1,45 @@
+#+title: demo screenplay
+
+* j-kvm demo
+
+** first slide
+#+begin_src j
+'sx sy' =. % 50 32 [ 'w h' =. 240 80
+mb =: |.|:8-+/2>|(z+*:)^:(<8) z =: (}:sy*i:-:h) j./~ 1-~ sx * (<.w%_3)+i.w
+pal =: (3#256)#: dfh;.1' 0 ffffff ffd21d b28f00 400fe8 1d2799 000055 000033'
+pal vm mb
+#+end_src
+
+** line-by-line demo
+#+begin_src j
+NB. having installed J from http://jsoftware.com/
+install'github:tangentstorm/j-kvm@work'
+#+end_src
+
+# Text without : is the spoken part
+
+Hello, and welcome to my demo.
+
+** once it's loaded
+
+Here's how you load the "viewmat" part of j-kvm.
+
+Viewmat is short for "view matrix" and comes with J, but
+here we are adapting it to work in the terminal.
+
+# text with : shows up in the REPL
+: load 'tangentstorm/j-kvm/vm'
+
+Here's a boolean matrix:
+
+: vm ~:/\^:(<32) 32#1  NB. sierpinski triangle
+
+Here's one with multiple values:
+
+: vm i. 5 5            NB. normal viewmat colors
+
+* another section
+
+
+** slide 1
+** slide 2

@@ -34,14 +34,15 @@ update =: {{ R =: R +. R__ed }}
 NB. make this work after we start scrolling.
 hist_lines =: {{
   if. -.*#ehist_world_ do. return. 0$a:  end.
-  (H-1) {. ('HISTL1' in_world_)~ {. ehist_world_ }}
+  h =. (#ehist_world_) <. H-2
+  (-h) {. ('HISTL1' in_world_)~ {. ehist_world_ }}
 
 render =: {{
   hist =. hist_lines''
   for_line. hist do.
     reset''
     goxy 0, line_index
-    vputs :. ] >line
+    vputs >line
   end.
   NB. draw line editor / prompt on the last line, with 3-space prompt
   XY__ed =: 3 0 + (0, # hist)

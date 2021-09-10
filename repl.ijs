@@ -51,7 +51,7 @@ render =: {{
 NB. event handler for accepting the finished input line
 accept =: {{
   exec_world_ B__ed
-  setval__ed'' [ R =: R__ed =: 1 }}
+  setval__ed'' }}
 
 
 NB. B__ed =: '{{ i. y }}"0 ] 5'

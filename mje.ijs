@@ -14,17 +14,8 @@ copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
 NB. main code
-
 ORG_PATH =: './screenplay.org'
 
-NB. todo: move this to kvm
-cocurrent 'kvm'
-NB. 'colorwrite' stuff
-cwc=. [: [:^:(16=]) 'krgybmcwKRGYBMCW' i. ]
-ischr=. 2 = 3!:0
-cwfg=: ([: fgc cwc^:ischr) f.
-cwbg=: ([: bgc cwc^:ischr) f.
-cocurrent'base'
 
 NB. org-mode stuff
 
@@ -57,16 +48,10 @@ open =: {{
   NB. emit_vm_ =: emit0_vm_
   0 0$0}}
 
+open''  NB. TODO: move to bottom
+NB. rkey'' [ echo<'done loading j-talk. press enter.'
 
-open''
-echo<'done loading j-talk. press enter.'
-rkey''
-cur =: 8 NB. jump to slide
-
-
-
-NB. --  screen setup --------------------------------------------------------
-
+NB. --  screen setup ---------------------------------------------------
 H_HIST =: 24
 X_HIST =: 72
 W_HIST =: X_HIST -~ xmax''
@@ -83,7 +68,6 @@ W__cmds =: (xmax'')-32
 H__cmds =: 32
 XY__cmds =: 33 0 + XY__list
 
-
 NB. led is the line editor for editing a line of text in the outline
 led =: 'UiEditWidget' conew~ ''
 XY__led =: XY__cmds
@@ -94,7 +78,8 @@ repl =: 'UiRepl' conew~ ''
 H__repl =: H_HIST+1
 W__repl =: W_HIST
 XY__repl=: X_HIST,0
-MJE__repl =: 1
+A__repl =: 1
+OLD__repl =: ''
 red =: ed__repl
 
 editor =: 'UiWidget' conew~ ''
@@ -102,14 +87,15 @@ XY__editor =: 0 0
 H__editor =: H_HIST
 W__editor =: X_HIST-2
 
+app =: (editor,list,cmds,led,repl) conew 'UiApp'
+
 
+NB. -- widget modifications ---------------------------------------
 
 NB. allow changing the repl line as we navigate through the outline
 new_repl_line =: {{
   if. ': ' {.@E. val =. >val__cmds'' do. 2}.val else. '' end. }}
 
-A__repl =: 1
-OLD__repl =: ''
 update__repl =: {{
   R =: R +. R__ed
   new =. new_repl_line_base_''
@@ -139,9 +125,6 @@ render__editor =: {{
       if. line ~: a: do.  (put_tok_TokEd_ :: ]) L:1 "1 > line end.
     end.
   end. R =: 0 }}
-
-app =: (editor,list,cmds,led,repl) conew 'UiApp'
-
 
 NB. keyboard control
 goto =: {{
@@ -258,13 +241,15 @@ kc_k =: keol__red
 
 copop''
 
-
 
+rl =: {{ load'mje.ijs' }} NB. reload command (for development)
+
 NB. event loop
 mje =: {{
   9!:29]0  NB. disable infinite loop on error
+  curs 0
   goto 0 NB. slide 0
-  cscr @ bg 24 [ curs 0
+  NB. main loop
   step__app loop_kvm_'base'
   reset''
   0$0}}
@@ -272,4 +257,3 @@ mje =: {{
 9!:27 'mje'''''
 9!:29]1
 
-rl =: {{ load'mje.ijs' }}

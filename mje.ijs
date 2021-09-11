@@ -83,6 +83,7 @@ XY__repl=: X_HIST,0
 A__repl =: 1
 OLD__repl =: ''
 red =: ed__repl
+KPS__red =: 10* KPS__red NB. double speed until we fix jprez speed issues
 
 editor =: 'UiWidget' conew~ ''
 XY__editor =: 0 0
@@ -102,6 +103,7 @@ new_repl_line =: {{
   else. '' end. }}
 
 update__repl =: {{
+  if. A__ed do. update__ed y end.
   R =: R +. R__ed
   new =. new_repl_line_base_''
   if. -. new -: OLD do.
@@ -198,22 +200,17 @@ k_k =: k_p =: {{
   if. (at0__cmds > at0__list)'' do.
     goto bak__list''
     goz__cmds''
-  else. bak__cmds'' end.
-  R__red =: 1
-  }}
+  else. bak__cmds'' end. }}
 
 k_j =: k_n =: {{
   if. atz__cmds'' do. goto fwd__list''
-  else. fwd__cmds'' end.
-  R__red =: 1
-  }}
+  else. fwd__cmds'' end. }}
 
 k_N =: {{
-  if. -. a: = cmd =. val__cmds'' do.
+  if. a: ~: cmd =. val__cmds'' do.
     cmd =. >cmd
-    if. ':' = 0{cmd do.  do_tok_>'n?','?!',~}.cmd end.
-  end.
-  k_n'' }}
+    if. ': . ' -: 4{.cmd do. do__red 4}.cmd end.
+  end. }}
 
 copop''
 

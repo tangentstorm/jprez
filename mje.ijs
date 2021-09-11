@@ -96,7 +96,10 @@ NB. -- widget modifications ---------------------------------------
 
 NB. allow changing the repl line as we navigate through the outline
 new_repl_line =: {{
-  if. ': ' {.@E. val =. >val__cmds'' do. 2}.val else. '' end. }}
+  if. ': ' {.@E. val =. >val__cmds'' do.
+    if. ': . ' {.@E. val do. ''
+    else. 2}.val end.
+  else. '' end. }}
 
 update__repl =: {{
   R =: R +. R__ed

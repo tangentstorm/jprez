@@ -36,8 +36,6 @@ open =: {{
       if. -. line = a: do.
         line =. > line
         if. ': ' {.@E. line do. line =. 2}.line     NB. : marks code line
-          index =: index, i,j
-          olr =: olr,<getstate__tmp'' NB. store repl *start* state
           if. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
             do__tmp line while. A__tmp do. update__tmp 1 end. NB. run macro
           else.
@@ -47,6 +45,8 @@ open =: {{
             exec_world_ line           NB. execute code in repl
             ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_
           end.
+          index =: index, i,j
+          olr =: olr,<getstate__tmp'' NB. store start state for next cmd
           olw =: olw,<this_world_'' NB. world stores both start & end state
         end.
       end.
@@ -124,11 +124,12 @@ accept__repl =: {{
   NB. TODO: trigger update of "future worlds"
   accept_UiRepl_ f.'' }}
 
+cmdix =: {{ index I. C__list, C__cmds }}
 hist_lines =: {{
   NB. returns the list of echo history lines that should currently
   NB. appear on the screen, based on the cursor positions within the
   NB. outline.
-  w =. olw pick~ index I. C__list, C__cmds
+  w =. olw pick~ cmdix''
   NB. H_HIST-1 to leave one line at bottom for next repl input
   (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
 
@@ -214,7 +215,10 @@ k_j =: k_n =: {{
 k_N =: {{
   if. a: ~: cmd =. val__cmds'' do.
     cmd =. >cmd
-    if. ': . ' -: 4{.cmd do. do__red 4}.cmd end.
+    if. ': . ' -: 4{.cmd do.
+      setstate__red olr__BASE pick~ cmdix__BASE''
+      do__red 4}.cmd
+    end.
   end. }}
 
 copop''

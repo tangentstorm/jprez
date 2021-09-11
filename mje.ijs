@@ -24,7 +24,7 @@ open =: {{
   org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
   NB. heads is the indented outline that shows up on the left
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
-  NB. (index I. (C__line, C__cmd) { olw) says which world we are in
+  NB. (index I. (C__list, C__cmd) { olw) says which world we are in
   index =: 0 0 $ 0  NB. one entry per line that starts with : (slide,line no)
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
   init_world_''
@@ -67,7 +67,7 @@ XY__list =: 0,Y_META
 NB. the detailed text of the screenplay (also macro commands)
 cmds =: 'UiList' conew~ a:
 W__cmds =: (xmax'')-32
-H__cmds =: 32
+H__cmds =: H__list
 XY__cmds =: 33 0 + XY__list
 
 NB. led is the line editor for editing a line of text in the outline

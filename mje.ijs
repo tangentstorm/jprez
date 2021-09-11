@@ -28,21 +28,26 @@ open =: {{
   index =: 0 0 $ 0  NB. one entry per line that starts with : (slide,line no)
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
   init_world_''
+  tmp =. ''conew 'UiEditWidget' NB. for tracking start states per macro
+  KPS__tmp =: _ [ TSV__tmp =: 0 NB. infinite speed, no random variation
+  olr =: ,<getstate__tmp''      NB. repl state for each ':' line
   for_slide. slides do. i =. slide_index
     for_line. text i do. j =. line_index
       if. -. line = a: do.
         line =. > line
         if. ': ' {.@E. line do. line =. 2}.line     NB. : marks code line
+          index =: index, i,j
+          olr =: olr,<getstate__tmp'' NB. store repl *start* state
           if. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
-            NB. TODO : execute macro
+            do__tmp line while. A__tmp do. update__tmp 1 end. NB. run macro
           else.
-            NB. execute and colorize input
+            setval__tmp line
+            NB. execute and colorize input:
             ehlen =. #ehist_world_     NB. length of the history
             exec_world_ line           NB. execute code in repl
             ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_
           end.
-          index =: index, i,j
-          olw =: olw,<this_world_''
+          olw =: olw,<this_world_'' NB. world stores both start & end state
         end.
       end.
     end.

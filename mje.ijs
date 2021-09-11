@@ -19,10 +19,10 @@ ORG_PATH =: './screenplay.org'
 
 NB. org-mode stuff
 
-NB. org_slides defines locale variables: title=:.. and slides=:..
 open =: {{
-  emit_vm_ =: ]
-  org_slides org_path=: ORG_PATH
+  emit_vm_ =: ] NB. so j-kvm/vm outputs string we can capture (vs puts)
+  org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
+  NB. heads is the indented outline that shows up on the left
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
   index =: 0 0 $ 0
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
@@ -39,9 +39,9 @@ open =: {{
             exec_world_ line           NB. execute code in repl
             ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_
           end.
+          index =: index, i,j
+          olw =: olw,<this_world_''
         end.
-        index =: index, i,j
-        olw =: olw,<this_world_''
       end.
     end.
   end.
@@ -104,6 +104,13 @@ update__repl =: {{
     R =: 1
   end. }}
 
+accept__repl =: {{
+  cmds =. cmds_base_
+  ins__cmds ': ', B__ed
+  ins__cmds ': . ', getlog__ed''
+  NB. TODO: trigger update of "future worlds"
+  accept_UiRepl_ f.'' }}
+
 hist_lines =: {{
   NB. returns the list of echo history lines that should currently
   NB. appear on the screen, based on the cursor positions within the
@@ -114,6 +121,8 @@ hist_lines =: {{
 
 hist_lines__repl =: {{ hist_lines_base_''}}
 
+
+NB. -- in-presentaiton editor widget (on the left) -------------------------
 render__editor =: {{
   cc =. code_base_ cur_base_
   NB. draw the code editor
@@ -150,9 +159,15 @@ k_any =: {{
   end. }}
 
 kc_l =: smudge__app
-kc_s =: {{ (org_text'') fwrites org_path }}
+kc_s =: {{ (org_text'') fwrites ORG_PATH }}
 kc_c =: {{ curs@1 reset@'' break_kvm_=: 1 }}
-kc_o =: {{ L__list =: heads }}@open
+kc_o =: {{
+  lc =. cur
+  rc =. C__cmds
+  init_world_''
+  open''
+  goto lc <. <: #slides
+  C__cmds =: rc <. <: #L__cmds }}
 
 edline =: {{
   R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds
@@ -222,22 +237,22 @@ copop''
 copush'replkeys'
 NB. -----------------------------------------------------------
 red =: red__BASE
+repl =: repl__BASE
 
 kc_m =: {{
   keymode__BASE 'outkeys'
-  V__red =: 0 [ R__red =: R__repl =: 1
-  NB. TODO:
+  accept__repl''
 }}
 
-k_asc =: {{ R__red =: 1 [ ins__red y }}
-kc_d =: del__red
-kc_h =: k_bksp =: bsp__red
-kc_b =: bak__red
-kc_f =: fwd__red
-kc_t =: swp__red
-kc_e =: eol__red
-kc_a =: bol__red
-kc_k =: keol__red
+k_asc =: k_asc__red
+kc_d =: kc_d__red
+kc_h =: k_bksp =: kc_h__red
+kc_b =: kc_b__red
+kc_f =: kc_f__red
+kc_t =: kc_t__red
+kc_e =: kc_e__red
+kc_a =: kc_a__red
+kc_k =: kc_k__red
 
 copop''
 

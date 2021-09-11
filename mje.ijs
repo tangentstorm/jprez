@@ -24,7 +24,8 @@ open =: {{
   org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
   NB. heads is the indented outline that shows up on the left
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
-  index =: 0 0 $ 0
+  NB. (index I. (C__line, C__cmd) { olw) says which world we are in
+  index =: 0 0 $ 0  NB. one entry per line that starts with : (slide,line no)
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
   init_world_''
   for_slide. slides do. i =. slide_index
@@ -35,6 +36,7 @@ open =: {{
           if. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
             NB. TODO : execute macro
           else.
+            NB. execute and colorize input
             ehlen =. #ehist_world_     NB. length of the history
             exec_world_ line           NB. execute code in repl
             ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_
@@ -45,7 +47,7 @@ open =: {{
       end.
     end.
   end.
-  NB. emit_vm_ =: emit0_vm_
+  emit_vm_ =: emit0_vm_ NB. restore j-kvm/vm
   0 0$0}}
 
 open''  NB. TODO: move to bottom
@@ -104,10 +106,11 @@ update__repl =: {{
     R =: 1
   end. }}
 
+inscmd =: put_text [ ins__cmds
+
 accept__repl =: {{
-  cmds =. cmds_base_
-  ins__cmds ': ', B__ed
-  ins__cmds ': . ', getlog__ed''
+  inscmd_base_ ': ', B__ed
+  inscmd_base_ ': . ', getlog__ed''
   NB. TODO: trigger update of "future worlds"
   accept_UiRepl_ f.'' }}
 
@@ -150,6 +153,7 @@ keymode =: {{ (~. (}: y;copath y),COPATH__BASE) copath BASE }}
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
+inscmd =: inscmd__BASE
 k_any =: {{
   select. 0{y
   case.'9'do. goto bak__list''
@@ -180,7 +184,7 @@ edrepl =: {{
   C__red =: 0 [ B__red =: 2}.>val__cmds__BASE''
   keymode__BASE 'replkeys' }}
 
-insline =: edline@'' put_text@'' @ ins__cmds@''
+insline =: edline@'' @ inscmd@''
 k_O =: insline
 k_o =: insline@fwd__cmds
 k_e =: edline

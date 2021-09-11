@@ -16,10 +16,12 @@ NB. should not be used for anything else without careful consideration.
 
 cocurrent 'world'
 
-
-ii =: 0       NB. world counter
-ihist =: ''   NB. input history
-ehist =: ''   NB. echo history
+init =: {{
+  ii =: 0       NB. world counter
+  ihist =: ''   NB. input history
+  ehist =: ''   NB. echo history
+  coerase (#~ #@('WORLD\d+'&rxmatches)&>) conl''
+  HISTL0_WORLD0_=: HISTL1_WORLD0_=: ii_world_=:0 }}
 
 NB. m in_world_ : name builder: append locative for current world to m
 in =: {{ m,'_',(this_world_''),'_' }}
@@ -42,11 +44,6 @@ next =: {{
   if. HISTL1 ~: HISTL0 do. HISTL0 =: HISTL1 end.
   ii_world_ =: ni
   this_world_'' }}
-
-init =: {{
-  coerase (#~ #@('WORLD\d+'&rxmatches)&>) conl''
-  HISTL0_WORLD0_=: HISTL1_WORLD0_=: ii_world_=:0 }}
-
 
 NB. nesting depth of tokens
 depth =: {{ +/\ 1 _1 0 {~ ('{{';'}}')&i. L:1 y }}

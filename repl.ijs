@@ -17,7 +17,7 @@ render =: {{
   catch.
     render_UiEditWidget_ f. y
   end.
-  render_cursor '' }}
+  render_cursor y }}
 
 coclass 'UiRepl' extends 'UiWidget'
 coinsert 'kvm'
@@ -46,7 +46,7 @@ render =: {{
   end.
   NB. draw line editor / prompt on the last line, with 3-space prompt
   XY__ed =: 3 0 + (0, # hist)
-  termdraw__ed'' }}
+  termdraw__ed y }}
 
 NB. event handler for accepting the finished input line
 accept =: {{

@@ -95,7 +95,7 @@ XY__editor =: 0 0
 H__editor =: H_HIST
 W__editor =: X_HIST-2
 
-app =: (editor,list,cmds,led,repl) conew 'UiApp'
+app =: (list,editor,cmds,led,repl) conew 'UiApp'
 
 
 NB. -- widget modifications ---------------------------------------
@@ -158,13 +158,20 @@ goto =: {{
 put_text =: {{ 0 0 $ slides =: (<L__cmds) (<cur,1) } slides  }}
 
 COPATH =: copath coname''
-keymode =: {{ (~. (}: y;copath y),COPATH__BASE) copath BASE }}
+keymode =: {{
+  NB. modal editing kludge to simulate focused widget
+  NB. and swap out keyboard handler.
+  NB. the curtail (}:) is to cut out 'z' reference from copath y
+  (~. (}: y;copath y),COPATH__BASE) copath BASE
+  NB. also set focus to a widget:
+  F__app =: FOCUS__ns [ ns =. < y
+}}
 
 
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
-inscmd =: inscmd__BASE
+FOCUS =: list__BASE [ inscmd =: inscmd__BASE
 k_any =: {{
   select. 0{y
   case.'9'do. goto bak__list''
@@ -228,7 +235,7 @@ copop''
 
 copush 'edkeys'
 NB. -----------------------------------------------------------
-led =: led__BASE [ cmds =: cmds__BASE
+FOCUS =: led =: led__BASE [ cmds =: cmds__BASE
 
 kc_m =: stop__led =: {{
   keymode__BASE 'outkeys'
@@ -252,8 +259,8 @@ copop''
 
 copush'replkeys'
 NB. -----------------------------------------------------------
-red =: red__BASE
-repl =: repl__BASE
+FOCUS =: repl =: repl__BASE
+red =: ed__repl
 
 kc_m =: {{
   keymode__BASE 'outkeys'

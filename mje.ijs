@@ -212,7 +212,8 @@ k_j =: k_n =: {{
   if. atz__cmds'' do. goto fwd__list''
   else. fwd__cmds'' end. }}
 
-k_N =: {{
+playmacro =: {{
+  NB. play macro we currently looking at in the outline
   if. a: ~: cmd =. val__cmds'' do.
     cmd =. >cmd
     if. ': . ' -: 4{.cmd do.
@@ -220,6 +221,8 @@ k_N =: {{
       do__red 4}.cmd
     end.
   end. }}
+
+k_N =: playmacro
 
 copop''
 
@@ -284,4 +287,3 @@ mje =: {{
 
 9!:27 'mje'''''
 9!:29]1
-

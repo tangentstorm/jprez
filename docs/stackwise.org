@@ -1,0 +1,44 @@
+#+title: features i want for repl in future
+
+* j token stack
+
+push and pop items from left side of j line here
+(use a stack the way the j parser uses a stack)
+basically a two-line repl(??)
+
+
+"come back to this point"
+> NB. find the alphabet
+> NB. find positions of vowels
+> NB. given a letter, which vowel precedes it in alphabet?
+
+
+* stackwise
+** keep a stack for where the heck i am in a narrative
+especially after i'm done with an example, and
+'popping off the stack'
+the ui for this is to be called "stackwise"
+
+** stackwise refinement
+start with final thing you want to say
+and perform stepwise refinement
+using this stack-based ui
+
+** stackwise UI
+- (use time-travelling repl to go back to that point)
+- visual display of your "goal stack"
+  - derived from the word you're defining
+  - *or* you can manually enter goals like:
+    - "give this example"
+    - "write this other function i need"
+    - go off on a tangent describing the ui you want to build in future videos
+    - you notice a bug and want to fix it(since it's blocking you)
+    - you want to refactor something
+
+* something like "git rebase"
+mid task, you realize the current task would be simpler if some other task had been done first
+push your work-in-progress onto a stack
+go back in time
+change / refactor something (or make it right from the start)
+play hit history to "new present"
+restart your current task from the newly improved start point

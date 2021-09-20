@@ -18,7 +18,6 @@ ORG_PATH =: './screenplay.org'
 
 
 NB. org-mode stuff
-
 open =: {{
   emit_vm_ =: ] NB. so j-kvm/vm outputs string we can capture (vs puts)
   org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
@@ -172,6 +171,7 @@ keymode =: {{
 NB. -----------------------------------------------------------
 coinsert BASE
 FOCUS =: list__BASE [ inscmd =: inscmd__BASE
+
 k_any =: {{
   select. 0{y
   case.'9'do. goto bak__list''
@@ -179,17 +179,33 @@ k_any =: {{
   case.'('do. bak__cmds''
   case.')'do. fwd__cmds''
   end. }}
-
+k_E =: edrepl
+k_N =: playmacro
+k_O =: insline
+k_d =: delline
+k_e =: edline
+k_j =: k_n =: fwd_cmd
+k_k =: k_p =: bak_cmd
+k_o =: insline@fwd__cmds
 kc_l =: smudge__app
-kc_s =: {{ (org_text'') fwrites ORG_PATH }}
-kc_c =: {{ curs@1 reset@'' break_kvm_=: 1 }}
-kc_o =: {{
+kc_o =: reopen
+kc_s =: save
+kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
+
+save =: {{ (org_text'') fwrites ORG_PATH }}
+halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
+insline =: edline@'' @ inscmd@''
+delline =: put_text@'' @ del__cmds
+
+reopen =: {{
   lc =. cur
   rc =. C__cmds
   init_world_''
   open''
   goto lc <. <: #slides
   C__cmds =: rc <. <: #L__cmds }}
+
+NB. more 'outkeys' definitions
 
 edline =: {{
   R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds
@@ -201,21 +217,14 @@ edrepl =: {{
   V__red =: R__red =: 1
   C__red =: 0 [ B__red =: 2}.>val__cmds__BASE''
   keymode__BASE 'replkeys' }}
-
-insline =: edline@'' @ inscmd@''
-k_O =: insline
-k_o =: insline@fwd__cmds
-k_e =: edline
-k_E =: edrepl
-k_d =: put_text@'' @ del__cmds
 
-k_k =: k_p =: {{
+bak_cmd =: {{
   if. (at0__cmds > at0__list)'' do.
     goto bak__list''
     goz__cmds''
   else. bak__cmds'' end. }}
 
-k_j =: k_n =: {{
+fwd_cmd =: {{
   if. atz__cmds'' do. goto fwd__list''
   else. fwd__cmds'' end. }}
 
@@ -229,15 +238,13 @@ playmacro =: {{
     end.
   end. }}
 
-k_N =: playmacro
-
 copop''
 
 copush 'edkeys'
 NB. -----------------------------------------------------------
 FOCUS =: led =: led__BASE [ cmds =: cmds__BASE
 
-kc_m =: stop__led =: {{
+stop =: {{
   keymode__BASE 'outkeys'
   V__led =: 0 [ R__led =: R__cmds =: 1
   L__cmds =: (<B__led) C__cmds } L__cmds
@@ -251,6 +258,7 @@ kc_h =: k_bsp =: bsp__led
 kc_e =: eol__led
 kc_b =: bak__led
 kc_f =: fwd__led
+kc_m =: stop
 kc_t =: swp__led
 kc_a =: bol__led
 kc_k =: keol__led
@@ -264,7 +272,7 @@ NB. -----------------------------------------------------------
 FOCUS =: repl =: repl__BASE
 red =: ed__repl
 
-kc_m =: {{
+stop =: {{
   keymode__BASE 'outkeys'
   accept__repl''
 }}
@@ -279,6 +287,7 @@ kc_e =: kc_e__red
 kc_f =: kc_f__red
 kc_h =: k_bsp =: kc_h__red
 kc_k =: kc_k__red
+kc_m =: stop
 kc_t =: kc_t__red
 
 

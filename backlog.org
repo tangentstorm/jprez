@@ -1,8 +1,7 @@
 #+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
-#+TODO: BUG TODO | DONE
 
 * inbox (for triage)
-
+- rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
 - ^c should be copy, not "break"
 - also ^c / in line-editor should not break whole application
 - ctrl-space should not break whole application
@@ -15,28 +14,37 @@
   - can also trigger different backgrounds
 - generate backgrounds for greenscreen
 - =render_UiApp_= (and compound widgets) should clear R flag on each widget it renders
-
+- make it easier to recover a working terminal if there's a bug in jprez/jkvm apps
+(right now, you try to debug and you waste brain cycles trying to see the cursor, etc.)
+- re-define =kc_spc= as break & clean up cursor for all j-kvm apps
+  - =k_nul= works, but it should probably be named =kc_spc=
+  - double check that control-space actually sends ascii 0.
+  - (maybe this is vt100 thing?) actual ascii character is called ^@
+  - explain why c-space breaks the application if =k_nul= was previously defined
 
 * current sprint (9/20-10/01)
-** DONE "focus color" for cursors in list, edit, repl          :feature:jprez:jkvm:
-** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
-** -- easy stuff:
-** BUG I set TSV=0 in macro player. it should be 1.            :jprez:
-** TODO [#A] make A=:1  the default for widgets                :jkvm:
-** TODO [#A] backspace key in editor
+** -- done
+*** DONE "focus color" for cursors in list, edit, repl        :feature:jprez:jkvm:
+*** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
+*** DONE I set TSV=0 in macro player. it should be 1.         :jprez:
+actually i don't use ?TSV, i use TSV*?0 so it's in seconds.
+*** DONE [#A] make A=:1  the default for widgets              :jkvm:
+*** DONE [#A] backspace key in editor                         :jprez:
+needed to manually copy all keyboard handlers.
+*** DONE don't break on =kc_m=                                  :jkvm:edit:
+*** DONE reorganize mje so that all keybindings map to named verb
+(instead of verb definition)
+** TODO [#A] colorize input history for standalone repl        :jrepl:
+** TODO start repl cursor at top of the screen                 :jprez:
+** -- harder stuff:
+** TODO inserting repl->script mis-manages start state         :bug:jprez:
+** TODO run the command and show the output in the repl        :jprez:
 ** TODO [#A] tie repl to the command history                   :jrepl:
 Pressing up or down should let you navigate the input history.
 This history is provided by worlds.ijs.
 
-** TODO [#A] colorize input history for standalone repl        :jrepl:
-** TODO start repl cursor at top of the screen                 :jprez:
-** -- harder stuff:
-** BUG inserting repl->script mis-manages start state          :bug:jprez:
-** TODO run the command and show the output in the repl        :jprez:
-** BUG [#B] hide errors containing =do_WORLDnn_=                 :jrepl:
-** TODO reorganize mje so that all keybindings map to named verb
-(instead of verb definition)
-** TODO allow wrapping long output lines                   :jkvm:
+** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
+** TODO allow wrapping long output lines                       :jkvm:
 ** TODO support the escape codes to toggle wrapping            :jkvm:
 ** -- org-mode stuff:
 ** TODO learn to clock time with org-mode                      :learn:
@@ -46,6 +54,10 @@ This history is provided by worlds.ijs.
 ** TODO stop/ restart macros during playback
 important because it can take a long time while you're using jprez
 also you don't want other keys to fire the macro or it'll screw up
+- plan: use different keybindings when A=1
+(use whatever "modal" dispatch system i use for app keyboard focus)
+- then we can have other keys when it's play mode, rather than having it interpret our keypresses
+
 ** TODO cut, copy, paste                                       :jkvm:edit:
 ** TODO [#A] optimize output of render/blit
 :PROPERTIES:
@@ -55,6 +67,14 @@ also you don't want other keys to fire the macro or it'll screw up
 :PROPERTIES:
 :Effort:   3d
 :END:
+- one option might be to dynamically copy all the verbs from the focused widget into the keybinding namespace
+(clear it out and do that every time the focus changes)
+- to simply make the namespace in which i look for key handlers dynamic in j-kvm
+- set to the app when using ui/app
+- the app can do some of the keyboard dispatch
+- maybe this means coming up standard numbers for keyboard codes
+- gives us the ability to decouple the ui framework from vt-100
+
 ** TODO [#A] fix j-kvm on osx
 :PROPERTIES:
 :Effort:   3d

@@ -24,15 +24,17 @@
 
 * current sprint (9/20-10/01)
 ** -- done
-*** DONE "focus color" for cursors in list, edit, repl        :feature:jprez:jkvm:
-*** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
-*** DONE I set TSV=0 in macro player. it should be 1.         :jprez:
+*** rejms-14
+**** DONE "focus color" for cursors in list, edit, repl      :feature:jprez:jkvm:
+*** rejms-15
+**** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
+**** DONE I set TSV=0 in macro player. it should be 1.       :jprez:
 actually i don't use ?TSV, i use TSV*?0 so it's in seconds.
-*** DONE [#A] make A=:1  the default for widgets              :jkvm:
-*** DONE [#A] backspace key in editor                         :jprez:
+**** DONE [#A] make A=:1  the default for widgets            :jkvm:
+**** DONE [#A] backspace key in editor                       :jprez:
 needed to manually copy all keyboard handlers.
-*** DONE don't break on =kc_m=                                  :jkvm:edit:
-*** DONE reorganize mje so that all keybindings map to named verb
+**** DONE don't break on =kc_m=                                :jkvm:edit:
+**** DONE reorganize mje so that all keybindings map to named verb
 (instead of verb definition)
 ** TODO [#A] colorize input history for standalone repl        :jrepl:
 ** TODO start repl cursor at top of the screen                 :jprez:

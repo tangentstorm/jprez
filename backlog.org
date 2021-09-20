@@ -1,36 +1,47 @@
-#+TITLE: kanban for rejms (the ridiculously early j morning show)
+#+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
 #+TODO: BUG TODO | DONE
 
 * inbox (for triage)
+
 - ^c should be copy, not "break"
 - also ^c / in line-editor should not break whole application
 - ctrl-space should not break whole application
 - =render_UiListWidget_= could use some golfing
 - fill in old git tags for older episodes
 - script to automate these tags ??
+- transparent round window to control the obs overlay
+  - use websockets to control obs overlay position
+  - remotely from round window
+  - can also trigger different backgrounds
+- generate backgrounds for greenscreen
+- =render_UiApp_= (and compound widgets) should clear R flag on each widget it renders
 
-* current sprint
+
+* current sprint (9/20-10/01)
 ** DONE "focus color" for cursors in list, edit, repl          :feature:jprez:jkvm:
-** BUG inserting repl->script mis-manages start state          :bug:jprez:
-** BUG reorganize mje so that all keybindings map to named verb
-(instead of verb definition)
-** TODO learn how to use org-clock org-clock-report            :learn:
-** TODO learn how to use level of effort                      :learn:
+** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
+** -- easy stuff:
 ** BUG I set TSV=0 in macro player. it should be 1.            :jprez:
+** TODO [#A] make A=:1  the default for widgets                :jkvm:
 ** TODO [#A] backspace key in editor
 ** TODO [#A] tie repl to the command history                   :jrepl:
 Pressing up or down should let you navigate the input history.
 This history is provided by worlds.ijs.
+
 ** TODO [#A] colorize input history for standalone repl        :jrepl:
-** TODO [#A] make A=:1  the default for widgets                :jkvm:
-** TODO [#B] hide errors containing =do_WORLDnn_=                :jrepl:
 ** TODO start repl cursor at top of the screen                 :jprez:
+** -- harder stuff:
+** BUG inserting repl->script mis-manages start state          :bug:jprez:
 ** TODO run the command and show the output in the repl        :jprez:
-** TODO learn to clock time with org-mode                      :learn:
+** BUG [#B] hide errors containing =do_WORLDnn_=                 :jrepl:
+** TODO reorganize mje so that all keybindings map to named verb
+(instead of verb definition)
 ** TODO allow wrapping long output lines                   :jkvm:
 ** TODO support the escape codes to toggle wrapping            :jkvm:
-** TODO make sure R=:0 in =render__repl= (in update, copy R from ed)
-
+** -- org-mode stuff:
+** TODO learn to clock time with org-mode                      :learn:
+** TODO learn how to use org-clock org-clock-report            :learn:
+** TODO learn how to use level of effort                       :learn:
 * backlog
 ** TODO stop/ restart macros during playback
 important because it can take a long time while you're using jprez

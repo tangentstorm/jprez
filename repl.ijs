@@ -46,7 +46,8 @@ render =: {{
   end.
   NB. draw line editor / prompt on the last line, with 3-space prompt
   XY__ed =: 3 0 + (0, # hist)
-  termdraw__ed y }}
+  termdraw__ed y
+  R =: R__ed =: 0 }}
 
 NB. event handler for accepting the finished input line
 accept =: {{

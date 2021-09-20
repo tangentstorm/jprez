@@ -244,8 +244,10 @@ kc_m =: stop__led =: {{
   put_text'' }}
 
 k_asc =: {{ R__led =: 1 [ ins__led y }}
+ka_b =: ka_b__led
+ka_f =: ka_f__led
 kc_d =: del__led
-kc_h =: k_bksp =: bsp__led
+kc_h =: k_bsp =: bsp__led
 kc_e =: eol__led
 kc_b =: bak__led
 kc_f =: fwd__led
@@ -268,14 +270,17 @@ kc_m =: {{
 }}
 
 k_asc =: k_asc__red
-kc_d =: kc_d__red
-kc_h =: k_bksp =: kc_h__red
-kc_b =: kc_b__red
-kc_f =: kc_f__red
-kc_t =: kc_t__red
-kc_e =: kc_e__red
+ka_b =: ka_b__red
+ka_f =: ka_f__red
 kc_a =: kc_a__red
+kc_b =: kc_b__red
+kc_d =: kc_d__red
+kc_e =: kc_e__red
+kc_f =: kc_f__red
+kc_h =: k_bsp =: kc_h__red
 kc_k =: kc_k__red
+kc_t =: kc_t__red
+
 
 copop''
 

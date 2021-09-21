@@ -39,10 +39,7 @@ open =: {{
             do__tmp line while. A__tmp do. update__tmp 1 end. NB. run macro
           else.
             setval__tmp line
-            NB. execute and colorize input:
-            ehlen =. #ehist_world_     NB. length of the history
             exec_world_ line           NB. execute code in repl
-            ehist_world_ =: (<'   ',vtcolor_tok_ line) ehlen } ehist_world_
           end.
           index =: index, i,j
           olr =: olr,<getstate__tmp'' NB. store start state for next cmd

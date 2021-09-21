@@ -15,6 +15,7 @@ NB. Basically, this is just enough magic to power my presentation tool and proba
 NB. should not be used for anything else without careful consideration.
 
 cocurrent 'world'
+require 'tok.ijs' NB. for colorization
 
 init =: {{
   ii =: 0       NB. world counter
@@ -61,7 +62,10 @@ exec =: {{ NB. run code in the current 'world'
     exec_mut =. ('=:';'=.')&(+./@e.) exec_toks =. ;: y
     exec_toks =.  ]`('=:'"_)@.('=.'&-:)L:0 exec_toks
     cocurrent next_world_''
-    echo_world_ '   ',y
+    NB. 'echo' colorized entry
+    ehlen =. # ehist_world_
+    echo_world_ '    ',y
+    ehist_world_ =: (<'   ',vtcolor_tok_ y) ehlen } ehist_world_
     for_execslot. I. ((0=depth_world_) *. e."1 _ S:0 & (,.'xymnuv')) exec_toks do.
       exec_fix =. <(>execslot{exec_toks),'_',(this_world_''),'_'
       exec_toks =. exec_fix execslot } exec_toks

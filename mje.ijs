@@ -78,7 +78,7 @@ W__led =: W__cmds
 V__led =: 0
 
 repl =: 'UiRepl' conew~ ''
-H__repl =: H_HIST+1
+H__repl =: H_HIST
 W__repl =: W_HIST
 XY__repl=: X_HIST,0
 A__repl =: 1
@@ -121,15 +121,8 @@ accept__repl =: {{
   accept_UiRepl_ f.'' }}
 
 cmdix =: {{ index I. C__list, C__cmds }}
-hist_lines =: {{
-  NB. returns the list of echo history lines that should currently
-  NB. appear on the screen, based on the cursor positions within the
-  NB. outline.
-  w =. olw pick~ cmdix''
-  NB. H_HIST-1 to leave one line at bottom for next repl input
-  (-H_HIST-1) {. ('HISTL1_',w,'_')~ {. ehist_world_ }}
 
-hist_lines__repl =: {{ hist_lines_base_''}}
+getworld__repl =: {{ olw_base_ pick~ cmdix_base_'' }}
 
 
 NB. -- in-presentaiton editor widget (on the left) -------------------------

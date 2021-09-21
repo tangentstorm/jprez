@@ -21,6 +21,7 @@
   - double check that control-space actually sends ascii 0.
   - (maybe this is vt100 thing?) actual ascii character is called ^@
   - explain why c-space breaks the application if =k_nul= was previously defined
+- when i go back and cleanup how mje initalizes things, see if i can move the vt-coloring step for input history into repl itself, using something like an =add_hist_line= method.
 
 * current sprint (9/20-10/01)
 ** -- done
@@ -36,8 +37,9 @@ needed to manually copy all keyboard handlers.
 **** DONE don't break on =kc_m=                                :jkvm:edit:
 **** DONE reorganize mje so that all keybindings map to named verb
 (instead of verb definition)
-** TODO [#A] colorize input history for standalone repl        :jrepl:
-** TODO start repl cursor at top of the screen                 :jprez:
+*** rejms-16
+**** DONE [#A] colorize input history for standalone repl    :jrepl:
+**** DONE start repl cursor at top of the screen             :jprez:
 ** -- harder stuff:
 ** TODO inserting repl->script mis-manages start state         :bug:jprez:
 ** TODO run the command and show the output in the repl        :jprez:

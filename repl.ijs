@@ -31,11 +31,16 @@ create =: {{
 
 update =: {{ R =: R +. R__ed }}
 
-NB. make this work after we start scrolling.
+getworld =: {{ this_world_'' }}
 hist_lines =: {{
   if. -.*#ehist_world_ do. return. 0$a:  end.
-  h =. (#ehist_world_) <. H-2
-  (-h) {. ('HISTL1' in_world_)~ {. ehist_world_ }}
+  NB. returns the list of echo history lines that should currently
+  NB. appear on the screen, based on the cursor positions within the
+  NB. outline.
+  NB. hlen=number of history lines *at this point in timeline*
+  hlen =. ('HISTL1_',(getworld''),'_')~
+  NB. leave one line at bottom for next repl input (max line is h-1, so h-2)
+  (-hlen <. H-2) {. hlen {. ehist_world_ }}
 
 render =: {{
   hist =. hist_lines''

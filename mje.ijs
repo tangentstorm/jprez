@@ -188,7 +188,7 @@ kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 save =: {{ (org_text'') fwrites ORG_PATH }}
 halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
 insline =: edline@'' @ inscmd@''
-delline =: put_text@'' @ del__cmds
+delline =: rebuild @ put_text@'' @ del__cmds
 
 reopen =: {{
   lc =. cur

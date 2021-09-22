@@ -121,6 +121,8 @@ inscmd =: put_text [ ins__cmds
 accept__repl =: {{
   inscmd_base_ ': ', B__ed
   inscmd_base_ ': . ', getlog__ed''
+  cmds =. cmds_base_
+  fwd__cmds^:2''
   accept_UiRepl_ f.''
   rebuild_base_'' }}
 
@@ -181,10 +183,16 @@ k_e =: edline
 k_j =: k_n =: fwd_cmd
 k_k =: k_p =: bak_cmd
 k_o =: insline@fwd__cmds
+kc_i =: focus_on_outline
 kc_l =: smudge__app
 kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
+
+focus_on_outline =: {{
+  R__list =: R__repl =: 1 NB. to redraw focus
+  keymode__BASE 'replkeys' }}
+
 
 save =: {{ (org_text'') fwrites ORG_PATH }}
 halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
@@ -266,10 +274,9 @@ NB. -----------------------------------------------------------
 FOCUS =: repl =: repl__BASE
 red =: ed__repl
 
-stop =: {{
-  keymode__BASE 'outkeys'
-  accept__repl''
-}}
+focus_on_outline =: {{
+  R__repl =: 1 NB. to redraw without focus
+  keymode__BASE 'outkeys' }}
 
 k_asc =: k_asc__red
 ka_b =: ka_b__red
@@ -280,10 +287,10 @@ kc_d =: kc_d__red
 kc_e =: kc_e__red
 kc_f =: kc_f__red
 kc_h =: k_bsp =: kc_h__red
+kc_i =: focus_on_outline
 kc_k =: kc_k__red
-kc_m =: stop
+kc_m =: accept__repl
 kc_t =: kc_t__red
-
 
 copop''
 

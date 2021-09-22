@@ -43,6 +43,7 @@ rebuild =: {{
           else.
             setval__tmp line
             exec_world_ line           NB. execute code in repl
+            setval__tmp''
           end.
           index =: index, i,j
           olr =: olr,<getstate__tmp'' NB. store start state for next cmd

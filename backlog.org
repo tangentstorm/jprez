@@ -1,6 +1,7 @@
 #+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
+- stay in repl mode
 - rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
 - ^c should be copy, not "break"
 - also ^c / in line-editor should not break whole application
@@ -37,12 +38,17 @@ needed to manually copy all keyboard handlers.
 **** DONE don't break on =kc_m=                                :jkvm:edit:
 **** DONE reorganize mje so that all keybindings map to named verb
 (instead of verb definition)
-*** rejms-16
+*** rejms-16 : repl enhancements
 **** DONE [#A] colorize input history for standalone repl    :jrepl:
 **** DONE start repl cursor at top of the screen             :jprez:
-** -- harder stuff:
-** TODO inserting repl->script mis-manages start state         :bug:jprez:
-** TODO run the command and show the output in the repl        :jprez:
+*** rejms-17 : working repl in jprez
+**** DONE inserting repl->script mis-manages start state     :bug:jprez:
+part of this was clearing the worlds, and part was =setval__tmp''=
+**** DONE [#C] clear "future" worlds on input                :jprez:
+**** DONE [#C] rebuild worlds on delete                      :jprez:
+**** DONE run the command and show the output in the repl    :jprez:
+**** DONE tab to switch between outline and repl
+
 ** TODO [#A] tie repl to the command history                   :jrepl:
 Pressing up or down should let you navigate the input history.
 This history is provided by worlds.ijs.
@@ -114,7 +120,6 @@ using "future" completion history is not allowed.
 this when you have a full future history from loading a presentation,
 and you use that history to complete a line in the past.
 This makes no sense from a narrative point of view.
-** TODO [#C] clear "future" worlds on input                    :jprez:
 ** TODO [#C] recalculate all worlds                            :jprez:
 ** TODO [#C] show world for line, with content?                :jrepl:debug:
 ** TODO [#C] fix =loop_kvm= so left argument does not need to be in the z locale :jkvm:

@@ -9,7 +9,7 @@ NB. that I should probably have it under version control.
 load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
 load'worlds.ijs org.ijs tok.ijs repl.ijs'
 coinsert 'kvm'
-
+dbg 1
 copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
@@ -19,10 +19,13 @@ ORG_PATH =: './screenplay.org'
 
 NB. org-mode stuff
 open =: {{
-  emit_vm_ =: ] NB. so j-kvm/vm outputs string we can capture (vs puts)
   org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
   NB. heads is the indented outline that shows up on the left
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
+  rebuild''}}
+
+rebuild =: {{
+  emit_vm_ =: ] NB. so j-kvm/vm outputs string we can capture (vs puts)
   NB. (index I. (C__list, C__cmd) { olw) says which world we are in
   index =: 0 0 $ 0  NB. one entry per line that starts with : (slide,line no)
   olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
@@ -48,11 +51,11 @@ open =: {{
       end.
     end.
   end.
+  codestroy__tmp''
   emit_vm_ =: emit0_vm_ NB. restore j-kvm/vm
   0 0$0}}
 
 open''  NB. TODO: move to bottom
-NB. rkey'' [ echo<'done loading j-talk. press enter.'
 
 NB. --  screen setup ---------------------------------------------------
 H_HIST =: 24
@@ -117,8 +120,8 @@ inscmd =: put_text [ ins__cmds
 accept__repl =: {{
   inscmd_base_ ': ', B__ed
   inscmd_base_ ': . ', getlog__ed''
-  NB. TODO: trigger update of "future worlds"
-  accept_UiRepl_ f.'' }}
+  accept_UiRepl_ f.''
+  rebuild_base_'' }}
 
 cmdix =: {{ index I. C__list, C__cmds }}
 
@@ -160,7 +163,7 @@ keymode =: {{
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
-FOCUS =: list__BASE [ inscmd =: inscmd__BASE
+FOCUS =: list__BASE [ ''`inscmd =: inscmd__BASE
 
 k_any =: {{
   select. 0{y

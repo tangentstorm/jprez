@@ -1,6 +1,8 @@
 #+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
+- inserting empty line causes a crash
+- probably want to start in repl mode
 - stay in repl mode
 - rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
 - ^c should be copy, not "break"
@@ -23,6 +25,9 @@
   - (maybe this is vt100 thing?) actual ascii character is called ^@
   - explain why c-space breaks the application if =k_nul= was previously defined
 - when i go back and cleanup how mje initalizes things, see if i can move the vt-coloring step for input history into repl itself, using something like an =add_hist_line= method.
+- on accept: remove consecutive duplicates from history
+  - maybe: if B != as last line in history, add it to the history
+  - maybe: if last two items in history are same, delete one
 
 * current sprint (9/20-10/01)
 ** -- done
@@ -48,11 +53,22 @@ part of this was clearing the worlds, and part was =setval__tmp''=
 **** DONE [#C] rebuild worlds on delete                      :jprez:
 **** DONE run the command and show the output in the repl    :jprez:
 **** DONE tab to switch between outline and repl
-
-** TODO [#A] tie repl to the command history                   :jrepl:
+*** rejms-18 : repl command history
+**** DONE [4/4] [#A] tie repl to the command history         :jrepl:
 Pressing up or down should let you navigate the input history.
 This history is provided by worlds.ijs.
 
+- [X] maintain an internal (invisible) list widget =hist= with input history
+- [X] last item in =hist= is the current edit buffer (set by up-arrow)
+- [X] on up arrow:
+  - [X] if i'm at the end of list, then update the list else ok
+  - [X] call =bak__hist= to move the history cursor
+  - [X] set B to =val__hist=
+- [X] on down arrow:
+  - call =fwd__hist=
+  - set B to =val__hist=
+
+** finish command history for standalone repl (keybinding issue)
 ** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
 ** TODO allow wrapping long output lines                       :jkvm:
 ** TODO support the escape codes to toggle wrapping            :jkvm:

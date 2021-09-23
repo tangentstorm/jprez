@@ -25,6 +25,7 @@ coinsert 'kvm'
 create =: {{
   'H W' =: gethw_vt_''
   ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted editor
+  hist =: (,<y) conew 'UiList'
   XY__ed =: 3 0  NB. initial position of prompt
   kc_m__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
   0 0$0 }}
@@ -54,10 +55,33 @@ render =: {{
   termdraw__ed y
   R =: R__ed =: 0 }}
 
+
+bak =: {{
+  if. atz__hist'' do.
+    if. #B__ed do. ins__hist <B__ed [ fwd__hist'' end.
+  end.
+  bak__hist''
+  setval__ed >val__hist''
+  R =: 1 }}
+
+fwd =: {{
+  fwd__hist''
+  setval__ed >val__hist''
+  R =: 1 }}
+
+
+NB. k_arup =: bak
+NB. k_ardn =: fwd
+
 NB. event handler for accepting the finished input line
 accept =: {{
   exec_world_ B__ed
+  goz__hist''
+  ins__hist B__ed
+  goz__hist''
+  L__hist =: L__hist -. <a:
   setval__ed'' }}
+
 
 
 NB. B__ed =: '{{ i. y }}"0 ] 5'

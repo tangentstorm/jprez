@@ -10,7 +10,7 @@ load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
 load'worlds.ijs org.ijs tok.ijs repl.ijs'
 coinsert 'kvm'
 dbg 1
-copush =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
+copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
 NB. main code
@@ -277,6 +277,9 @@ red =: ed__repl
 focus_on_outline =: {{
   R__repl =: 1 NB. to redraw without focus
   keymode__BASE 'outkeys' }}
+
+k_arup =: bak__repl
+k_ardn =: fwd__repl
 
 k_asc =: k_asc__red
 ka_b =: ka_b__red

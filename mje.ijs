@@ -160,6 +160,8 @@ keymode =: {{
   (~. (}: y;copath y),COPATH__BASE) copath BASE
   NB. also set focus to a widget:
   F__app =: FOCUS__ns [ ns =. < y
+  NB. !! this should probably be in an on_focus event, but:
+  L__hist__repl =: ihist_world_
 }}
 
 

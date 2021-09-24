@@ -278,9 +278,8 @@ focus_on_outline =: {{
   R__repl =: 1 NB. to redraw without focus
   keymode__BASE 'outkeys' }}
 
-k_arup =: bak__repl
-k_ardn =: fwd__repl
-
+k_arup =: k_arup__red
+k_ardn =: k_ardn__red
 k_asc =: k_asc__red
 ka_b =: ka_b__red
 ka_f =: ka_f__red
@@ -290,9 +289,9 @@ kc_d =: kc_d__red
 kc_e =: kc_e__red
 kc_f =: kc_f__red
 kc_h =: k_bsp =: kc_h__red
-kc_i =: focus_on_outline
+kc_i =: focus_on_outline  NB. tab to unfocus
 kc_k =: kc_k__red
-kc_m =: accept__repl
+kc_m =: kc_m__red
 kc_t =: kc_t__red
 
 copop''

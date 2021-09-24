@@ -28,7 +28,7 @@ rebuild =: {{
   emit_vm_ =: ] NB. so j-kvm/vm outputs string we can capture (vs puts)
   NB. (index I. (C__list, C__cmd) { olw) says which world we are in
   index =: 0 0 $ 0  NB. one entry per line that starts with : (slide,line no)
-  olw =: ,<'WORLD0' NB. outline worlds. 'now'=HISTL0/HISTL1 in (i{olw)
+  olw =: ,0  NB. outline worlds. 'now'=EHISTL0/EHISTL1 in (i{olw)
   init_world_''
   tmp =. ''conew 'UiEditWidget' NB. for tracking start states per macro
   KPS__tmp =: _ [ TSV__tmp =: 0 NB. infinite speed, no random variation
@@ -47,7 +47,7 @@ rebuild =: {{
           end.
           index =: index, i,j
           olr =: olr,<getstate__tmp'' NB. store start state for next cmd
-          olw =: olw,<this_world_'' NB. world stores both start & end state
+          olw =: olw,ii_world_        NB. world stores both start & end state
         end.
       end.
     end.
@@ -128,7 +128,8 @@ accept__repl =: {{
 
 cmdix =: {{ index I. C__list, C__cmds }}
 
-getworld__repl =: {{ olw_base_ pick~ cmdix_base_'' }}
+worldnum =: {{ olw_base_ pick~ cmdix_base_'' }}
+getworld__repl =: {{ 'WORLD',": worldnum_base_'' }}
 
 
 NB. -- in-presentaiton editor widget (on the left) -------------------------
@@ -161,8 +162,10 @@ keymode =: {{
   NB. also set focus to a widget:
   F__app =: FOCUS__ns [ ns =. < y
   NB. !! this should probably be in an on_focus event, but:
-  L__hist__repl =: ihist_world_
+  reset_rhist''
 }}
+
+reset_rhist =: {{ L__hist__repl =: (1+worldnum'') {. ihist_world_ }}
 
 
 (copush [ coinsert) 'outkeys'
@@ -238,6 +241,7 @@ playmacro =: {{
     cmd =. >cmd
     if. ': . ' -: 4{.cmd do.
       setstate__red olr__BASE pick~ cmdix__BASE''
+      reset_rhist__BASE''
       do__red 4}.cmd
     end.
   end. }}

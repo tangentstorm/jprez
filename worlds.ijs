@@ -22,7 +22,7 @@ init =: {{
   ihist =: ''   NB. input history
   ehist =: ''   NB. echo history
   coerase (#~ #@('WORLD\d+'&rxmatches)&>) conl''
-  HISTL0_WORLD0_=: HISTL1_WORLD0_=: ii_world_=:0 }}
+  EHISTL0_WORLD0_=: EHISTL1_WORLD0_=: ii_world_=:0 }}
 
 NB. m in_world_ : name builder: append locative for current world to m
 in =: {{ m,'_',(this_world_''),'_' }}
@@ -35,14 +35,14 @@ boxc =: ,(,.<"0 a.{~ 16+i.11),.(8 u: dfh) each cut'250c 252c 2510 251c 253c 2524
 boxe =: {{ y rplc"1 boxc }}
 echo =: {{
   for_line. lines boxe y do. ehist =: ehist,line end.
-  ('HISTL1'in_world_) =: #ehist }}
+  ('EHISTL1'in_world_) =: #ehist }}
 
 this =: {{ 'WORLD',":ii_world_ }}
 next =: {{
   ni =. ii_world_ + 1
   cocurrent nw =. 'WORLD',":ni
   coinsert this_world_''
-  if. HISTL1 ~: HISTL0 do. HISTL0 =: HISTL1 end.
+  if. EHISTL1 ~: EHISTL0 do. EHISTL0 =: EHISTL1 end.
   ii_world_ =: ni
   this_world_'' }}
 

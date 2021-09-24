@@ -78,20 +78,20 @@ This history is provided by worlds.ijs.
 - [X] on down arrow:
   - call =fwd__hist=
   - set B to =val__hist=
-** rejms-19 : history fixes
-*** DONE fix length error: =getlog__ed= when the log is empty.  :ui:edit:
+*** rejms-19 : history fixes
+**** DONE fix length error: =getlog__ed= when the log is empty. :ui:edit:
 
-*** DONE fix length error in exec when input is empty.        :worlds:
-*** DONE pressing up, and then down should restore the line   :jrepl:
-*** DONE create pluggable =on_arup= and =on_ardn= event handlers  :ui:edit:
-*** DONE record the history navigation in the macro           :jprez:
-*** DONE command history for standalone repl (keybinding issue) :jrepl:
-*** DONE playback of j/k keys in macro player (up/down arrows) :ui:edit:
-*** DONE stopgap method to get input history into repl widget
+**** DONE fix length error in exec when input is empty.      :worlds:
+**** DONE pressing up, and then down should restore the line :jrepl:
+**** DONE create pluggable =on_arup= and =on_ardn= event handlers :ui:edit:
+**** DONE record the history navigation in the macro         :jprez:
+**** DONE command history for standalone repl (keybinding issue) :jrepl:
+**** DONE playback of j/k keys in macro player (up/down arrows) :ui:edit:
+**** DONE stopgap method to get input history into repl widget
 right now it just sets the history when the focus changes,
 and it includes the entire input history.
 
-*** DONE properly handle history in playback                  :jprez:
+**** DONE properly handle history in playback                :jprez:
 this is handled by =reset_rhist= when focus changes or you play macro.
 this way we get the exact history at that point in time.
 

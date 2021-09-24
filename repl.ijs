@@ -57,8 +57,9 @@ render =: {{
 
 
 bak =: {{
-  if. atz__hist'' do.
-    if. #B__ed do. ins__hist <B__ed [ fwd__hist'' end.
+  if. (atz__hist'') *. #B__ed do.
+    NB. save work-in-progress so arrow up, arrow down restores it.
+    ins__hist B__ed [ fwd__hist''
   end.
   bak__hist''
   setval__ed >val__hist''

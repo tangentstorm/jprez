@@ -1,7 +1,18 @@
 #+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
-- inserting empty line causes a crash
+- ^s should save anywhere (global hotkeys).. right now you have to be focused on the outline
+- add real on_focus handlers whenever i do real keyboard focus handling solution
+- check for multiline input.
+  - we already have =depth_world_=  and we just need to check depth of last token
+  - double check that parens cannot span lines inside direct definitions
+- visual indication that the file actually saved when you press ^s
+- edit: refactor so that keys, macro recording, and macro playback are all defined in one table
+  (right now we define a key and its macro logging character in one area, far away from the update method)
+- default tab key handler (=kc_i=) should be to call 'next-widget' on main app
+  - requires somehow having reference to the app in which we are running
+- better idiom for expresssing 'method___self' (see =create= in repl.ijs)
+- in exec_world_, decide what to do when an error happens and the debugger is on.
 - probably want to start in repl mode
 - stay in repl mode
 - rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
@@ -33,7 +44,7 @@
 ** -- done
 *** rejms-14
 **** DONE "focus color" for cursors in list, edit, repl      :feature:jprez:jkvm:
-*** rejms-15
+*** rejms-15 : 5 easy changes
 **** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
 **** DONE I set TSV=0 in macro player. it should be 1.       :jprez:
 actually i don't use ?TSV, i use TSV*?0 so it's in seconds.
@@ -67,8 +78,23 @@ This history is provided by worlds.ijs.
 - [X] on down arrow:
   - call =fwd__hist=
   - set B to =val__hist=
+** rejms-19 : history fixes
+*** DONE fix length error: =getlog__ed= when the log is empty.  :ui:edit:
 
-** finish command history for standalone repl (keybinding issue)
+*** DONE fix length error in exec when input is empty.        :worlds:
+*** DONE pressing up, and then down should restore the line   :jrepl:
+*** DONE create pluggable =on_arup= and =on_ardn= event handlers  :ui:edit:
+*** DONE record the history navigation in the macro           :jprez:
+*** DONE command history for standalone repl (keybinding issue) :jrepl:
+*** DONE playback of j/k keys in macro player (up/down arrows) :ui:edit:
+*** DONE stopgap method to get input history into repl widget
+right now it just sets the history when the focus changes,
+and it includes the entire input history.
+
+*** DONE properly handle history in playback                  :jprez:
+this is handled by =reset_rhist= when focus changes or you play macro.
+this way we get the exact history at that point in time.
+
 ** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
 ** TODO allow wrapping long output lines                       :jkvm:
 ** TODO support the escape codes to toggle wrapping            :jkvm:

@@ -188,16 +188,15 @@ k_e =: edline
 k_j =: k_n =: fwd_cmd
 k_k =: k_p =: bak_cmd
 k_o =: insline@fwd__cmds
-kc_i =: focus_on_outline
+kc_i =: focus_on_repl
 kc_l =: smudge__app
 kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
-focus_on_outline =: {{
+focus_on_repl =: {{
   R__list =: R__repl =: 1 NB. to redraw focus
   keymode__BASE 'replkeys' }}
-
 
 save =: {{ (org_text'') fwrites ORG_PATH }}
 halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}

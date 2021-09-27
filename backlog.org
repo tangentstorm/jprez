@@ -1,44 +1,6 @@
-#+TITLE: kanban for jprez ( https://github.com/tangentstorm/jprez/ )
+#+TITLE: backlog for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
-- ^s should save anywhere (global hotkeys).. right now you have to be focused on the outline
-- add real on_focus handlers whenever i do real keyboard focus handling solution
-- check for multiline input.
-  - we already have =depth_world_=  and we just need to check depth of last token
-  - double check that parens cannot span lines inside direct definitions
-- visual indication that the file actually saved when you press ^s
-- edit: refactor so that keys, macro recording, and macro playback are all defined in one table
-  (right now we define a key and its macro logging character in one area, far away from the update method)
-- default tab key handler (=kc_i=) should be to call 'next-widget' on main app
-  - requires somehow having reference to the app in which we are running
-- better idiom for expresssing 'method___self' (see =create= in repl.ijs)
-- in exec_world_, decide what to do when an error happens and the debugger is on.
-- probably want to start in repl mode
-- stay in repl mode
-- rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
-- ^c should be copy, not "break"
-- also ^c / in line-editor should not break whole application
-- ctrl-space should not break whole application
-- =render_UiListWidget_= could use some golfing
-- fill in old git tags for older episodes
-- script to automate these tags ??
-- transparent round window to control the obs overlay
-  - use websockets to control obs overlay position
-  - remotely from round window
-  - can also trigger different backgrounds
-- generate backgrounds for greenscreen
-- =render_UiApp_= (and compound widgets) should clear R flag on each widget it renders
-- make it easier to recover a working terminal if there's a bug in jprez/jkvm apps
-(right now, you try to debug and you waste brain cycles trying to see the cursor, etc.)
-- re-define =kc_spc= as break & clean up cursor for all j-kvm apps
-  - =k_nul= works, but it should probably be named =kc_spc=
-  - double check that control-space actually sends ascii 0.
-  - (maybe this is vt100 thing?) actual ascii character is called ^@
-  - explain why c-space breaks the application if =k_nul= was previously defined
-- when i go back and cleanup how mje initalizes things, see if i can move the vt-coloring step for input history into repl itself, using something like an =add_hist_line= method.
-- on accept: remove consecutive duplicates from history
-  - maybe: if B != as last line in history, add it to the history
-  - maybe: if last two items in history are same, delete one
 
 * current sprint (9/20-10/01)
 ** -- done
@@ -95,26 +57,84 @@ and it includes the entire input history.
 this is handled by =reset_rhist= when focus changes or you play macro.
 this way we get the exact history at that point in time.
 
-** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
-** TODO allow wrapping long output lines                       :jkvm:
-** TODO support the escape codes to toggle wrapping            :jkvm:
-** -- org-mode stuff:
-** TODO learn to clock time with org-mode                      :learn:
-** TODO learn how to use org-clock org-clock-report            :learn:
-** TODO learn how to use level of effort                       :learn:
-* backlog
-** TODO stop/ restart macros during playback
+*** rejms-20 : backlog grooming 2
+**** DONE rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
+
+**** DONE ^c / in repl/line-editor should not break whole application
+one exit key is enough.
+(fix was to remove the 3 in j-kvm.ijs)
+
+** -- easy stuff for week 2 of sprint
+** TODO [#A] start in repl mode
+
+** TODO [#A] key: ^s should save anywhere (global hotkeys)..   :key:
+right now you have to be focused on the outline
+could be done by having a globalkeys namespace that all keyboard handlers can =coinsert=
+** TODO [#A] home key to move to start of line                 :key:
+** TODO [#A] end key to move to end of line                    :key:
+** TODO [#A] stop macro during playback
 important because it can take a long time while you're using jprez
 also you don't want other keys to fire the macro or it'll screw up
 - plan: use different keybindings when A=1
 (use whatever "modal" dispatch system i use for app keyboard focus)
 - then we can have other keys when it's play mode, rather than having it interpret our keypresses
+** TODO [#B] alt-d to delete next word                         :key:jkvm:edit:
+** TODO [#A] allow wrapping long output lines                  :jkvm:jrepl:
+this would be an option for the behavior of =puts_vid= (when writing to video buffer)
 
-** TODO cut, copy, paste                                       :jkvm:edit:
-** TODO [#A] optimize output of render/blit
-:PROPERTIES:
-:Effort:   1h
-:END:
+it looks like they wrap, but jrepl doesn't know that they've wrapped,
+and puts the cursor in weird places.
+3 issues:
+  - 1. the lines don't currently get cut off in the (default) non-wrapping mode
+  - 2. when the lines wrap, jrepl doesn't know that there multiple lines, and shows the cursor in wrong place.
+  - 3. when editing a line long enough to overflow, it wraps back to the left side.
+
+** TODO [#C] support the escape codes to toggle wrapping       :jkvm:
+this would be added to the parser in =vputs_vid=
+
+** TODO [#B] alt-backspace to delete previous word             :key:jkvm:edit:
+** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
+** -- lhs editor episode
+** TODO [#A] Define Text Editor Component                      :widget:
+(right now, the jprez editor is just a plain UiWidget)
+  - T: text as a whole
+  - P: current page
+  - L: current line(s)
+  - C: cursor(s) (per line)
+  - B: line buffer
+
+** TODO [#B] draw the editor cursor(s)                         :jprez:lsed:
+we can start with the idea that the editor is just a list of lines
+with an extra cursor drawn on top.
+
+** TODO [#B] ui to set initial state of editor for slide       :jprez:lsed:
+This feature has always existed, by using source blocks in the outline.
+But there is no way to create such a thing in jprez.
+So the feature here is to edit the inital editor state /without recording a macro/.
+(meaning the viewer should not have to watch every character get typed out)
+Ex: we want to show complete settle code /before/ we derive it.
+
+** TODO [#B] let repl push input to the editor                 :jprez:lsed:
+- maybe any assignment or load/import goes to the editor buffer by default?
+
+** TODO [#B] store lsed state (visible, buffer, cursor) in each world :jprez:lsed:
+* backlog
+** TODO [#A] make it easier to recover a working terminal if there's a bug in jprez/jkvm apps :jkvm:
+extend 'reset' so that:
+  - make sure echo is on
+  - make sure cursor is on
+  - if possible, make sure j's readline gets re-enabled so j prompt has cursor control
+(right now, you try to debug and you waste brain cycles trying to see the cursor, etc.)
+maybe even better would be a global error trap that does this in =kvm_loop=
+** TODO [#A] add special pop-up editor for multi-widget macros.
+(something that gave you more of fine-grained control over the timeline without having to edit macro code)
+almost like a timeline view? or like an old-school midi/mod tracker?
+ex ui: https://upload.wikimedia.org/wikipedia/commons/7/7e/Schism-beyond.gif
+
+** TODO [#A] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
+- edit: refactor so that keys, macro recording, and verb to execute (for live binding or macro playback) are all defined in one table
+- maybe the quick answer for keyboard layouts is to just put that in a separate file?
+- or have two files: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
 ** TODO [#A] clean up the whole focus/keybinding mess          :jkvm:jprez:
 :PROPERTIES:
 :Effort:   3d
@@ -127,123 +147,15 @@ also you don't want other keys to fire the macro or it'll screw up
 - maybe this means coming up standard numbers for keyboard codes
 - gives us the ability to decouple the ui framework from vt-100
 
-** TODO [#A] fix j-kvm on osx
+** TODO [#A] optimize output of render/blit
 :PROPERTIES:
-:Effort:   3d
+:Effort:   1h
 :END:
-** TODO [#B] alt-d to delete next word                         :jkvm:edit:
-** TODO [#B] alt-backspace to delete previous word             :jkvm:edit:
-** TODO [#B] repl animations can also push input to the editor buffer :jprez:lsed:
-- maybe any assignment or load/import goes to the editor buffer by default?
-** TODO [#B] store lsed state (visible, buffer, cursor) in each world :jprez:lsed:
-** TODO [#B] make worlds optional                              :jrepl:
-Some people will just prefer a regular repl.
+*** TODO app: emit color codes only when they change
+*** TODO app: emit only changed cells
 
-** TODO [#B] set initial state of editor for slide             :jprez:lsed:
-Ex: we want to show complete settle code /before/ we derive it.
-- parse block names from org-mode ... /or/ just use headlines?
-** TODO [#B] command to insert a line from repl into the buffer at position x :jprez:lsed:
-** TODO [#B] command to evaluate the editor in the repl        :jprez:lsed:
-- probably don't want to dump the whole buffer
-- maybe say '<<evaluated x lines...>>' in the repl
-** TODO [#B] draw the editor cursor(s)                         :jprez:lsed:
-** TODO [#B] draw selection                                    :jprez:lsed:
-** TODO [#B] save state of the editor/slide at each step       :jprez:lsed:
-
-** TODO [#B] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
-** TODO [#B] speed up the escape code parsers (vputs, onkey)   :jkvm:
-:PROPERTIES:
-:Effort:   2d
-:END:
-** TODO [#C] test that the macro actually produces the next line of code in the script.
-examples: manually edited macros might break.
-using "future" completion history is not allowed.
-** TODO [#C] detect and "bake" usage of "future command line history" :jprez:
-this when you have a full future history from loading a presentation,
-and you use that history to complete a line in the past.
-This makes no sense from a narrative point of view.
-** TODO [#C] recalculate all worlds                            :jprez:
-** TODO [#C] show world for line, with content?                :jrepl:debug:
-** TODO [#C] fix =loop_kvm= so left argument does not need to be in the z locale :jkvm:
-:PROPERTIES:
-:Effort:   3d
-:END:
-** TODO [#C] decide whether curs 0 should be part of loop_kvm_, and if so, how to use cursors?
-maybe this is just a flag.
-** TODO [#C] re-arrange mje.ijs so that open'' isn't in the middle of the file :jprez:techdebt:
-** TODO [#C] allow setting vim or emacs keys                   :jkvm:edit:
-** TODO use numeric prefix for multi-commands                  :jkvm:edit:
-** TODO toggle selection mode                                  :jkvm:edit:
-** TODO highlight the selection                                :jkvm:edit:
-** ----------------------
-** TODO app: emit color codes only when they change
-** TODO app: emit only changed cells
-** TODO app: define applications' widget in a table with x,y,class,args
-** TODO in the repl, if i print out a non-noun, syntax highlight it.
-** TODO add word-wrap mode
-** TODO extract UiComponent from UiApp (component=widget+container) (??)
-have a list of children and auto-provide the ability to draw all of them with extra code.
-(probably can factor this out of ui/app.ijs)
-** TODO add ability to run arbitrary verbs on every frame
-** TODO bug: open quote breaks the lexer
-
-** TODO repl widget (enhanced shell for J, b4, etc)            :widget:
-*** TODO edit j function
-*** TODO preserve source code
-**** integrate with JOD?
-*** TODO repl widget
-**** TODO up/down: history
-** TODO outliner widget (for presentations)                    :widget:
-** TODO stack widget                                           :widget:
-** TODO [5/12] have =puts= recognize escape codes
-https://www2.ccs.neu.edu/research/gpc/VonaUtils/vona/terminal/vtansi.htm
-*** DONE home/goxy:  ~CSI (row? ; col?)? H~
-*** TODO cursor shift: ~CSI count? A|B|C|D~ # A=up B=dn C=rt D=lf
-*** TODO erase down: ~CSI J~
-*** DONE erase screen: ~CSI 2J~
-*** DONE clear to eol: ~CSI K~
-*** DONE show cursor: ~CSI ?25 h~
-*** DONE hide cursor: ~CSI ?25 l~
-*** TODO [0/9] ansi color: ~CSI (attr (;attr)*)* m~
-**** TODO 0=reset attrs
-**** TODO 1=bright
-**** TODO 30-37 → krgybmcw fg
-**** TODO 40-47 → krgybmcw bg
-**** TODO 38;5 → 256-color fg
-**** TODO 48;5 → 256-color bg
-**** TODO 38;2 → 24-bit fg
-**** TODO 48;2 → 24-bit bg
-*** TODO scrolling
-*** TODO enable line wrap: ~CSI 7h~
-*** TODO disable line wrap: ~CSI 7l~
-*** TODO query cursor position: ~CSI 6n~  (responds with =CSI ROW;COL R=)
-'0123456789' e.~ s=:'1234;1234234x42342'
-** TODO document and port cwio
-** TODO [2/9] missing kvm features
-*** DONE fetch real terminal dimensions
-  hw =. _".}: 2!:0 'stty size'
-*** TODO make sure i can fill entire screen
-*** TODO disable ^C on linux
-*** TODO [#9] mouse events
-*** TODO [#9] show console in jqt
-: jshowconsole_j_ 1  NB. doesn't seem to work in jqt
-*** TODO blit subwindows
-: {{ (u x {y) x } y }}  NB. from bob t.
-: ix _:"0 {{ (u x {y) x } y }} i.10 10 [ (ix=.<2 3 4; 5 6)
-https://stackoverflow.com/questions/68362425/amend-a-subarray-in-place-in-j
-*** TODO [3/5] virtual terminal buffer
-**** DONE state variables for terminal
-**** DONE write a character to video ram
-**** DONE draw entire buffer
-**** TODO increment cursor position
-**** TODO [#2] handle end of line behavior
-*** DONE [2/2] termstack
-**** DONE wrap putc, goxy, etc
-**** DONE push/pop term
-*** TODO [#9] [0/3] low priority terminal enhancements
-**** TODO [#9] on redraw, compare buf vs cached
-***** TODO check for runs of same fg,bg colors
-***** etc
+*** TODO check for runs of same fg,bg colors
+*** etc
 a =: 8 32 $ a.i.'.'
 b =: 95 (0 3;3 24; 3 26; 4 18)}a
 (draw =: [: puts cls, a.{~ ])
@@ -258,7 +170,7 @@ xys,.<"0 xys { b
 
 NB. each row is x,y,val
 ;@|."1(;"0~{&b) xys
-***** TODO redraw the changes:
+*** TODO redraw the changes:
 generate list of attributes of the changed cells.
 ideally you'd have rank 2 list: fg and bg.
 turn it into 2 boxes.
@@ -268,126 +180,148 @@ otherwise ''.
 
 likewise, for the coordinates, if they're right next to each other,
 you don't need to issue a cursor move
-**** TODO [#9] representing the video buffer more compactly
-***** option 2: 32 bits per cell
-- 13 bit unicode char
-- 23 bits left over for bold/italic/underline
-- 256 fg, bg colors
+** TODO [#A] use numeric prefix for multi-commands             :jkvm:edit:
+especially important for pauses
+** TODO [#A] set base tempo for playback (in kps)              :jkvm:edit:
+** TODO [#A] general undo system for all widgets               :jkvm:ui:
+** TODO [#B] pick a new default panic/break key
+maybe ^/ or ^] or whatever
+because ^space is used in emacs to set the mark (enter selection mode)
+** TODO [#B] ctrl-space should enter selection mode
+** TODO [#B] command to insert a line from repl into the editor at cursor :jprez:lsed:
+** TODO [#B] command to evaluate the editor in the repl        :jprez:lsed:
+- probably don't want to dump the whole buffer
+- maybe say '<<evaluated x lines...>>' in the repl
+** TODO [#B] draw selection                                    :jprez:lsed:
+** TODO [#B] ^c should not break out of the application
+** TODO [#B] cut, copy, paste                                  :jkvm:edit:
+requires a selection
+** TODO [#B] make worlds optional                              :jrepl:
+Some people will just prefer a regular repl.
 
-The trick to packing the unicode would
-be to use a code page prefix, and only
-allow a fixed number of code pages on
-the screen at one time. (like 64 or something)
+** TODO [#B] speed up the escape code parsers (vputs, onkey)   :jkvm:
+:PROPERTIES:
+:Effort:   2d
+:END:
+** TODO [#B] extract UiComponent from UiApp (component=widget+container) (??) :jkvm:
+have a list of children and auto-provide the ability to draw all of them with extra code.
+(probably can factor this out of ui/app.ijs)
+** TODO [#B] app: define applications' widget in a table with x,y,class,args
+** TODO [#B] in the repl, if i print out a non-noun, syntax highlight it.
+** TODO [#B] make =vputs_vid_= table-driven
+the current code is a horrifying recursive descent parser
+derive the state machine from a list of the escape code patterns
+** TODO [#B] [5/12] have =vputs_vid_= recognize escape codes
+https://www2.ccs.neu.edu/research/gpc/VonaUtils/vona/terminal/vtansi.htm
+*** DONE home/goxy:  ~CSI (row? ; col?)? H~
+*** DONE erase screen: ~CSI 2J~
+*** DONE clear to eol: ~CSI K~
+*** DONE show cursor: ~CSI ?25 h~
+*** DONE hide cursor: ~CSI ?25 l~
+*** TODO vt code: cursor shift: ~CSI count? A|B|C|D~ # A=up B=dn C=rt D=lf
+*** TODO erase down: ~CSI J~
+*** TODO bold:  ( CSI 1m ? or is that just "bright"?)
+*** TODO italic?
+*** TODO enable line wrap: ~CSI 7h~
+*** TODO disable line wrap: ~CSI 7l~
+*** TODO query cursor position: ~CSI 6n~  (responds with =CSI ROW;COL R=)
+'0123456789' e.~ s=:'1234;1234234x42342'
+** TODO [#B] add real =on_focus= handlers                        :jkvm:ui:
+(after i do real keyboard focus handling solution)
+** TODO [#B] check for multiline input. (direct defs)
+  - we already have =depth_world_=  and we just need to check depth of last token
+  - double check that parens cannot span lines inside direct definitions
+** TODO [#B] visual indication that the file actually saved when you press ^s :jprez:
+status line widget?
+(right now we define a key and its macro logging character in one area, far away from the update method)
+** TODO [#B] default tab-key handler (=kc_i=) should be to call 'next-widget' on main app :jkvm:
+  - requires somehow having reference to the app in which we are running
+** TODO [#B] =render_UiApp_= (and compound widgets) should clear R flag on each widget it renders :jkvm:ui:
+** TODO [#B] look for =kc_spc= instead of =k_nul=                  :jkvm:
+- =k_nul= works, but it should probably be named =kc_spc=
+- (maybe this is vt100 thing?) actual ascii character is called ^@
+- double check that control-space actually sends ascii 0.
+** TODO [#C] remove =vtcolor_tok_= call from worlds              :jprez:techdebt:
+- right now, =exec= calls =vtcolor= to color the history
+- maybe the repl widget itself should just know to color history lines
+- then we don't need vtcolor (which actually stores escape characters in the history)
+** TODO [#C] on accept: remove consecutive duplicates from history
+  - maybe: if B != as last line in history, add it to the history
+  - maybe: if last two items in history are same, delete one
 
-***** dealing with multi-codepoint characters?
-we could also track the individual characters
-we need. this might be useful because a cell on
-the screen might be filled with multiple unicode cells.
 
-#+begin_src j
-u:16ba00+_2 dfh\'2a281c3e2c40'
-ਪਨਜਾਬੀ
-punjabi ... seems like each vowel takes a half-space
-#+end_src
+** TODO [#C] re-arrange mje.ijs so that open'' isn't in the middle of the file :jprez:techdebt:
+** TODO [#C] fix j-kvm on osx
+:PROPERTIES:
+:Effort:   3d
+:END:
+** TODO [#C] test that the macro actually produces the next line of code in the script.
+examples: manually edited macros might break.
+using "future" completion history is not allowed.
+** TODO [#C] detect and "bake" usage of "future command line history" :jprez:
+this when you have a full future history from loading a presentation,
+and you use that history to complete a line in the past.
+This makes no sense from a narrative point of view.
+** TODO [#C] show world for line, with content                 :jrepl:debug:
+on screen, show the world number as you move the outline cursor
+also have a display of the variables in scope that changes as you move the cursor
+** TODO [#C] fix =loop_kvm= so left argument does not need to be in the z locale :jkvm:
+:PROPERTIES:
+:Effort:   3d
+:END:
+** TODO [#C] decide whether curs 0 should be part of loop_kvm_, and if so, how to use cursors?
+maybe this is just a flag.
+** TODO [#C] allow setting vim or emacs keys                   :jkvm:edit:
+** TODO [#C] add word-wrap mode to list control                :jkvm:list:
+- not just wrapping the characters, but breaking on spaces or hyphens or something
+- would need to track the height of each entry
+** TODO [#C] file browser widget                               :widget:
+** TODO [#C] "goal stack" widget in timeline                   :widget:
+is this even different from a list widget? color coding, maybe?
+the goal is different: it's to show the current state of the narrative.
+(it's an "on-screen", in-presentation widget that changes as you navigate through time)
 
-***** rank 1 or 2?
-2d seems natural but operations are simpler in 1d
-and we can just apply the necessary calculations to
-map index positions to coordinates after we've
-selected for differences
-** TODO file browser                                           :widget:
-** TODO git status widget                                      :jkvm:files:
-** TODO terminal mode viewmat                                  :widget:
+** TODO [#C] demonstrate mouse events                          :jkvm:
+** TODO [#C] elastic tabstops for editor
+https://nickgravgaard.com/elastic-tabstops/
+** TODO [#D] add ability to run arbitrary verbs on every frame
+- The idea here was to have a general-purpose task runner, that was not necessarily tied to a widget.
+- I don't remember why I wanted this,
+- But it's easy to simulate with an invisible widget.
+- Is there any need for more than this?
 
-these block drawing characters do the work:
-: >((u:32 16b2584 16b2580 16b2588){~#.@|:) L:0 ] _2<\  (0,~])^:(#%2) n=: |:#:i.32
+** TODO [#D] document and port cwio
+cwio = 'colorwrite'
+https://github.com/tangentstorm/xpl/blob/master/demo/cwio_eg.pas
 
-for a black and white matrix this is fine.
-but we can have true color now.
-** TODO editor file commands
-*** TODO load file: T =: fread path
-*** TODO save file: text fwrite path
-** TODO Text Editor Component                                  :widget:
-*** TODO text editor
-**** state vars:
-  - T: text as a whole
-  - P: current page
-  - L: current line(s)
-  - C: cursor(s) (per line)
-  - B: line buffer
-
-**** line editor commands
-  - insert char
-  - delete char
-  - delete word/token
-  - swap (in either direction)
-
-**** page editor
+** TODO [#D] git status widget                                 :jkvm:files:
+(after we have a file browser)
+** TODO [#D] paging in text editor
   - insert page
   - delete page
   - join pages
-*** TODO keyboard commands
-**** insert char
-**** delete char
-**** cut
-**** copy
-**** paste
-**** backspace
-**** move cursor
-**** undo
-*** TODO draw fake cursor(s) in vt buffer
-*** TODO [#2] syntax highlighting
-** TODO [#9] elastic tabstops
-https://nickgravgaard.com/elastic-tabstops/
-** [4/16] token editor
-*** TODO connect buffer editor to the slide
-*** DONE make the editor into a widget
-*** DONE ability to insert / edit plain text lines
-**** DONE fix bug that deleted blank lines on save
-org parser was deleting lines matching the slide (incl. blanks)
-rather than just extracting the range.
-**** DONE [3/3] keys O/o to start blank lines before/after
-***** DONE use the 'insert' command from the editor widget
-***** DONE verb to invoke line editor
-***** DONE O/o should insert line and and invoke the editor
-*** DONE keep a separate 'ihist' for input history, so we can work from an earlier input
-*** DONE make the repl's token editor line a widget ("ted")
-*** ----
-*** TODO hook keyboard up to token editor
-*** TODO show each input lines input number in the text itself =: label_324.= or something
-*** TODO record in the repl
-*** TODO add special pop-up editor for editor macro lines.
-*** TODO run macro lines internally when rendering, and verify correctness:
-- next line must be a : line
-- it must match the contents of the buffer after macro is run
-*** TODO button to play an animation in place in the repl
-*** TODO toggle focus of the widget with tab
-*** TODO separate ui widgets for each level
-**** TODO UiWordEd - word editor (string editor)
-**** TODO UiLineEd - line editor (lines of tokens)
-**** TODO UiTextEd - text editor (files of lines)
-*** TODO [0/3] draw editor widget instead of a 'slide'
-**** TODO make a CodeEdit class
-- not in kvm unless i want to introduce jlex
-**** TODO like Uilist, draw the visible buffer
-**** TODO override the item-drawing verb so it highlights syntax
-*** TODO [0/7] handle editor keyboard events
-**** TODO give editor a 'focused' flag, and toggle with tab key
-**** TODO when focused, keyboard events go to editor
-**** TODO have undo built-in from the start
-**** TODO add keys to move between lines (up,down,goto)
-**** TODO add keys to position cursor(s) on the line
-**** TODO add cut/copy/paste/clipboard
-**** TODO add keys to expand/contract selection
-*** TODO record keyboard events (with timing)
-** [1/2] j wishlist (ask for on j list)
-*** TODO {.@E. special form (string "startswith") .. also &.|. for endswith
-*** DONE if name==main:
-best i have so far is this:
-#+begin_src j
-{{ y }}^:('repl.ijs' {.@E.&.|. >{.}.ARGV)'')
-#+end_src
-* canceled
+
+** TODO [#D] =render_UiListWidget_= could use some golfing
+
+
+* someday / maybe
+** [#D] show (os) console in jqt
+: jshowconsole_j_ 1  NB. doesn't seem to work in jqt
+qt terminal doesn't support vt escape codes
+not sure i even care about this.
+(would have to be done in jqt front-end itself)
+(better idea would probably be make terminal emulator in jqt, or opengl, or SDL)
+
+** [#D] integrate with JOD?
+* design work needed
+** in =exec_world_=, decide what to do when an error happens and the debugger is on. :unclear:
+** better idiom for expresssing 'method___self' (see =create= in repl.ijs) :unclear:
+maybe this ties in with the '::' concept for nested spaces
+(but: conames and names don't currently occupy the same namespace)
+maybe ::x  is x in current namespace?
+
+
+
 * finished
 ** [3/3] app framework
 *** DONE render multiple widgets to buffer

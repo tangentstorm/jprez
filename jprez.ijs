@@ -302,7 +302,7 @@ kc_t =: kc_t__red
 copop''
 
 
-rl =: {{ load'mje.ijs' }} NB. reload command (for development)
+rl =: {{ load'jprez.ijs' }} NB. reload command (for development)
 
 NB. event loop
 mje =: {{

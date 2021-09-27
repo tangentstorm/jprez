@@ -11,7 +11,7 @@ It is also currently the subject of the **<a href="https://twitch.tv/tangentstor
 (Past episodes are available at https://youtube.com/c/tangentstorm/, along with my scripted programming videos.)
 
 # orientation
-<img src="jprez.png">
+<img src="readme-screenshot.png">
 
 There are four sections to the screen above.
 

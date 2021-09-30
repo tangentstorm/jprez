@@ -27,7 +27,7 @@ create =: {{
   ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted editor
   hist =: (,<y) conew 'UiList'
   XY__ed =: 3 0  NB. initial position of prompt
-  kc_m__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
+  on_accept__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
   on_up__ed =: ('bak_','_',~>coname'')~  NB. ugly way to create reference
   on_dn__ed =: ('fwd_','_',~>coname'')~  NB. to a method on this object
   0 0$0 }}

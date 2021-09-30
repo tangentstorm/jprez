@@ -1,6 +1,26 @@
 #+TITLE: backlog for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
+** TODO allow binding keys to multi-character macros
+NB. TODO: 'd$' is the correct macro for kc_k/macro 'K'
+** TODO group syntax to record a macro                         :ui:edit:macros:
+: (abcd) would execute a,b,c,d in 4 ticks
+** TODO block syntax to run a macro at max speed               :ui:edit:macros:
+: [abcd] would execute a,b,c,d in 1 tick
+- for typing long strings at speed
+- for grouping primitive operations into a single "command"
+** TODO give blocks a name
+: :go[abcd]  would define 'go'
+: {go} would call 'go' (??)
+- there needs to be an end delimiter because
+
+** TODO character to invoke a named macro
+- right now, every macro instruction is a single character
+- therefore, many ascii characters are used up.
+- so: we need an escape character to indicate that we want to call a macro,
+    rather than execute each character in its name.
+- we also need an end-escape character to indicate the end of the name.
+
 
 * current sprint (9/20-10/01)
 ** -- done
@@ -64,8 +84,12 @@ this way we get the exact history at that point in time.
 one exit key is enough.
 (fix was to remove the 3 in j-kvm.ijs)
 
-** -- easy stuff for week 2 of sprint
-** TODO [#A] start in repl mode
+*** rejms-21 : start on table-driven keybindings (tag only in j-kvm)
+*** rejms-22 : table-driven keybindings part 2*
+**** DONE [#A] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
+- edit: refactor so that keys, macro recording, and verb to execute (for live binding or macro playback) are all defined in one table
+- maybe the quick answer for keyboard layouts is to just put that in a separate file?
+- or have two tables: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
 
 ** TODO [#A] key: ^s should save anywhere (global hotkeys)..   :key:
 right now you have to be focused on the outline
@@ -79,6 +103,7 @@ also you don't want other keys to fire the macro or it'll screw up
 (use whatever "modal" dispatch system i use for app keyboard focus)
 - then we can have other keys when it's play mode, rather than having it interpret our keypresses
 ** TODO [#B] alt-d to delete next word                         :key:jkvm:edit:
+** TODO [#B] alt-backspace to delete previous word             :key:jkvm:edit:
 ** TODO [#A] allow wrapping long output lines                  :jkvm:jrepl:
 this would be an option for the behavior of =puts_vid= (when writing to video buffer)
 
@@ -89,11 +114,11 @@ and puts the cursor in weird places.
   - 2. when the lines wrap, jrepl doesn't know that there multiple lines, and shows the cursor in wrong place.
   - 3. when editing a line long enough to overflow, it wraps back to the left side.
 
+** TODO [#A] start in repl mode
+** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
 ** TODO [#C] support the escape codes to toggle wrapping       :jkvm:
 this would be added to the parser in =vputs_vid=
 
-** TODO [#B] alt-backspace to delete previous word             :key:jkvm:edit:
-** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
 ** -- lhs editor episode
 ** TODO [#A] Define Text Editor Component                      :widget:
 (right now, the jprez editor is just a plain UiWidget)
@@ -131,10 +156,6 @@ maybe even better would be a global error trap that does this in =kvm_loop=
 almost like a timeline view? or like an old-school midi/mod tracker?
 ex ui: https://upload.wikimedia.org/wikipedia/commons/7/7e/Schism-beyond.gif
 
-** TODO [#A] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
-- edit: refactor so that keys, macro recording, and verb to execute (for live binding or macro playback) are all defined in one table
-- maybe the quick answer for keyboard layouts is to just put that in a separate file?
-- or have two files: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
 ** TODO [#A] clean up the whole focus/keybinding mess          :jkvm:jprez:
 :PROPERTIES:
 :Effort:   3d

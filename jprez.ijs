@@ -257,18 +257,11 @@ stop =: {{
   L__cmds =: (<B__led) C__cmds } L__cmds
   put_text'' }}
 
+NB. copy keymap from led. ex:  k_arup =: k_arup__led
+". {{  y,' =: ',y,'__led' }}S:0 KEY_PRESS__led
+
 k_asc =: {{ R__led =: 1 [ ins__led y }}
-ka_b =: ka_b__led
-ka_f =: ka_f__led
-kc_d =: del__led
-kc_h =: k_bsp =: bsp__led
-kc_e =: eol__led
-kc_b =: bak__led
-kc_f =: fwd__led
 kc_m =: stop
-kc_t =: swp__led
-kc_a =: bol__led
-kc_k =: keol__led
 
 copop''
 
@@ -283,21 +276,11 @@ focus_on_outline =: {{
   R__repl =: 1 NB. to redraw without focus
   keymode__BASE 'outkeys' }}
 
-k_arup =: k_arup__red
-k_ardn =: k_ardn__red
+NB. copy keymap from red. ex:  k_arup =: k_arup__red
+". {{  y,' =: ',y,'__red' }}S:0 KEY_PRESS__red
+
 k_asc =: k_asc__red
-ka_b =: ka_b__red
-ka_f =: ka_f__red
-kc_a =: kc_a__red
-kc_b =: kc_b__red
-kc_d =: kc_d__red
-kc_e =: kc_e__red
-kc_f =: kc_f__red
-kc_h =: k_bsp =: kc_h__red
 kc_i =: focus_on_outline  NB. tab to unfocus
-kc_k =: kc_k__red
-kc_m =: kc_m__red
-kc_t =: kc_t__red
 
 copop''
 

@@ -136,6 +136,7 @@ NB. keyboard control
 goto =: {{
  R__editor =: R__repl =: 1
  L__cmds =: text cur =: y
+ L__editor =: code y
  S__cmds =: C__cmds =: 0 }}
 
 put_text =: {{ 0 0 $ slides =: (<L__cmds) (<cur,1) } slides  }}

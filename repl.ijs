@@ -10,9 +10,9 @@ create =: {{
   hist =: (,<y) conew 'UiList'
   ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted line editor
   XY__ed =: 3 0  NB. initial position of prompt
-  on_accept__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
-  on_up__ed =: ('bak_','_',~>coname'')~  NB. ugly way to create reference
-  on_dn__ed =: ('fwd_','_',~>coname'')~  NB. to a method on this object
+  on_accept__ed =: 'accept'of_self
+  on_up__ed =: 'bak' of_self
+  on_dn__ed =: 'fwd' of_self
   0 0$0 }}
 
 update =: {{ R =: R +. R__ed }}

@@ -1,31 +1,14 @@
 NB. repl ui widget, including history display
 load 'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
-load 'tok.ijs worlds.ijs'
-
-coclass 'UiSyntaxLine' extends 'UiEditWidget'
-
-create =: {{
-  create_UiEditWidget_ f. y
-  ted =: '' conew 'TokEd'  NB. for syntax highlighting
-}}
-
-render =: {{
-  bg BG [ fg FG
-  try.
-    B__ted =: jcut_jlex_ B
-    render__ted y
-  catch.
-    render_UiEditWidget_ f. y
-  end.
-  render_cursor y }}
+require 'tok.ijs worlds.ijs syntaxline.ijs'
 
 coclass 'UiRepl' extends 'UiWidget'
 coinsert 'kvm'
 
 create =: {{
   'H W' =: gethw_vt_''
-  ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted editor
   hist =: (,<y) conew 'UiList'
+  ed =: '' conew 'UiSyntaxLine'  NB. syntax highlighted line editor
   XY__ed =: 3 0  NB. initial position of prompt
   on_accept__ed =: ('accept_','_',~>coname'')~  NB. !! TODO: fix this ugly mess!
   on_up__ed =: ('bak_','_',~>coname'')~  NB. ugly way to create reference

@@ -7,7 +7,7 @@ NB. not well organized at the moment, but important enough
 NB. that I should probably have it under version control.
 (<'z') copath 'base' NB. clear previous path
 load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
-load'worlds.ijs org.ijs tok.ijs repl.ijs'
+load'worlds.ijs org.ijs tok.ijs repl.ijs jedit.ijs'
 coinsert 'kvm'
 dbg 1
 copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
@@ -90,7 +90,7 @@ OLD__repl =: ''
 red =: ed__repl
 KPS__red =: 10* KPS__red NB. double speed until we fix jprez speed issues
 
-editor =: 'UiWidget' conew~ ''
+editor =: 'JCodeEditor' conew~ ''
 XY__editor =: 0 0
 H__editor =: H_HIST
 W__editor =: X_HIST-2
@@ -131,19 +131,6 @@ cmdix =: {{ index I. C__list, C__cmds }}
 worldnum =: {{ olw_base_ pick~ cmdix_base_'' }}
 getworld__repl =: {{ 'WORLD',": worldnum_base_'' }}
 
-
-NB. -- in-presentaiton editor widget (on the left) -------------------------
-render__editor =: {{
-  cc =. code_base_ cur_base_
-  NB. draw the code editor
-  cscr'' [ bg 16b101010 [ reset''
-  if. -. a: -: cc do.
-    for_line. >jlex cc do.
-      goxy 0,line_index
-      puts ' ' NB. little bit of whitespace on the left
-      if. line ~: a: do.  (put_tok_TokEd_ :: ]) L:1 "1 > line end.
-    end.
-  end. R =: 0 }}
 
 NB. keyboard control
 goto =: {{

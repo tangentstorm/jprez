@@ -1,8 +1,11 @@
 #+TITLE: backlog for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
+
+** TODO pressing n at end of last slide takes you to top of last slide :jprez:bug:
+it should just do nothing.
 ** TODO allow binding keys to multi-character macros
-NB. TODO: 'd$' is the correct macro for kc_k/macro 'K'
+NB. TODO: 'd$' is the "correct" vim macro for kc_k/macro 'K'
 ** TODO group syntax to record a macro                         :ui:edit:macros:
 : (abcd) would execute a,b,c,d in 4 ticks
 ** TODO block syntax to run a macro at max speed               :ui:edit:macros:
@@ -91,6 +94,29 @@ one exit key is enough.
 - maybe the quick answer for keyboard layouts is to just put that in a separate file?
 - or have two tables: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
 
+*** rejms-23 : start multi-line editor
+**** DONE [#A] Define Text Editor Component                  :widget:
+(right now, the jprez editor is just a plain UiWidget)
+**** DONE code editor should extend the UiList
+we can start with the idea that the editor is just a list of lines
+therefore, extend the UiListWidget
+**** DONE create =of_self= adverb
+**** DONE [#B] draw the editor cursor(s)                     :jprez:lsed:
+render the tokenized LIST with an extra cursor drawn on top.
+** -- ls editor stuff --
+** TODO [#B] ui to set initial state of editor for slide       :jprez:lsed:
+This feature has always existed, by using source blocks in the outline.
+But there is no way to create such a thing in jprez.
+So the feature here is to edit the inital editor state /without recording a macro/.
+(meaning the viewer should not have to watch every character get typed out)
+Ex: we want to show complete settle code /before/ we derive it.
+
+** TODO [#B] let repl push input to the editor                 :jprez:lsed:
+- maybe any assignment or load/import goes to the editor buffer by default?
+
+** TODO [#B] store lsed state (visible, buffer, cursor) in each world :jprez:lsed:
+** --- keyboard event handlers --
+** TODO add keyboard handling to use the editor
 ** TODO [#A] key: ^s should save anywhere (global hotkeys)..   :key:
 right now you have to be focused on the outline
 could be done by having a globalkeys namespace that all keyboard handlers can =coinsert=
@@ -119,30 +145,6 @@ and puts the cursor in weird places.
 ** TODO [#C] support the escape codes to toggle wrapping       :jkvm:
 this would be added to the parser in =vputs_vid=
 
-** -- lhs editor episode
-** TODO [#A] Define Text Editor Component                      :widget:
-(right now, the jprez editor is just a plain UiWidget)
-  - T: text as a whole
-  - P: current page
-  - L: current line(s)
-  - C: cursor(s) (per line)
-  - B: line buffer
-
-** TODO [#B] draw the editor cursor(s)                         :jprez:lsed:
-we can start with the idea that the editor is just a list of lines
-with an extra cursor drawn on top.
-
-** TODO [#B] ui to set initial state of editor for slide       :jprez:lsed:
-This feature has always existed, by using source blocks in the outline.
-But there is no way to create such a thing in jprez.
-So the feature here is to edit the inital editor state /without recording a macro/.
-(meaning the viewer should not have to watch every character get typed out)
-Ex: we want to show complete settle code /before/ we derive it.
-
-** TODO [#B] let repl push input to the editor                 :jprez:lsed:
-- maybe any assignment or load/import goes to the editor buffer by default?
-
-** TODO [#B] store lsed state (visible, buffer, cursor) in each world :jprez:lsed:
 * backlog
 ** TODO [#A] make it easier to recover a working terminal if there's a bug in jprez/jkvm apps :jkvm:
 extend 'reset' so that:

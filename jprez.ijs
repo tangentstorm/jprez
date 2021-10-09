@@ -153,7 +153,8 @@ keymode =: {{
   reset_rhist''
 }}
 
-reset_rhist =: {{ L__hist__repl =: (1+worldnum'') {. ihist_world_ }}
+NB. 1+worldnum includes the completed macro.
+reset_rhist =: {{ goz__hist__repl'' [ L__hist__repl =: (1+worldnum'') {. ihist_world_ }}
 
 
 (copush [ coinsert) 'outkeys'
@@ -228,7 +229,8 @@ playmacro =: {{
     cmd =. >cmd
     if. ': . ' -: 4{.cmd do.
       setstate__red olr__BASE pick~ cmdix__BASE''
-      reset_rhist__BASE''
+      reset_rhist__BASE'' NB. this includes the completed line...
+      set__hist__repl__BASE'' NB. so delete it. (TODO: handle multi-line macros)
       do__red 4}.cmd
     end.
   end. }}

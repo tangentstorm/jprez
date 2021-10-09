@@ -72,7 +72,9 @@ exec =: {{ NB. run code in the current 'world'
         exec_toks =. exec_fix execslot } exec_toks
       end.
     end.
-    exec_res =. ": (<'do'in_world_)`:0 ' ' joinstring exec_toks
+    (<'do'in_world_)`:0 'JRESULT=:', ' ' joinstring exec_toks
+    if. (type 'JRESULT'in_world_) -: <'noun' do. exec_res =. ": 'JRESULT'in_world_~
+    else. exec_res =. 5!:5 <'JRESULT'in_world_ end.
     if. (*# exec_res) > '=:'-:>1{exec_toks,a:,a: do. echo_world_ exec_res end.
   catch.
     echo_world_ dberm''

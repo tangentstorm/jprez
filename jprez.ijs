@@ -157,6 +157,26 @@ NB. 1+worldnum includes the completed macro.
 reset_rhist =: {{ goz__hist__repl'' [ L__hist__repl =: (1+worldnum'') {. ihist_world_ }}
 
 
+NB. global keyboard shortcuts
+kc_l =: smudge__app
+kc_o =: reopen
+kc_s =: save
+kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
+
+k_f3 =: move_splitter@_1
+k_f4 =: move_splitter@ 1
+
+move_splitter =: {{
+  if. *./ 1 < (H__list-y),H__repl + y do.
+    XY__list =: XY__list + 0,y [ H__list =: H__list - y
+    XY__cmds =: XY__cmds + 0,y [ H__cmds =: H__cmds - y
+    H__editor =: H__editor +y
+    H__repl =: H__repl + y
+    smudge__app''
+  end. }}
+
+
+
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
@@ -178,10 +198,6 @@ k_j =: k_n =: fwd_cmd
 k_k =: k_p =: bak_cmd
 k_o =: insline@fwd__cmds
 kc_i =: focus_on_repl
-kc_l =: smudge__app
-kc_o =: reopen
-kc_s =: save
-kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
 focus_on_repl =: {{
   R__list =: R__repl =: 1 NB. to redraw focus

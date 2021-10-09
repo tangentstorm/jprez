@@ -59,10 +59,8 @@ rebuild =: {{
 open''  NB. TODO: move to bottom
 
 NB. --  screen setup ---------------------------------------------------
-H_HIST =: 24
-X_HIST =: 72
-W_HIST =: X_HIST -~ xmax''
-Y_META =: H_HIST+2
+H_SPLIT =: 24 NB. initial height of horizontal splitter
+Y_META =: H_SPLIT+2
 
 NB. indent headings based on depth
 list =: 'UiList' conew~ heads
@@ -81,10 +79,8 @@ XY__led =: XY__cmds
 W__led =: W__cmds
 V__led =: 0
 
-repl =: 'UiRepl' conew~ ''
-H__repl =: H_HIST
-W__repl =: W_HIST
-XY__repl=: X_HIST,0
+repl =: 'UiRepl' conew~ ''   NB. W,XY of repl are calculated in show/hide editor
+H__repl =: H_SPLIT
 A__repl =: 1
 OLD__repl =: ''
 red =: ed__repl
@@ -92,11 +88,14 @@ KPS__red =: 10* KPS__red NB. double speed until we fix jprez speed issues
 
 editor =: 'JCodeEditor' conew~ ''
 XY__editor =: 0 0
-H__editor =: H_HIST
-W__editor =: X_HIST-2
+H__editor =: H_SPLIT
+W__editor =: 70
+
+show_editor =: {{ V__editor =: 1 [ XY__repl =: (W__editor+2), 0 [ W__repl =: W__editor -~ xmax'' }}
+hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__repl =: 1+xmax'' }}
+show_editor''
 
 app =: (list,editor,cmds,led,repl) conew 'UiApp'
-
 
 NB. -- widget modifications ---------------------------------------
 
@@ -158,6 +157,7 @@ reset_rhist =: {{ goz__hist__repl'' [ L__hist__repl =: (1+worldnum'') {. ihist_w
 
 
 NB. global keyboard shortcuts
+NB. ----------------------------------------------------
 kc_l =: smudge__app
 kc_o =: reopen
 kc_s =: save
@@ -165,6 +165,7 @@ kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
 k_f3 =: move_splitter@_1
 k_f4 =: move_splitter@ 1
+k_f5 =: toggle_editor
 
 move_splitter =: {{
   if. *./ 1 < (H__list-y),H__repl + y do.
@@ -174,6 +175,10 @@ move_splitter =: {{
     H__repl =: H__repl + y
     smudge__app''
   end. }}
+
+toggle_editor =: {{
+  if. V__editor do. hide_editor'' else. show_editor'' end.
+  smudge__app'' }}
 
 
 

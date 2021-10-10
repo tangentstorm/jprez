@@ -91,8 +91,8 @@ XY__editor =: 0 0
 H__editor =: H_SPLIT
 W__editor =: 70
 
-show_editor =: {{ V__editor =: 1 [ XY__repl =: (W__editor+2), 0 [ W__repl =: W__editor -~ xmax'' }}
-hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__repl =: 1+xmax'' }}
+show_editor =: {{ V__editor =: 1 [ XY__repl =: (W__editor+2), 0 [ W__red =: W__repl =: W__editor -~ xmax'' }}
+hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__red =: W__repl =: 1+xmax'' }}
 show_editor''
 
 app =: (list,editor,cmds,led,repl) conew 'UiApp'
@@ -182,6 +182,12 @@ toggle_editor =: {{
 
 
 
+save =: {{ (org_text'') fwrites ORG_PATH }}
+halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
+insline =: edline@'' @ inscmd@''
+delline =: rebuild @ put_text@'' @ del__cmds
+
+
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
@@ -207,11 +213,6 @@ kc_i =: focus_on_repl
 focus_on_repl =: {{
   R__list =: R__repl =: 1 NB. to redraw focus
   keymode__BASE 'replkeys' }}
-
-save =: {{ (org_text'') fwrites ORG_PATH }}
-halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
-insline =: edline@'' @ inscmd@''
-delline =: rebuild @ put_text@'' @ del__cmds
 
 reopen =: {{
   lc =. cur

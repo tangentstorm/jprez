@@ -93,7 +93,7 @@ W__editor =: 70
 
 show_editor =: {{ V__editor =: 1 [ XY__repl =: (W__editor+2), 0 [ W__red =: W__repl =: W__editor -~ xmax'' }}
 hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__red =: W__repl =: 1+xmax'' }}
-show_editor''
+hide_editor''
 
 app =: (list,editor,cmds,led,repl) conew 'UiApp'
 

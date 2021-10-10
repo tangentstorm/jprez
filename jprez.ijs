@@ -166,6 +166,11 @@ kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 k_f3 =: move_splitter@_1
 k_f4 =: move_splitter@ 1
 k_f5 =: toggle_editor
+k_f6 =: goto@bak__list
+k_f7 =: goto@fwd__list
+k_f8 =: bak_cmd
+k_f9 =: fwd_cmd @ keymode@'replkeys'
+k_f10=: playmacro
 
 move_splitter =: {{
   if. *./ 1 < (H__list-y),H__repl + y do.
@@ -180,12 +185,33 @@ toggle_editor =: {{
   if. V__editor do. hide_editor'' else. show_editor'' end.
   smudge__app'' }}
 
-
 
 save =: {{ (org_text'') fwrites ORG_PATH }}
 halt =: {{ curs@1 @ reset@'' [ break_kvm_=: 1 }}
 insline =: edline@'' @ inscmd@''
 delline =: rebuild @ put_text@'' @ del__cmds
+
+bak_cmd =: {{
+  if. (at0__cmds > at0__list)'' do.
+    goto bak__list''
+    goz__cmds''
+  else. bak__cmds'' end. }}
+
+fwd_cmd =: {{
+  if. atz__cmds'' do. goto fwd__list''
+  else. fwd__cmds'' end. }}
+
+playmacro =: {{
+  NB. play macro we currently looking at in the outline
+  if. a: ~: cmd =. val__cmds'' do.
+    cmd =. >cmd
+    if. ': . ' -: 4{.cmd do.
+      setstate__red olr pick~ cmdix''
+      reset_rhist'' NB. this includes the completed line...
+      set__hist__repl'' NB. so delete it. (TODO: handle multi-line macros)
+      do__red 4}.cmd
+    end.
+  end. }}
 
 
 (copush [ coinsert) 'outkeys'
@@ -222,8 +248,6 @@ reopen =: {{
   goto lc <. <: #slides
   C__cmds =: rc <. <: #L__cmds }}
 
-NB. more 'outkeys' definitions
-
 edline =: {{
   R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds
   C__led =: 0 [ B__led =: '',>val__cmds__BASE''
@@ -235,28 +259,6 @@ edrepl =: {{
   C__red =: 0 [ B__red =: 2}.>val__cmds__BASE''
   keymode__BASE 'replkeys' }}
 
-bak_cmd =: {{
-  if. (at0__cmds > at0__list)'' do.
-    goto bak__list''
-    goz__cmds''
-  else. bak__cmds'' end. }}
-
-fwd_cmd =: {{
-  if. atz__cmds'' do. goto fwd__list''
-  else. fwd__cmds'' end. }}
-
-playmacro =: {{
-  NB. play macro we currently looking at in the outline
-  if. a: ~: cmd =. val__cmds'' do.
-    cmd =. >cmd
-    if. ': . ' -: 4{.cmd do.
-      setstate__red olr__BASE pick~ cmdix__BASE''
-      reset_rhist__BASE'' NB. this includes the completed line...
-      set__hist__repl__BASE'' NB. so delete it. (TODO: handle multi-line macros)
-      do__red 4}.cmd
-    end.
-  end. }}
-
 copop''
 
 copush 'edkeys'
@@ -265,7 +267,7 @@ FOCUS =: led =: led__BASE [ cmds =: cmds__BASE
 
 stop =: {{
   keymode__BASE 'outkeys'
-  V__led =: 0 [ R__led =: R__cmds =: 1
+  V__led =: 0 [ R__repl =: R__red =: R__led =: R__cmds =: 1
   L__cmds =: (<B__led) C__cmds } L__cmds
   put_text'' }}
 

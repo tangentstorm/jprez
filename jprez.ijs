@@ -169,8 +169,11 @@ k_f5 =: toggle_editor
 k_f6 =: goto@bak__list
 k_f7 =: goto@fwd__list
 k_f8 =: bak_cmd
-k_f9 =: fwd_cmd @ keymode@'replkeys'
-k_f10=: playmacro
+k_f9 =: advance
+
+advance =: {{
+  if. ': . ' {.@E. >val__cmds'' do. playmacro''
+  else. fwd_cmd'' [ keymode'replkeys' end. }}
 
 move_splitter =: {{
   if. *./ 1 < (H__list-y),H__repl + y do.
@@ -209,6 +212,7 @@ playmacro =: {{
       setstate__red olr pick~ cmdix''
       reset_rhist'' NB. this includes the completed line...
       set__hist__repl'' NB. so delete it. (TODO: handle multi-line macros)
+      on_macro_end__red =: fwd_cmd_base_
       do__red 4}.cmd
     end.
   end. }}

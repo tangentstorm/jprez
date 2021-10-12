@@ -74,10 +74,10 @@ NB. B__ed =: '{{ i. y }}"0 ] 5'
 NB. macro =: '$XXXXXXXXXXXXXXXX?hello world?b?,?$'
 
 NB. standalone app (if not inside 'load' from some other file)
-{{y
+repl=:{{y
   cocurrent'base'
   init_world_''
   repl =: 'UiRepl' conew~ ''
   app_z_ =: 'UiApp' conew~ ,repl   NB. in z so loop_kvm can see it
-  step__app loop_kvm_ >ed__repl
-}}^:('repl.ijs' {.@E.&.|. >{.}.ARGV)''
+  step__app loop_kvm_ >ed__repl }}
+repl^:('repl.ijs' {.@E.&.|. >{.}.ARGV)''

@@ -2,6 +2,40 @@
 
 * inbox (for triage)
 
+** TODO general purpose grid widget
+- for macro debugger
+- for keymap editing
+- for file browser? (tree-grid)
+
+** TODO [#A] macro debugger / stepper
+you record a long macro and made a typo
+or want to change the timing
+now you're editing macros by hand. this is annoying.
+also you have to remember what all the keys do,
+so it would be nice to see the macros vertically with
+a description for each keypress, and strings on their own line
+
+** TODO [#A] fix blank line in history
+from outliner:
+  - tab to go to repl
+  - press up
+  - you should see the previous line from history
+  - instead you see a blank line
+
+** TODO [#A] horizontal scrolling doesn't seem to work correctly with ^e, etc :ui:edit:bug:
+make sure leftmost cursor is always in view
+
+** TODO [#A] general ability to re-arrange panels              :ui:
+everyone's screen/camera setup will be different,
+so let them arrange the screen in the most convenient way.
+(especially for my own situation, i wanted the text to be on top for the recording,
+so that my eyes would line up with the camera while i was reading)
+** TODO [#A] ability to insert linefeed/break lines            :jprez:
+this is ^j in vim
+
+** TODO [#A] multi-line macros are broken because of this line in jprez.ijs :bug:
+:  set__hist__repl__BASE'' NB. so delete it. (TODO: handle multi-line macros)
+
 ** TODO pressing n at end of last slide takes you to top of last slide :jprez:bug:
 it should just do nothing.
 ** TODO allow binding keys to multi-character macros
@@ -24,85 +58,47 @@ NB. TODO: 'd$' is the "correct" vim macro for kc_k/macro 'K'
     rather than execute each character in its name.
 - we also need an end-escape character to indicate the end of the name.
 
+** TODO lines in the screenplay that are too long are unreadable.
+"what good is the nub sieve?"
 
-* current sprint (9/20-10/01)
-** -- done
-*** rejms-14
-**** DONE "focus color" for cursors in list, edit, repl      :feature:jprez:jkvm:
-*** rejms-15 : 5 easy changes
-**** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
-**** DONE I set TSV=0 in macro player. it should be 1.       :jprez:
-actually i don't use ?TSV, i use TSV*?0 so it's in seconds.
-**** DONE [#A] make A=:1  the default for widgets            :jkvm:
-**** DONE [#A] backspace key in editor                       :jprez:
-needed to manually copy all keyboard handlers.
-**** DONE don't break on =kc_m=                                :jkvm:edit:
-**** DONE reorganize mje so that all keybindings map to named verb
-(instead of verb definition)
-*** rejms-16 : repl enhancements
-**** DONE [#A] colorize input history for standalone repl    :jrepl:
-**** DONE start repl cursor at top of the screen             :jprez:
-*** rejms-17 : working repl in jprez
-**** DONE inserting repl->script mis-manages start state     :bug:jprez:
-part of this was clearing the worlds, and part was =setval__tmp''=
-**** DONE [#C] clear "future" worlds on input                :jprez:
-**** DONE [#C] rebuild worlds on delete                      :jprez:
-**** DONE run the command and show the output in the repl    :jprez:
-**** DONE tab to switch between outline and repl
-*** rejms-18 : repl command history
-**** DONE [4/4] [#A] tie repl to the command history         :jrepl:
-Pressing up or down should let you navigate the input history.
-This history is provided by worlds.ijs.
+** TODO deal with unicode in input history
 
-- [X] maintain an internal (invisible) list widget =hist= with input history
-- [X] last item in =hist= is the current edit buffer (set by up-arrow)
-- [X] on up arrow:
-  - [X] if i'm at the end of list, then update the list else ok
-  - [X] call =bak__hist= to move the history cursor
-  - [X] set B to =val__hist=
-- [X] on down arrow:
-  - call =fwd__hist=
-  - set B to =val__hist=
-*** rejms-19 : history fixes
-**** DONE fix length error: =getlog__ed= when the log is empty. :ui:edit:
+** TODO [#C] tokenize org-mode text
 
-**** DONE fix length error in exec when input is empty.      :worlds:
-**** DONE pressing up, and then down should restore the line :jrepl:
-**** DONE create pluggable =on_arup= and =on_ardn= event handlers :ui:edit:
-**** DONE record the history navigation in the macro         :jprez:
-**** DONE command history for standalone repl (keybinding issue) :jrepl:
-**** DONE playback of j/k keys in macro player (up/down arrows) :ui:edit:
-**** DONE stopgap method to get input history into repl widget
-right now it just sets the history when the focus changes,
-and it includes the entire input history.
+** TODO need actual outlining capabilities
+- insert headline (actually works but requires save/reload)
+- re-indenting is not possible without external editor
 
-**** DONE properly handle history in playback                :jprez:
-this is handled by =reset_rhist= when focus changes or you play macro.
-this way we get the exact history at that point in time.
+** TODO [#C] would be nice to just have "org-mode" view        :jprez:
+- single editor buffer with the asterisks visible
 
-*** rejms-20 : backlog grooming 2
-**** DONE rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
+** TODO reopen verb should refresh the outline widgets         :jprez:
 
-**** DONE ^c / in repl/line-editor should not break whole application
-one exit key is enough.
-(fix was to remove the 3 in j-kvm.ijs)
+* backlog
+** -- done --
+** jprez-24 : unblocking jprez
+*** DONE 24a fix jrepl so non-nouns are displayed             :jrepl:bug:
+verb "((V i. V) = i. $ V) # V" is not displaying correctly
+it seems to only show results when they're nouns.
+had to also account for empty lines and comments.
 
-*** rejms-21 : start on table-driven keybindings (tag only in j-kvm)
-*** rejms-22 : table-driven keybindings part 2*
-**** DONE [#A] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
-- edit: refactor so that keys, macro recording, and verb to execute (for live binding or macro playback) are all defined in one table
-- maybe the quick answer for keyboard layouts is to just put that in a separate file?
-- or have two tables: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
+*** DONE 24b fix starting point for history in macro player   :jprez:bug:
+"we do need to define V" is not starting the macro from the right place
+sometimes it works, sometimes it doesn't
+seems like the behavior depends on which lines i've visited last with the outline cursor
 
-*** rejms-23 : start multi-line editor
-**** DONE [#A] Define Text Editor Component                  :widget:
-(right now, the jprez editor is just a plain UiWidget)
-**** DONE code editor should extend the UiList
-we can start with the idea that the editor is just a list of lines
-therefore, extend the UiListWidget
-**** DONE create =of_self= adverb
-**** DONE [#B] draw the editor cursor(s)                     :jprez:lsed:
-render the tokenized LIST with an extra cursor drawn on top.
+*** DONE 24c move "splitter" between outlines and presentation :jprez:
+*** DONE 24d button to toggle split screen vs full repl       :jprez:
+*** DONE utf-8 in the input displays incorrectly              :jprez:bug:
+APL characters are not being rendered and screwing up
+*** DONE make red same width as repl when toggling editor     :jprez:
+*** DONE keep cursor focused when playing                     :jprez:
+accomplished by using f9/f10 keys in addition to n/shift-N
+
+*** DONE add a callback from line editor when macro finishes playing
+this is so i can advance the outline cursor after playmacro
+
+
 ** -- ls editor stuff --
 ** TODO [#B] ui to set initial state of editor for slide       :jprez:lsed:
 This feature has always existed, by using source blocks in the outline.
@@ -116,6 +112,7 @@ Ex: we want to show complete settle code /before/ we derive it.
 
 ** TODO [#B] store lsed state (visible, buffer, cursor) in each world :jprez:lsed:
 ** --- keyboard event handlers --
+** TODO [#A] arrow keys to navigate the outliner
 ** TODO add keyboard handling to use the editor
 ** TODO [#A] key: ^s should save anywhere (global hotkeys)..   :key:
 right now you have to be focused on the outline
@@ -459,3 +456,76 @@ fixed by adding bounds checking to =goz=
 - save start states in =olr=
 
 **** DONE play macros from the line's starting state when 'N' is pressed
+** rejms-14
+*** DONE "focus color" for cursors in list, edit, repl        :feature:jprez:jkvm:
+** rejms-15 : 5 easy changes
+*** DONE make sure R=:0 in =render__repl= (in update, copy R from ed)
+*** DONE I set TSV=0 in macro player. it should be 1.         :jprez:
+actually i don't use ?TSV, i use TSV*?0 so it's in seconds.
+*** DONE [#A] make A=:1  the default for widgets              :jkvm:
+*** DONE [#A] backspace key in editor                         :jprez:
+needed to manually copy all keyboard handlers.
+*** DONE don't break on =kc_m=                                :jkvm:edit:
+*** DONE reorganize mje so that all keybindings map to named verb
+(instead of verb definition)
+** rejms-16 : repl enhancements
+*** DONE [#A] colorize input history for standalone repl      :jrepl:
+*** DONE start repl cursor at top of the screen               :jprez:
+** rejms-17 : working repl in jprez
+*** DONE inserting repl->script mis-manages start state       :bug:jprez:
+part of this was clearing the worlds, and part was =setval__tmp''=
+*** DONE [#C] clear "future" worlds on input                  :jprez:
+*** DONE [#C] rebuild worlds on delete                        :jprez:
+*** DONE run the command and show the output in the repl      :jprez:
+*** DONE tab to switch between outline and repl
+** rejms-18 : repl command history
+*** DONE [4/4] [#A] tie repl to the command history           :jrepl:
+Pressing up or down should let you navigate the input history.
+This history is provided by worlds.ijs.
+
+- [X] maintain an internal (invisible) list widget =hist= with input history
+- [X] last item in =hist= is the current edit buffer (set by up-arrow)
+- [X] on up arrow:
+  - [X] if i'm at the end of list, then update the list else ok
+  - [X] call =bak__hist= to move the history cursor
+  - [X] set B to =val__hist=
+- [X] on down arrow:
+  - call =fwd__hist=
+  - set B to =val__hist=
+** rejms-19 : history fixes
+*** DONE fix length error: =getlog__ed= when the log is empty. :ui:edit:
+
+*** DONE fix length error in exec when input is empty.        :worlds:
+*** DONE pressing up, and then down should restore the line   :jrepl:
+*** DONE create pluggable =on_arup= and =on_ardn= event handlers :ui:edit:
+*** DONE record the history navigation in the macro           :jprez:
+*** DONE command history for standalone repl (keybinding issue) :jrepl:
+*** DONE playback of j/k keys in macro player (up/down arrows) :ui:edit:
+*** DONE stopgap method to get input history into repl widget
+right now it just sets the history when the focus changes,
+and it includes the entire input history.
+
+*** DONE properly handle history in playback                  :jprez:
+this is handled by =reset_rhist= when focus changes or you play macro.
+this way we get the exact history at that point in time.
+** rejms-20 : backlog grooming 2
+*** DONE rename =mje.ijs= to =jprez.ijs= (or at least =main.ijs=)
+
+*** DONE ^c / in repl/line-editor should not break whole application
+one exit key is enough.
+(fix was to remove the 3 in j-kvm.ijs)
+** rejms-21 : start on table-driven keybindings (tag only in j-kvm)
+** rejms-22 : table-driven keybindings part 2*
+*** DONE [#A] make keybindings table-driven (so people can choose which keys they use for input) :jkvm:
+- edit: refactor so that keys, macro recording, and verb to execute (for live binding or macro playback) are all defined in one table
+- maybe the quick answer for keyboard layouts is to just put that in a separate file?
+- or have two tables: one mapping macro code <-> function name, and another for key <-> macro or key <-> function
+** rejms-23 : start multi-line editor
+*** DONE [#A] Define Text Editor Component                    :widget:
+(right now, the jprez editor is just a plain UiWidget)
+*** DONE code editor should extend the UiList
+we can start with the idea that the editor is just a list of lines
+therefore, extend the UiListWidget
+*** DONE create =of_self= adverb
+*** DONE [#B] draw the editor cursor(s)                       :jprez:lsed:
+render the tokenized LIST with an extra cursor drawn on top.

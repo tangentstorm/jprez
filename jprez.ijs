@@ -14,7 +14,9 @@ copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
 NB. main code
-ORG_PATH =: './screenplay.org'
+ORG_PATH =: {{
+  if. '.org' {.@E.&.|. arg=.>{:ARGV do. arg
+  else. './screenplay.org' end. }}''
 
 
 NB. org-mode stuff

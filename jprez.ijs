@@ -7,7 +7,7 @@ NB. not well organized at the moment, but important enough
 NB. that I should probably have it under version control.
 (<'z') copath 'base' NB. clear previous path
 load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
-load'worlds.ijs org.ijs tok.ijs repl.ijs jedit.ijs'
+load'worlds.ijs org.ijs tok.ijs repl.ijs jedit.ijs macro.ijs'
 coinsert 'kvm'
 dbg 1
 copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
@@ -77,7 +77,7 @@ XY__cmds =: ((W__list+2),0) + XY__list
 TX_BG__cmds =: 16b111122
 
 NB. led is the line editor for editing a line of text in the outline
-led =: 'UiEditWidget' conew~ ''
+led =: 'MacroWidget' conew~ ''
 XY__led =: XY__cmds
 W__led =: W__cmds
 V__led =: 0
@@ -278,11 +278,25 @@ reopen =: {{
   goto lc <. <: #slides
   C__cmds =: rc <. <: #L__cmds }}
 
+NB. outline / macro editor
+
+register__led red  NB. red listens for changes to led ..
+notify__led =: ]   NB. .. but ignores them by default.
 edline =: {{
   R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds-S__cmds
-  C__led =: 0 [ B__led =: '',>val__cmds__BASE''
+  C__led =: 0 [ B__led =: b=. '',>val__cmds__BASE''
   ed_edkeys_ =: led
-  keymode__BASE 'edkeys'}}
+  keymode__BASE 'edkeys'
+  if. ': ' -: 2 {. b do.
+    if. ': . ' -: 4{.b do.
+      notify__red =: instaplay @ (4&}. [ reset_rhist_base_@'')
+      setval__red ''
+    else.
+      notify__red =: setval @ (2&}.)
+      setval__red 2}.b
+    end.
+  else. notify__red =: ] end.
+  0 0$0 }}
 
 edrepl =: {{
   V__red =: R__red =: 1
@@ -303,8 +317,7 @@ stop =: {{
 
 NB. copy keymap from led. ex:  k_arup =: k_arup__led
 ". {{  y,' =: ',y,'__led' }}S:0 KEY_PRESS__led
-
-k_asc =: {{ R__led =: 1 [ ins__led y }}
+k_asc =: k_asc__led
 kc_m =: stop
 
 copop''

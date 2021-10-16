@@ -62,18 +62,19 @@ open''  NB. TODO: move to bottom
 
 NB. --  screen setup ---------------------------------------------------
 H_SPLIT =: 24 NB. initial height of horizontal splitter
-Y_META =: H_SPLIT+2
 
 NB. indent headings based on depth
 list =: 'UiList' conew~ heads
-H__list =: (ymax'')-Y_META
-XY__list =: 0,Y_META
+H__list =: (>:ymax'')-H_SPLIT
+XY__list =: 0,H_SPLIT
+TX_BG__list =: 16b111122
 
 NB. the detailed text of the screenplay (also macro commands)
 cmds =: 'UiList' conew~ a:
-W__cmds =: (xmax'')-32
+W__cmds =: (xmax'')-(W__list)
 H__cmds =: H__list
-XY__cmds =: 33 0 + XY__list
+XY__cmds =: ((W__list+2),0) + XY__list
+TX_BG__cmds =: 16b111122
 
 NB. led is the line editor for editing a line of text in the outline
 led =: 'UiEditWidget' conew~ ''
@@ -98,6 +99,7 @@ hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__red =: W__repl =: 1+xmax
 hide_editor''
 
 app =: (list,editor,cmds,led,repl) conew 'UiApp'
+smudge__app BG__app =: 16b112233
 
 NB. -- widget modifications ---------------------------------------
 
@@ -165,8 +167,9 @@ kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
+k_f2 =: flip
 k_f3 =: move_splitter@_1
-k_f4 =: move_splitter@ 1
+k_f4 =: move_splitter@1
 k_f5 =: toggle_editor
 k_f6 =: goto@bak__list
 k_f7 =: goto@fwd__list
@@ -177,12 +180,33 @@ advance =: {{
   if. ': . ' {.@E. >val__cmds'' do. playmacro''
   else. fwd_cmd'' [ keymode'replkeys' end. }}
 
+FLIP =: 1
+flipped =: {{ FLIP }}
+flip =: {{
+  FLIP =: -FLIP
+  H__list =: H__cmds =: H__editor [ th =. H__cmds
+  H__editor =: H__repl =: th
+  ty1 =. 1{XY__editor [ ty0 =. 1{XY__cmds
+  XY__editor =: ty0 (1) } XY__editor
+  XY__repl   =: ty0 (1) } XY__repl
+  XY__list   =: ty1 (1) } XY__list
+  XY__cmds   =: ty1 (1) } XY__cmds
+  move_splitter 0
+}}
+
 move_splitter =: {{
   if. *./ 1 < (H__list-y),H__repl + y do.
-    XY__list =: XY__list + 0,y [ H__list =: H__list - y
-    XY__cmds =: XY__cmds + 0,y [ H__cmds =: H__cmds - y
-    H__editor =: H__editor +y
-    H__repl =: H__repl + y
+    if. FLIP = 1 do.
+      XY__list =: XY__list + 0,y [ H__list =: H__list - y
+      XY__cmds =: XY__cmds + 0,y [ H__cmds =: H__cmds - y
+      H__editor =: H__editor + y
+      H__repl =: H__repl + y
+    else.
+      XY__editor =: XY__editor + 0,y [ H__editor =: H__editor - y
+      XY__repl   =: XY__repl   + 0,y [ H__repl =: H__repl - y
+      H__cmds =: H__cmds + y
+      H__list =: H__list + y
+    end.
     smudge__app''
   end. }}
 
@@ -251,11 +275,12 @@ reopen =: {{
   rc =. C__cmds
   init_world_''
   open''
+  R__list =: 1 [ L__list =: heads
   goto lc <. <: #slides
   C__cmds =: rc <. <: #L__cmds }}
 
 edline =: {{
-  R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds
+  R__led =: V__led =: 1 [ XY__led =: XY__cmds + 0,C__cmds-S__cmds
   C__led =: 0 [ B__led =: '',>val__cmds__BASE''
   ed_edkeys_ =: led
   keymode__BASE 'edkeys'}}

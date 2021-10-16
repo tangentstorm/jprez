@@ -82,5 +82,5 @@ exec =: {{ NB. run code in the current 'world'
       if. (*# exec_res) > '=:'-:>1{exec_toks,a:,a: do. echo_world_ exec_res end.
     end.
   catch.
-    echo_world_ dberm''
+    echo_world_ ('do_WORLD\d+_|JRESULT=:';'') rxrplc dberm''
   end. }}

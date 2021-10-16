@@ -87,7 +87,6 @@ H__repl =: H_SPLIT
 A__repl =: 1
 OLD__repl =: ''
 red =: ed__repl
-KPS__red =: 10* KPS__red NB. double speed until we fix jprez speed issues
 
 editor =: 'JCodeEditor' conew~ ''
 XY__editor =: 0 0

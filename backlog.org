@@ -1,7 +1,9 @@
 #+TITLE: backlog for jprez ( https://github.com/tangentstorm/jprez/ )
 
 * inbox (for triage)
-
+** TODO bug with wrapping on big screen: (+*:)^:(<15)~ 0.3
+** TODO further improve render__app by omitting the cursor moves for adjacent characters
+** TODO general purpose hbox/vbox widgets
 ** TODO general purpose grid widget
 - for macro debugger
 - for keymap editing
@@ -73,6 +75,14 @@ NB. TODO: 'd$' is the "correct" vim macro for kc_k/macro 'K'
 - single editor buffer with the asterisks visible
 
 ** TODO reopen verb should refresh the outline widgets         :jprez:
+
+
+** TODO adding line on blank slide breaks jprez  :jprez:bug:
+i have a last slide with one blank line
+i try to edit the line, and get this:
+: |index error: stop
+: |   L__cmds=:(<B__led)    C__cmds}L__cmds
+: |stop[3]
 
 * backlog
 ** -- done --

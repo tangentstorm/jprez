@@ -9,14 +9,6 @@
 - for keymap editing
 - for file browser? (tree-grid)
 
-** TODO [#A] macro debugger / stepper
-you record a long macro and made a typo
-or want to change the timing
-now you're editing macros by hand. this is annoying.
-also you have to remember what all the keys do,
-so it would be nice to see the macros vertically with
-a description for each keypress, and strings on their own line
-
 ** TODO [#A] fix blank line in history
 from outliner:
   - tab to go to repl
@@ -24,21 +16,10 @@ from outliner:
   - you should see the previous line from history
   - instead you see a blank line
 
-** TODO [#A] horizontal scrolling doesn't seem to work correctly with ^e, etc :ui:edit:bug:
-make sure leftmost cursor is always in view
-
-** TODO [#A] general ability to re-arrange panels              :ui:
-everyone's screen/camera setup will be different,
-so let them arrange the screen in the most convenient way.
-(especially for my own situation, i wanted the text to be on top for the recording,
-so that my eyes would line up with the camera while i was reading)
-** TODO [#A] ability to insert linefeed/break lines            :jprez:
-this is ^j in vim
-
 ** TODO [#A] multi-line macros are broken because of this line in jprez.ijs :bug:
 :  set__hist__repl__BASE'' NB. so delete it. (TODO: handle multi-line macros)
 
-** TODO pressing n at end of last slide takes you to top of last slide :jprez:bug:
+** TODO bug: pressing n at end of last slide takes you to top of last slide :jprez:bug:
 it should just do nothing.
 ** TODO allow binding keys to multi-character macros
 NB. TODO: 'd$' is the "correct" vim macro for kc_k/macro 'K'
@@ -63,30 +44,22 @@ NB. TODO: 'd$' is the "correct" vim macro for kc_k/macro 'K'
 ** TODO lines in the screenplay that are too long are unreadable.
 "what good is the nub sieve?"
 
-** TODO deal with unicode in input history
-
 ** TODO [#C] tokenize org-mode text
-
 ** TODO need actual outlining capabilities
 - insert headline (actually works but requires save/reload)
 - re-indenting is not possible without external editor
 
-** TODO [#C] would be nice to just have "org-mode" view        :jprez:
-- single editor buffer with the asterisks visible
-
 ** TODO reopen verb should refresh the outline widgets         :jprez:
 
-
-** TODO adding line on blank slide breaks jprez  :jprez:bug:
+** TODO adding line on blank slide breaks jprez                :jprez:bug:
 i have a last slide with one blank line
 i try to edit the line, and get this:
 : |index error: stop
 : |   L__cmds=:(<B__led)    C__cmds}L__cmds
 : |stop[3]
 
-* backlog
-** -- done --
-** jprez-24 : unblocking jprez
+* recent
+** stream-24 : unblocking mummy-nub
 *** DONE 24a fix jrepl so non-nouns are displayed             :jrepl:bug:
 verb "((V i. V) = i. $ V) # V" is not displaying correctly
 it seems to only show results when they're nouns.
@@ -97,6 +70,11 @@ had to also account for empty lines and comments.
 sometimes it works, sometimes it doesn't
 seems like the behavior depends on which lines i've visited last with the outline cursor
 
+*** DONE [#A] general ability to re-arrange panels            :ui:
+everyone's screen/camera setup will be different,
+so let them arrange the screen in the most convenient way.
+(especially for my own situation, i wanted the text to be on top for the recording,
+so that my eyes would line up with the camera while i was reading)
 *** DONE 24c move "splitter" between outlines and presentation :jprez:
 *** DONE 24d button to toggle split screen vs full repl       :jprez:
 *** DONE utf-8 in the input displays incorrectly              :jprez:bug:
@@ -108,8 +86,40 @@ accomplished by using f9/f10 keys in addition to n/shift-N
 *** DONE add a callback from line editor when macro finishes playing
 this is so i can advance the outline cursor after playmacro
 
+** stream-25 : mandelbrot blockers / j-kvm speed
+*** DONE [#B] hide errors containing =do_WORLDnn_=              :bug:jrepl:
+** stream-26 : macro debugger
+*** DONE [#A] macro debugger / stepper
+you record a long macro and made a typo
+or want to change the timing
+now you're editing macros by hand. this is annoying.
+also you have to remember what all the keys do,
+so it would be nice to see the macros vertically with
+a description for each keypress, and strings on their own line
 
-** -- ls editor stuff --
+** stream-27 : ??
+* backlog
+** -- asciicast support --
+*** TODO clear-screen support in worlds
+make ehist a range?
+add estart variable to world?
+*** TODO macro line for clearing the screen
+sets estart to current ehistlen
+*** TODO generate asciicast file
+- [ ] macro lines become input events
+- [ ] editor events need ansi output
+- [ ] single line version of screen diff escape code generator
+- [ ] input lines become "enter" keypress events
+
+
+** -- left side editor --
+** TODO [#A] horizontal scrolling doesn't seem to work correctly with ^e, etc :ui:edit:bug:
+make sure leftmost cursor is always in view
+** TODO [#A] ability to insert linefeed/break lines            :jprez:
+this is ^j in vim
+** TODO [#C] would be nice to just have "org-mode" view        :jprez:
+- single editor buffer with the asterisks visible
+
 ** TODO [#B] ui to set initial state of editor for slide       :jprez:lsed:
 This feature has always existed, by using source blocks in the outline.
 But there is no way to create such a thing in jprez.
@@ -148,11 +158,10 @@ and puts the cursor in weird places.
   - 3. when editing a line long enough to overflow, it wraps back to the left side.
 
 ** TODO [#A] start in repl mode
-** TODO [#B] hide errors containing =do_WORLDnn_=                :bug:jrepl:
 ** TODO [#C] support the escape codes to toggle wrapping       :jkvm:
 this would be added to the parser in =vputs_vid=
 
-* backlog
+** -- later --
 ** TODO [#A] make it easier to recover a working terminal if there's a bug in jprez/jkvm apps :jkvm:
 extend 'reset' so that:
   - make sure echo is on
@@ -278,7 +287,6 @@ status line widget?
 ** TODO [#C] on accept: remove consecutive duplicates from history
   - maybe: if B != as last line in history, add it to the history
   - maybe: if last two items in history are same, delete one
-
 
 ** TODO [#C] re-arrange mje.ijs so that open'' isn't in the middle of the file :jprez:techdebt:
 ** TODO [#C] fix j-kvm on osx

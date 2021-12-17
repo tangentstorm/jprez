@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
+[ext_resource path="res://addons/jprez/jprez.gd" type="Script" id=2]
+[ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
+
+[node name="JPrez" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 2 )
+
+[node name="JLang" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="JKVM" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 1280, 650 )
+focus_mode = 1
+script = ExtResource( 1 )
+cursor_visible = false
+
+[connection signal="keypress" from="JKVM" to="." method="_on_JKVM_keypress"]

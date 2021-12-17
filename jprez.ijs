@@ -354,5 +354,5 @@ mje =: {{
   reset''
   0$0}}
 
-9!:27 'mje'''''
-9!:29]1
+NB. only run if directly invoked from command line
+{{9!:29]1[9!:27 'mje _'}}^:('jprez.ijs' {.@E.&.|. >{.}.ARGV)'')

@@ -22,23 +22,9 @@ func _ready():
 	JI.cmd("sethw__A__app "+hw)
 	JI.cmd("sethw__B__app "+hw)
 	# --
-	refresh_console()
+	$JKVM.refresh()
 	$JKVM.grab_focus()
 
-func to_colors(ints):
-	var res = PoolColorArray()
-	for i in ints:
-		if i < 0: res.append($JKVM.pal[-i])
-		else: res.append(Color(i*0x100+0xFF))
-	return res
-
-func refresh_console():
-	JI.cmd("render__app''")
-	$JKVM.cursor_visible = false
-	$JKVM.CHB = JI.cmd("3 u:,CHB__B__app")
-	$JKVM.FGB = to_colors(JI.cmd(",FGB__B__app"))
-	$JKVM.BGB = to_colors(JI.cmd(",BGB__B__app"))
-	$JKVM.update()
 
 func _on_JKVM_keypress(code, ch, fns):
 	# print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
@@ -46,4 +32,4 @@ func _on_JKVM_keypress(code, ch, fns):
 	for fn in fns: s += "'"+fn+"';"
 	JI.cmd("fn =: > {. (#~ 3 = 4!:0) ("+s+";'k_any')")
 	JI.cmd("(fn~)'"+ch+"'")
-	refresh_console()
+	$JKVM.refresh()

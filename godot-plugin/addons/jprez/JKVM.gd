@@ -5,10 +5,16 @@ signal keypress(code, ch, fns)
 export var font : Font = preload("res://fonts/noto-font.tres")
 export var font_base : Vector2 = Vector2(1,12)
 
+export var j_interpreter = "../JLang"
+export var j_widget : String = "app"
+export var j_locale : String = "base"
+
 export var rng_seed : int = 82076 setget _set_rng_seed
 export var grid_wh : Vector2 = Vector2(80, 25) setget _set_grid_wh
 export var cell_wh : Vector2 = Vector2(12,14)
-export var cursor_visible: bool = true setget _set_cursor_visible
+export var cursor_visible: bool = false setget _set_cursor_visible
+
+onready var JI = get_node(j_interpreter)
 
 var cursor_xy : Vector2 = Vector2.ZERO
 var fg : Color = Color.gray
@@ -145,3 +151,17 @@ func _gui_input(e):
 				KEY_ENTER: fns.append('kc_m')
 				KEY_BACKSPACE: fns.append('k_bsp')
 		emit_signal('keypress', code, ch, fns)
+
+func _to_colors(ints):
+	var res = PoolColorArray()
+	for i in ints:
+		if i < 0: res.append(pal[-i])
+		else: res.append(Color(i*0x100+0xFF))
+	return res
+
+func refresh():
+	JI.cmd("render__" + j_widget + "''")
+	CHB = JI.cmd("3 u:,CHB__B__" + j_widget)
+	FGB = _to_colors(JI.cmd(",FGB__B__" + j_widget))
+	BGB = _to_colors(JI.cmd(",BGB__B__" + j_widget))
+	update()

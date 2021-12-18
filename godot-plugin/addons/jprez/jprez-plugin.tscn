@@ -65,6 +65,8 @@ j_widget = "led"
 grid_wh = Vector2( 124, 1 )
 cell_wh = Vector2( 9, 20 )
 
+[connection signal="focus_entered" from="jp-list" to="." method="_on_jplist_focus_entered"]
 [connection signal="keypress" from="jp-list" to="." method="_on_JKVM_keypress"]
+[connection signal="focus_entered" from="jp-cmds" to="." method="_on_jpcmds_focus_entered"]
 [connection signal="keypress" from="jp-cmds" to="." method="_on_JKVM_keypress"]
 [connection signal="keypress" from="jp-led" to="." method="_on_JKVM_keypress"]

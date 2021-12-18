@@ -28,12 +28,30 @@ func _on_JKVM_keypress(code, ch, fns):
 	# print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
 	var s = ""
 	for fn in fns: s += "'"+fn+"';"
-	JI.cmd("fn =: > {. (#~ 3 = 4!:0) ("+s+";'k_any')")
+	s = "("+s+"'k_any')"
+	JI.cmd("fn =: > {. (#~ 3 = 4!:0) "+s)
 	JI.cmd("(fn~)'"+ch+"'")
 	if Engine.editor_hint:
 		$"jp-cmds".refresh()
 		$"jp-list".refresh()
-		var repl = get_tree().get_edited_scene_root().get_node('jp-repl')
-		if repl:
-			repl.JI = JI
-			repl.refresh()
+
+func refresh_repl():
+	var repl = get_tree().get_edited_scene_root().get_node('jp-repl')
+	if repl:
+		repl.JI = JI
+		repl.refresh()
+
+func _process(_dt):
+	if Engine.editor_hint:
+		if not JI: return
+		if not JI.has_method('cmd'): return
+		JI.cmd("cocurrent'base'")
+		JI.cmd("update__app''")
+		var r = JI.cmd('R__repl * 2') # so it's not a boolean
+		if r: refresh_repl()
+
+func _on_jplist_focus_entered():
+	JI.cmd("keymode'outkeys'")
+
+func _on_jpcmds_focus_entered():
+	JI.cmd("keymode'outkeys'")

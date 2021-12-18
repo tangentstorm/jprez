@@ -37,6 +37,7 @@ func _set_cursor_visible(v):
 func _set_grid_wh(v):
 	grid_wh = v
 	rect_min_size = grid_wh * cell_wh
+	rect_size = rect_min_size
 	update()
 
 func _ready():
@@ -49,6 +50,8 @@ func _ready():
 	_set_cursor_visible(cursor_visible)
 	_reset()
 	_cscr()
+	if j_widget:
+		call_deferred('refresh')
 
 func _reset():
 	fg = Color.gray
@@ -159,9 +162,23 @@ func _to_colors(ints):
 		else: res.append(Color(i*0x100+0xFF))
 	return res
 
+func j_hw():
+	return str(grid_wh.y) + ' ' + str(grid_wh.x)
+
+func J(cmd):
+	# print(cmd)
+	return JI.cmd(cmd)
+
 func refresh():
-	JI.cmd("render__" + j_widget + "''")
-	CHB = JI.cmd("3 u:,CHB__B__" + j_widget)
-	FGB = _to_colors(JI.cmd(",FGB__B__" + j_widget))
-	BGB = _to_colors(JI.cmd(",BGB__B__" + j_widget))
+	var vid = 'scratch'
+	J("cocurrent '" + j_locale + "'")
+	J(vid + "=: 'vid' conew~ |." + j_hw())
+	J("pushterm_kvm_ "+ vid)
+	J("'H__" + j_widget + " W__"+j_widget+"' =: "+j_hw())
+	J("render__" + j_widget + " " + str(int(has_focus())))
+	J("popterm_kvm_ ''")
+	CHB = J("3 u:,CHB__" + vid)
+	FGB = _to_colors(J(",FGB__" + vid))
+	BGB = _to_colors(J(",BGB__" + vid))
+	J('codestroy__' + vid + "''")
 	update()

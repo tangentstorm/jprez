@@ -14,19 +14,96 @@ script = ExtResource( 2 )
 [node name="JLang" type="Node" parent="."]
 script = ExtResource( 3 )
 
-[node name="JKVM" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 216.0
-margin_bottom = 10.0
-rect_min_size = Vector2( 1800, 630 )
+[node name="hbox" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="jp-editor" type="Control" parent="hbox"]
+margin_right = 840.0
+margin_bottom = 336.0
+rect_min_size = Vector2( 840, 336 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 font_base = Vector2( 0, 15 )
-grid_wh = Vector2( 150, 45 )
+j_interpreter = "../../JLang"
+j_widget = "editor"
+grid_wh = Vector2( 70, 24 )
 cell_wh = Vector2( 9, 20 )
 
-[connection signal="keypress" from="JKVM" to="." method="_on_JKVM_keypress"]
+[node name="jp-repl" type="Control" parent="hbox"]
+margin_left = 844.0
+margin_right = 2644.0
+margin_bottom = 336.0
+rect_min_size = Vector2( 1800, 336 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+j_interpreter = "../../JLang"
+j_widget = "repl"
+grid_wh = Vector2( 150, 24 )
+cell_wh = Vector2( 9, 20 )
+
+[node name="jp-list" type="Control" parent="."]
+margin_left = 9.0
+margin_top = 554.0
+margin_right = 393.0
+margin_bottom = 722.0
+rect_min_size = Vector2( 384, 168 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+j_widget = "list"
+grid_wh = Vector2( 32, 12 )
+cell_wh = Vector2( 9, 20 )
+
+[node name="jp-cmds" type="Control" parent="."]
+margin_left = 397.0
+margin_top = 554.0
+margin_right = 1885.0
+margin_bottom = 722.0
+rect_min_size = Vector2( 1488, 168 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+j_widget = "cmds"
+grid_wh = Vector2( 124, 12 )
+cell_wh = Vector2( 9, 20 )
+
+[node name="jp-led" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 306.0
+margin_top = 516.0
+margin_right = 730.0
+margin_bottom = -110.0
+rect_min_size = Vector2( 1488, 14 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+j_widget = "led"
+grid_wh = Vector2( 124, 1 )
+cell_wh = Vector2( 9, 20 )
+
+[connection signal="keypress" from="hbox/jp-editor" to="." method="_on_JKVM_keypress"]
+[connection signal="keypress" from="hbox/jp-repl" to="." method="_on_JKVM_keypress"]
+[connection signal="keypress" from="jp-list" to="." method="_on_JKVM_keypress"]
+[connection signal="keypress" from="jp-cmds" to="." method="_on_JKVM_keypress"]
+[connection signal="keypress" from="jp-led" to="." method="_on_JKVM_keypress"]

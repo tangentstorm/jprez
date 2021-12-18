@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="jprez godot plugin"
-run/main_scene="res://addons/jprez/JKVM.tscn"
+run/main_scene="res://addons/jprez/jprez-scene.tscn"
 
 [editor_plugins]
 

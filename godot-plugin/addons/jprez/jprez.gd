@@ -17,8 +17,12 @@ func _ready():
 	JI.cmd("1!:44 'd:/ver/jprez'")
 	JI.cmd('gethw_vt_ =: {{ ' +hw+ '}}')
 	JI.cmd("load 'jprez.ijs'")
-	$"jp-cmds".grab_focus()
-
+	if Engine.editor_hint:
+		var cmds = $"jp-cmds"
+		if cmds:cmds.grab_focus()
+	else:
+		var repl = $"jp-repl"
+		if repl: repl.grab_focus()
 
 func _on_JKVM_keypress(code, ch, fns):
 	# print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
@@ -26,6 +30,10 @@ func _on_JKVM_keypress(code, ch, fns):
 	for fn in fns: s += "'"+fn+"';"
 	JI.cmd("fn =: > {. (#~ 3 = 4!:0) ("+s+";'k_any')")
 	JI.cmd("(fn~)'"+ch+"'")
-	$"jp-cmds".refresh()
-	$"jp-list".refresh()
-	$"jp-repl".refresh()
+	if Engine.editor_hint:
+		$"jp-cmds".refresh()
+		$"jp-list".refresh()
+		var repl = get_tree().get_edited_scene_root().get_node('jp-repl')
+		if repl:
+			repl.JI = JI
+			repl.refresh()

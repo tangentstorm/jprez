@@ -11,7 +11,7 @@ export var j_locale : String = "base"
 
 export var rng_seed : int = 82076 setget _set_rng_seed
 export var grid_wh : Vector2 = Vector2(80, 25) setget _set_grid_wh
-export var cell_wh : Vector2 = Vector2(12,14)
+export var cell_wh : Vector2 = Vector2(12,14) setget _set_cell_wh
 export var cursor_visible: bool = false setget _set_cursor_visible
 
 onready var JI = get_node(j_interpreter)
@@ -36,6 +36,13 @@ func _set_cursor_visible(v):
 
 func _set_grid_wh(v):
 	grid_wh = v
+	recalc_size()
+
+func _set_cell_wh(v):
+	cell_wh =v
+	recalc_size()
+
+func recalc_size():
 	rect_min_size = grid_wh * cell_wh
 	rect_size = rect_min_size
 	update()

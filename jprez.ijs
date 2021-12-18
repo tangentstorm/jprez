@@ -355,4 +355,4 @@ mje =: {{
   0$0}}
 
 NB. only run if directly invoked from command line
-{{9!:29]1[9!:27 'mje _'}}^:('jprez.ijs' {.@E.&.|. >{.}.ARGV)'')
+{{9!:29]1[9!:27 'mje _'}}^:('jprez.ijs' {.@E.&.|. >{.}.ARGV)''

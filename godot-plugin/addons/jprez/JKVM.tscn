@@ -17,9 +17,17 @@ script = ExtResource( 3 )
 [node name="JKVM" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 1280, 650 )
+margin_right = 216.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 1800, 630 )
 focus_mode = 1
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+grid_wh = Vector2( 150, 45 )
+cell_wh = Vector2( 9, 20 )
 cursor_visible = false
 
 [connection signal="keypress" from="JKVM" to="." method="_on_JKVM_keypress"]

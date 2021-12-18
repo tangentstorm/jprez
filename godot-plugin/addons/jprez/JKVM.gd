@@ -3,11 +3,11 @@ tool class_name JKVM extends Control
 signal keypress(code, ch, fns)
 
 export var font : Font = preload("res://fonts/noto-font.tres")
-export var font_base : Vector2 = Vector2(1,20)
+export var font_base : Vector2 = Vector2(1,12)
 
 export var rng_seed : int = 82076 setget _set_rng_seed
-export var grid_wh : Vector2 = Vector2(80, 25)
-export var cell_wh : Vector2 = Vector2(16,26)
+export var grid_wh : Vector2 = Vector2(80, 25) setget _set_grid_wh
+export var cell_wh : Vector2 = Vector2(12,14)
 export var cursor_visible: bool = true setget _set_cursor_visible
 
 var cursor_xy : Vector2 = Vector2.ZERO
@@ -26,13 +26,17 @@ func _set_rng_seed(v):
 
 func _set_cursor_visible(v):
 	cursor_visible = v
-	if $cursor: $cursor.visible = v
+	#if $cursor: $cursor.visible = v
+
+func _set_grid_wh(v):
+	grid_wh = v
+	rect_min_size = grid_wh * cell_wh
+	update()
 
 func _ready():
-	rect_min_size = grid_wh * cell_wh
 	focus_mode = FOCUS_CLICK
 	var cursor = ColorRect.new()
-	cursor.color = Color(0xffffff66e)
+	cursor.color = Color.transparent
 	cursor.rect_size = cell_wh
 	cursor.name = "cursor"
 	add_child(cursor)

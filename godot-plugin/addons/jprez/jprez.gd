@@ -2,20 +2,26 @@ tool extends Control
 
 onready var JI = $JLang # J interpreter
 
+func cmd(src):
+	print("src: ", src)
+	var res = JI.cmd(src)
+	print("--> ", res)
+	return res
+
 func _ready():
+	var hw = str($JKVM.grid_wh.y) + ' ' + str($JKVM.grid_wh.x)
 	print("J_HOME:", OS.get_environment('J_HOME'))
-	JI.cmd("ARGV_z_=:''")
+	JI.cmd("ARGV_z_=:,<''")
 	JI.cmd("load 'tangentstorm/j-kvm/vid'")
 	JI.cmd("coinsert 'kvm'")
 	JI.cmd("1!:44 'd:/ver/jprez'")
-	JI.cmd("load 'repl.ijs'")
-	JI.cmd("init_world_''")
+	JI.cmd('gethw_vt_ =: {{ ' +hw+ '}}')
+	JI.cmd("load 'jprez.ijs'")
+	#JI.cmd("show_editor''")
+	print("xmax:", JI.cmd("xmax''"))
+	JI.cmd("sethw__A__app "+hw)
+	JI.cmd("sethw__B__app "+hw)
 	# --
-	JI.cmd("repl =: 'UiRepl' conew~ ''")
-	JI.cmd("B__ed__repl =: '+/\\p: i. 10 NB. running sum of first 10 primes'")
-	JI.cmd("accept__repl''")
-	JI.cmd("H__repl =: 25 [ W__repl =: 80")
-	JI.cmd("C__repl =: '' conew 'vid' ")
 	refresh_console()
 	$JKVM.grab_focus()
 
@@ -27,21 +33,17 @@ func to_colors(ints):
 	return res
 
 func refresh_console():
-	JI.cmd("sethw__C__repl 25 80")
-	# JI.cmd("rnd__C__repl'.'") # draw some junk to make sure it's working
-	JI.cmd("pushterm C__repl")
-	JI.cmd("render__repl 1")
-	JI.cmd("popterm''")
+	JI.cmd("render__app''")
 	$JKVM.cursor_visible = false
-	$JKVM.CHB = JI.cmd("a.i.,CHB__C__repl")
-	$JKVM.FGB = to_colors(JI.cmd(",FGB__C__repl"))
-	$JKVM.BGB = to_colors(JI.cmd(",BGB__C__repl"))
+	$JKVM.CHB = JI.cmd("3 u:,CHB__B__app")
+	$JKVM.FGB = to_colors(JI.cmd(",FGB__B__app"))
+	$JKVM.BGB = to_colors(JI.cmd(",BGB__B__app"))
 	$JKVM.update()
 
 func _on_JKVM_keypress(code, ch, fns):
 	# print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
 	var s = ""
 	for fn in fns: s += "'"+fn+"';"
-	JI.cmd("fn =: > {. (#~ 3 = 4!:0) ,&'__ed__repl' L:0 ("+s+";'k_any')")
+	JI.cmd("fn =: > {. (#~ 3 = 4!:0) ("+s+";'k_any')")
 	JI.cmd("(fn~)'"+ch+"'")
 	refresh_console()

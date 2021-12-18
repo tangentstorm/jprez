@@ -28,4 +28,4 @@ func _on_JKVM_keypress(code, ch, fns):
 	JI.cmd("(fn~)'"+ch+"'")
 	$"jp-cmds".refresh()
 	$"jp-list".refresh()
-	$"hbox/jp-repl".refresh()
+	$"jp-repl".refresh()

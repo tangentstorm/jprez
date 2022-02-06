@@ -1,3 +1,15 @@
+NB. jprez-specific org-mode parser
+NB. the jprez format is a subset of org-mode:
+NB.  - #+title: at the top
+NB.  - any number of nested headlines
+NB.  - body text only appears in leaf nodes ("slides")
+NB.  - zero to one #+begin_src j ... #+end_src per slide
+NB.  - lines starting with # indicate comments
+NB.  - [[path/to/file.xyz]] indicates an audio file
+NB.  - verbatim lines (starting with ":") indicate repl input or macros
+NB.    - ": ." indicates that the line is a jprez keyboard macro
+NB.    - ": " (not followed by " .") indicates verbatim repl input
+
 between =: (>:@[ +  i.@<:@-~)/           NB. between 3 7 ->  4 5 6
 parse =: monad define
   NB. parse a single slide
@@ -6,7 +18,7 @@ parse =: monad define
   depth =. h <:@-&# head                 NB. record the number of leading stars
   text =. }. y
   srcd =. '#+begin_src j';'#+end_src'    NB. source code delimiters
-  src =: , |: si=.I. y ="1 0 srcd        NB. indices of start and end delimiters
+  src =. , |: si=.I. y ="1 0 srcd        NB. indices of start and end delimiters
   if. #src do.
     code =. y {~ between 2$src           NB. only take the first source block
     text =. (1{src) }. text

@@ -1,6 +1,10 @@
-tool extends VBoxContainer
+class_name Org
+# Represent emacs org-mode files as trees of objects.
+# (The jprez file format is a subset of org syntax)
+# https://orgmode.org/
 
 class OrgNode:
+
 	var headline : String
 	var children : Array
 	var slide : String
@@ -25,24 +29,9 @@ class OrgNode:
 		for child in self.children:
 			child.add_to_tree(tree, item)
 
-
-export(String) var org_path = 'd:/ver/j-talks/s1/e4-mandelbrot/script.org' setget _set_org
-export(bool) var go = false setget _go
-func _go(checked:bool):
-	if checked:
-		self.reload_outline()
-		self.set("go", false)
-
-func _ready():
-	reload_outline()
-
-func _set_org(path):
-	org_path = path
-	reload_outline()
-
-func reload_outline():
+static func from_path(path:String):
 	var org = OrgNode.new('')
-	var f = File.new(); f.open(self.org_path, File.READ)
+	var f = File.new(); f.open(path, File.READ)
 	var stack = [org]
 	var i = -1
 	for line in f.get_as_text().split("\n"):
@@ -53,13 +42,10 @@ func reload_outline():
 			org.headline = rest
 		elif line.begins_with("*"):
 			if (cut-1) > len(stack):
-				printerr("too many asterisks on line ",i)
-				return
+				printerr("warning: too many asterisks on line ",i)
+				continue
 			var node = OrgNode.new(rest)
 			stack[cut-1].add_child(node)
 			if cut == len(stack): stack.push_back(node)
 			else: stack[cut] = node
-
-	org.add_to_tree($Tree, null)
-	# extra line at the end so we can 'insert' before end
-	var blank = $Tree.create_item(stack[0]); blank.set_text(0, '')
+	return org

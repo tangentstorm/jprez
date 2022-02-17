@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "JKVM",
 "language": "GDScript",
 "path": "res://addons/jprez/JKVM.gd"
+}, {
+"base": "Reference",
+"class": "Org",
+"language": "GDScript",
+"path": "res://addons/jprez/Org.gd"
 } ]
 _global_script_class_icons={
-"JKVM": ""
+"JKVM": "",
+"Org": ""
 }
 
 [application]
@@ -25,7 +31,7 @@ run/main_scene="res://addons/jprez/jprez-scene.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/jprez/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/jprez/plugin.cfg", "res://addons/waveform/plugin.cfg" )
 
 [physics]
 

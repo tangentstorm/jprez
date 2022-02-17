@@ -15,6 +15,20 @@ __meta__ = {
 [node name="JLang" type="Node" parent="."]
 script = ExtResource( 3 )
 
+[node name="jp-repl" type="Control" parent="."]
+margin_right = 1080.0
+margin_bottom = 480.0
+rect_min_size = Vector2( 1080, 480 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+font_base = Vector2( 0, 15 )
+j_widget = "repl"
+grid_wh = Vector2( 120, 24 )
+cell_wh = Vector2( 9, 20 )
+
 [node name="jp-editor" type="Control" parent="."]
 margin_left = 1115.0
 margin_right = 1745.0
@@ -30,19 +44,5 @@ j_widget = "editor"
 grid_wh = Vector2( 70, 24 )
 cell_wh = Vector2( 9, 20 )
 
-[node name="jp-repl" type="Control" parent="."]
-margin_right = 1080.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 1080, 480 )
-focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font_base = Vector2( 0, 15 )
-j_widget = "repl"
-grid_wh = Vector2( 120, 24 )
-cell_wh = Vector2( 9, 20 )
-
-[connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]
 [connection signal="keypress" from="jp-repl" to="." method="_on_JKVM_keypress"]
+[connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]

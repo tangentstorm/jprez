@@ -45,10 +45,6 @@ slide_lines =: {{
 NB. turn the arrays back into org text:
 org_text =: {{ ;(,&LF)L:0 title,'';;slide_lines each i.#slides }}
 
-cur=:0
-fwd=:verb :'cur=:(<:#slides)<.>:cur'
-bak=:verb :'cur=:0>.<:cur'
-
 head =: verb : '> (<y,0) { slides'  NB. -> str
 text =: verb : '> (<y,1) { slides'  NB. -> [box(str)]
 code =: verb : '> (<y,2) { slides'  NB. -> [box(str)]

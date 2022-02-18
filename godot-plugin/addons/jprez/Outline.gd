@@ -2,7 +2,7 @@ tool extends VBoxContainer
 
 signal node_selected(org_node)
 
-func set_org(org):
+func set_org(org:OrgNode):
 	$Tree.clear()
 	org.add_to_tree($Tree, null)
 	# extra line at the end so we can 'insert' before end

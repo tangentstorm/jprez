@@ -1,34 +1,9 @@
-class_name Org extends Resource
+tool class_name Org
 # Represent emacs org-mode files as trees of objects.
 # (The jprez file format is a subset of org syntax)
 # https://orgmode.org/
 
-class OrgNode:
-
-	var headline : String
-	var children : Array
-	var slide : String
-	var steps : Array
-
-	func _init(title):
-		self.headline = title
-		self.children = []
-		self.slide = ''
-		self.steps = []
-
-	func add_child(node:OrgNode):
-		self.children.append(node)
-
-	func add_to_tree(tree:Tree, parent:TreeItem):
-		if parent == null: # then we're the root
-			parent = null
-		var item = tree.create_item(parent)
-		item.set_text(0, self.headline)
-		item.set_metadata(0, self)
-		for child in self.children:
-			child.add_to_tree(tree, item)
-
-static func from_path(path:String):
+static func from_path(path:String)->OrgNode:
 	var root = OrgNode.new('')
 	var node = root
 	var stack = [root]
@@ -39,7 +14,7 @@ static func from_path(path:String):
 		var cut = line.find(" ")
 		var rest = line.right(cut)
 		if line.begins_with('#+title:'):
-			root.headline = rest
+			root.head = rest
 		elif line.begins_with("*"):
 			if (cut-1) > len(stack):
 				printerr("warning: too many asterisks on line ",i)

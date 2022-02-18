@@ -4,7 +4,7 @@ const START = 0
 const LENGTH = 1
 const TEXT = 2
 
-func set_org(org:Org.OrgNode):
+func set_org(org:OrgNode):
 	var tree : Tree = $Tree
 	tree.clear()
 	for col in [START,LENGTH,TEXT]:

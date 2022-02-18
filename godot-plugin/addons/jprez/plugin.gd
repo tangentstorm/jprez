@@ -7,8 +7,6 @@ var outln
 var steps
 var org_import
 
-var org_path = 'd:/ver/j-talks/s1/e4-mandelbrot/script.org'
-
 func _enter_tree():
 	org_import = preload("res://addons/jprez/org_import.gd").new()
 	add_import_plugin(org_import)
@@ -24,16 +22,10 @@ func _enter_tree():
 
 	outln.connect("node_selected", steps, "set_org")
 
-	org = Org.from_path(org_path)
-	edit(org)
-
 func handles(object):
 	return object is OrgNode
 
-func edit(object):
-	print("edit:", object)
-	var org = object as OrgNode
-	print("org:", org)
+func edit(org):
 	outln.set_org(org)
 	steps.set_org(org)
 

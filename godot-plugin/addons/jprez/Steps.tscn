@@ -22,3 +22,5 @@ hide_root = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]

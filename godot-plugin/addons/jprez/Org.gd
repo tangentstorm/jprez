@@ -15,12 +15,11 @@ static func from_path(path:String)->OrgNode:
 		var rest = line.right(cut)
 		if line.begins_with('#+title:'):
 			root.head = rest
-		elif line == '' or line.begins_with(':') or line.begins_with("*"):
+		elif line == '' or line[0] in [':','*','#']:
 			if para:
 				node.steps.append(para); para = ''
-			if line.begins_with(':'):
-				node.steps.append(line)
-			elif line.begins_with("*"):
+			if line =='': continue
+			if line[0]=='*':
 				if (cut-1) > len(stack):
 					printerr("warning: too many asterisks on line ",i)
 					continue
@@ -28,6 +27,7 @@ static func from_path(path:String)->OrgNode:
 				stack[cut-1].add_child(node)
 				if cut == len(stack): stack.push_back(node)
 				else: stack[cut] = node
+			else: node.steps.append(line)
 		else: para += ('\n' if para else '') + line
 	if para: node.steps.append(para)
 	return root

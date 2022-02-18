@@ -35,6 +35,11 @@ _global_script_class_icons={
 config/name="jprez godot plugin"
 run/main_scene="res://addons/jprez/jprez-scene.tscn"
 
+[audio]
+
+default_bus_layout="res://addons/waveform/waveform_bus_layout.tres"
+enable_audio_input=true
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/jprez/plugin.cfg", "res://addons/waveform/plugin.cfg" )

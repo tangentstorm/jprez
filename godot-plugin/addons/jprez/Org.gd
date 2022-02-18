@@ -33,7 +33,7 @@ static func from_path(path:String):
 	var node = root
 	var stack = [root]
 	var f = File.new(); f.open(path, File.READ)
-	var i = -1
+	var i = -1; var para = ''
 	for line in f.get_as_text().split("\n"):
 		i += 1
 		var cut = line.find(" ")
@@ -48,5 +48,11 @@ static func from_path(path:String):
 			stack[cut-1].add_child(node)
 			if cut == len(stack): stack.push_back(node)
 			else: stack[cut] = node
-		else: node.steps.append(line)
+		elif line == '' or line.begins_with(':'):
+			if para:
+				node.steps.append(para); para = ''
+			if line.begins_with(':'):
+				node.steps.append(line)
+		else: para += ('\n' if para else '') + line
+	if para: node.steps.append(para)
 	return root

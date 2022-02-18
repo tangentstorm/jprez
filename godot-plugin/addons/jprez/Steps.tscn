@@ -17,6 +17,7 @@ margin_right = 1025.0
 margin_bottom = 601.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 3
 hide_root = true
 __meta__ = {
 "_edit_use_anchors_": false

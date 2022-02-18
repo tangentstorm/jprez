@@ -43,6 +43,7 @@ func _on_audio_step_selected(path):
 		print("DOESNT EXIST SO CREATING")
 		samp = AudioStreamSample.new()
 		samp.format = AudioStreamSample.FORMAT_16_BITS
+		samp.stereo = true
 		samp.save_to_wav(path)
 		ed.get_resource_filesystem().scan()
 	samp = ResourceLoader.load(path)

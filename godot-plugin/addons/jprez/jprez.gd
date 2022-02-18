@@ -8,6 +8,12 @@ func cmd(src):
 	print("--> ", res)
 	return res
 
+func set_org(org:OrgNode):
+	var org_path = ProjectSettings.globalize_path(org.resource_path)
+	JI.cmd("ORG_PATH =: '%s'" % [org_path])
+	JI.cmd("reopen''")
+	update_editor()
+
 func _ready():
 	var hw = '36 157'
 	print("J_HOME:", OS.get_environment('J_HOME'))
@@ -18,7 +24,7 @@ func _ready():
 	JI.cmd('gethw_vt_ =: {{ ' +hw+ '}}')
 	JI.cmd("load 'jprez.ijs'")
 	if Engine.editor_hint:
-		var cmds = $"jp-cmds"
+		var cmds = get_node_or_null("jp-cmds")
 		if cmds:cmds.grab_focus()
 	else:
 		var repl = $"jp-repl"
@@ -31,12 +37,16 @@ func _on_JKVM_keypress(code, ch, fns):
 	s = "("+s+"'k_any')"
 	JI.cmd("fn =: > {. (#~ 3 = 4!:0) "+s)
 	JI.cmd("(fn~)'"+ch+"'")
+	update_editor()
+
+func update_editor():
 	if Engine.editor_hint:
-		$"jp-cmds".refresh()
-		$"jp-list".refresh()
+		for np in ['jp-cmds', 'jp-list']:
+			var n = get_node_or_null(np)
+			if n: n.refresh()
 
 func refresh_repl():
-	var repl = get_tree().get_edited_scene_root().get_node('jp-repl')
+	var repl = get_tree().get_edited_scene_root().get_node_or_null('jp-repl')
 	if repl:
 		repl.JI = JI
 		repl.refresh()

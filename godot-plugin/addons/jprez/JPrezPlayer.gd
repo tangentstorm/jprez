@@ -29,8 +29,6 @@ func _ready():
 
 	timer = Timer.new()
 	add_child(timer)
-	print("adding timer:", timer)
-	timer.autostart = true
 	timer.wait_time = 0.25
 	timer.connect("timeout", self, '_timeout')
 	timer.start()

@@ -2,15 +2,37 @@ tool class_name OrgNode extends Resource
 # This is a recursive structure that represents
 # the content of a jprez-flavored *.org file.
 
+class OrgTime:
+	export var hh: int = 0
+	export var mm: int = 0
+	export var ss: int = 0
+	export var ms: float = 0.0
+
+class OrgChunk:
+	export(Resource) var time_start
+	export(Resource) var time_end
+	export var track : int
+	export(Array, String) var lines
+
+	func to_string():
+		var res = ''
+		for line in lines:
+			res += ('\n' if res else '') + line
+		return res
+
+# -- OrgNode proper -----------------
+
+export var depth : int
 export var head : String
 export var slide : String
-export var steps : Array
+export var chunks : Array
 export var children : Array
 
-func _init(head='', slide='', steps=[], children=[]):
+func _init(depth=0, head='', slide='', chunks=[], children=[]):
+	self.depth = depth
 	self.head = head
 	self.slide = slide
-	self.steps = steps
+	self.chunks = chunks
 	for child in children:
 		self.children.append(child as OrgNode)
 
@@ -18,10 +40,28 @@ func add_child(node:OrgNode):
 	self.children.append(node)
 
 func add_to_tree(tree:Tree, parent:TreeItem):
-	if parent == null: # then we're the root
-		parent = null
 	var item = tree.create_item(parent)
 	item.set_text(0, self.head)
 	item.set_metadata(0, self)
 	for child in self.children:
 		child.add_to_tree(tree, item)
+
+func dump():
+	print(to_string())
+
+func to_string():
+	var res = ''
+	if depth == 0: res += "#+title:%s\n\n" % head
+	else: res += "*".repeat(depth) + head + '\n'
+	if slide:
+		res += "#+begin_src: j\n"
+		res += slide
+		res += "#+end_src\n"
+		res += "\n"
+	if self.children:
+		for child in self.children:
+			res += child.to_string()
+	else:
+		for chunk in self.chunks:
+			res += chunk.to_string() + '\n\n'
+	return res

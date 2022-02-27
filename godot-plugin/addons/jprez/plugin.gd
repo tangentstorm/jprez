@@ -4,7 +4,7 @@ tool extends EditorPlugin
 var jprez
 var org : OrgNode
 var outln
-var steps
+var chunks
 var org_import
 
 func _enter_tree():
@@ -14,21 +14,21 @@ func _enter_tree():
 	outln = preload("res://addons/jprez/Outline.tscn").instance()
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, outln)
 
-	steps = preload("res://addons/jprez/Steps.tscn").instance()
-	add_control_to_dock(DOCK_SLOT_LEFT_BL, steps)
+	chunks = preload("res://addons/jprez/jp-chunklist.tscn").instance()
+	add_control_to_dock(DOCK_SLOT_LEFT_BL, chunks)
 
 	jprez = preload("res://addons/jprez/jprez-plugin.tscn").instance()
 	add_control_to_bottom_panel(jprez, "jprez")
 
-	outln.connect("node_selected", steps, "set_org")
-	steps.connect("audio_step_selected", self, "_on_audio_step_selected")
+	outln.connect("node_selected", chunks, "set_org")
+	chunks.connect("audio_step_selected", self, "_on_audio_step_selected")
 
 func handles(object):
 	return object is OrgNode
 
 func edit(org):
 	outln.set_org(org)
-	steps.set_org(org)
+	chunks.set_org(org)
 	jprez.set_org(org)
 
 func _exit_tree():

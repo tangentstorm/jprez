@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/jprez/Steps.gd" type="Script" id=1]
+[ext_resource path="res://addons/jprez/ChunkList.gd" type="Script" id=1]
 
-[node name="Steps" type="VBoxContainer"]
+[node name="ChunkList" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1.0
@@ -13,8 +13,8 @@ __meta__ = {
 }
 
 [node name="Tree" type="Tree" parent="."]
-margin_right = 1025.0
-margin_bottom = 601.0
+margin_right = 1921.0
+margin_bottom = 1081.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 3

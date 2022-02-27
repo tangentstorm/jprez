@@ -17,6 +17,7 @@ func set_org(org:OrgNode):
 func _ready():
 	var hw = '36 157'
 	print("J_HOME:", OS.get_environment('J_HOME'))
+	JI.cmd("9!:7 [ (16+i.11){a.  NB. box drawing characters")
 	JI.cmd("ARGV_z_=:,<''")
 	JI.cmd("load 'tangentstorm/j-kvm/vid'")
 	JI.cmd("coinsert 'kvm'")

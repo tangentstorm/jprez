@@ -8,7 +8,7 @@ tool class_name Org
 const TIME = "\\d{2}:\\d{2}:\\d{2}.\\d{3}"
 const SPAN = "^(?<start>"+TIME+")( --> (?<end>"+TIME+"))?"
 
-enum Track { TEXT, MACRO, INPUT, EVENT }
+enum Track { AUDIO, MACRO, INPUT, EVENT }
 
 class OrgParser:
 	var rx_timespan = RegEx.new()
@@ -26,7 +26,7 @@ class OrgParser:
 
 	func extend_chunk(line):
 		if chunk == null:
-			chunk = OrgNode.OrgChunk.new()
+			chunk = OrgChunk.new()
 		chunk.lines.append(line)
 
 	func new_slide(lno, cut, rest):
@@ -39,18 +39,18 @@ class OrgParser:
 			else: stack[cut] = node
 
 	func new_chunk(_lno, line):
-		var track = Track.TEXT
+		var track = Track.AUDIO
 		if line.begins_with(": ."): track = Track.MACRO
 		elif line.begins_with(": "): track = Track.INPUT
-		chunk = OrgNode.OrgChunk.new()
+		chunk = OrgChunk.new()
 		chunk.track = track
 		chunk.lines = [line]
 
 	func note_timespan(start, end):
 		pass
 
-	func note_waveform(path):
-		pass
+	func note_audio(rest):
+		chunk.file_path = rest
 
 	func note_event(rest):
 		pass
@@ -58,15 +58,19 @@ class OrgParser:
 	func org_from_path(path:String):
 		root = OrgNode.new(''); node = root; stack = [root]; chunk = null
 		var f = File.new(); f.open(path, File.READ)
-		var lno = -1
+		var lno = -1; var in_src = false
 		for line in f.get_as_text().split("\n"):
 			lno += 1
 			var cut = line.find(" ")
 			var rest = line.right(cut)
-			if line == '': end_chunk()
+			if in_src:
+				if line == '#+end_src': in_src = false
+				else: node.slide.append(line)
+			elif line == '': end_chunk()
 			elif line.begins_with('#+title:'): root.head = rest
-			elif line.begins_with('#+audio:'): note_waveform(rest)
+			elif line.begins_with('#+audio:'): note_audio(rest)
 			elif line.begins_with('#+event:'): note_event(rest)
+			elif line.begins_with('#+begin_src j'): in_src = true
 			elif line[0] in [':','*']:
 				end_chunk()
 				if line[0] == '*': new_slide(lno, cut, rest)

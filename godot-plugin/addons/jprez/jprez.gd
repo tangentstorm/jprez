@@ -47,7 +47,9 @@ func update_editor():
 			if n: n.refresh()
 
 func refresh_repl():
-	var repl = get_tree().get_edited_scene_root().get_node_or_null('jp-repl')
+	var root = get_tree().get_edited_scene_root()
+	if not root: return
+	var repl = root.get_node_or_null('jp-repl')
 	if repl:
 		repl.JI = JI
 		repl.refresh()

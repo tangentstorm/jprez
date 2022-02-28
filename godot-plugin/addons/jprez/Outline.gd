@@ -6,7 +6,8 @@ func set_org(org:OrgNode):
 	$Tree.clear()
 	org.add_to_tree($Tree, null)
 	# extra line at the end so we can 'insert' before end
-	var blank = $Tree.create_item($Tree.get_tree().root); blank.set_text(0, '')
+	var blank = $Tree.create_item(); blank.set_text(0, '')
+	$Tree.get_root().get_children().select(0)
 
 func _on_Tree_item_selected():
 	var tree : Tree = $Tree

@@ -3,6 +3,7 @@ extends Node
 export(Resource) var org setget set_org
 onready var JI = $JLang # J interpreter
 
+var org_dir = ''
 var org_path = ''
 onready var cmd_label = $PanelContainer/CurrentCmd
 var cursor : OrgCursor
@@ -49,6 +50,8 @@ class OrgCursor:
 		return res
 
 func set_org(org:OrgNode):
+	org_dir = org.resource_path.get_base_dir() + '/'
+	print("org_dir:", org_dir)
 	org_path = ProjectSettings.globalize_path(org.resource_path)
 	cursor = OrgCursor.new(org)
 
@@ -63,8 +66,6 @@ func _ready():
 	JI.cmd("1!:44 'd:/ver/jprez'")
 	JI.cmd('gethw_vt_ =: {{ ' +hw+ '}}')
 	JI.cmd("load 'jprez.ijs'")
-	
-	print("org path:", org_path)
 	if org_path != '':
 		JI.cmd("cocurrent'base'")
 		JI.cmd("ORG_PATH =: '%s'" % [org_path])
@@ -76,6 +77,22 @@ func _ready():
 	timer.wait_time = 0.10
 	timer.connect("timeout", self, '_timeout')
 	timer.start()
+
+	$AudioStreamPlayer.connect("finished", self, "next_chunk")
+	next_chunk()
+
+func next_chunk():
+	var chunk = cursor.next_chunk()
+	cmd_label.text = chunk.lines_to_string() if chunk else ''
+	if not chunk: return
+	if chunk.track == Org.Track.AUDIO:
+		if chunk.file_exists(org_dir):
+			var sample : AudioStreamSample = load(org_dir + chunk.suggest_path())
+			$AudioStreamPlayer.stream = sample
+			$AudioStreamPlayer.play()
+			return
+	# still here for any reason? just move on:
+	call_deferred("next_chunk")
 
 func _process(dt):
 	# we do this on every tick so we can watch macros play.
@@ -89,7 +106,5 @@ func _process(dt):
 		repl.refresh()
 
 func _timeout():
-	var chunk = cursor.next_chunk()
-	cmd_label.text = chunk.lines_to_string() if chunk else ''
 	# advance, unless we're playing a macro.
 	JI.cmd("advance^:(-.A__red)''")

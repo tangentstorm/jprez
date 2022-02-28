@@ -28,5 +28,5 @@ func suggest_path()->String:
 	if len(res) < 32: res += md5.right(4).left(32-len(res))
 	return res + '.wav'
 
-func file_exists(dir_path='res://')->bool:
+func file_exists(dir_path)->bool:
 	return File.new().file_exists(dir_path + suggest_path())

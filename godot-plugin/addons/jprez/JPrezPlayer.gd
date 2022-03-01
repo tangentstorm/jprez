@@ -1,15 +1,17 @@
-										  extends Node
+extends Node
 
 export(Resource) var org setget set_org
 onready var JI = $JLang # J interpreter
 
 var org_dir = ''
 var org_path = ''
-onready var cmd_label = $PanelContainer/CurrentCmd
-onready var count_label = $counts
+onready var cmd_label = $PanelContainer/VBox/CurrentCmd
+onready var count_label = $PanelContainer/VBox/counts
+onready var jcmd_label = $PanelContainer/VBox/jcmd
 
 var tracks: Array
-func set_org(org:OrgNode):
+func set_org(x:OrgNode):
+	org = x
 	org_dir = org.resource_path.get_base_dir() + '/'
 	org_path = ProjectSettings.globalize_path(org.resource_path)
 	tracks = []
@@ -19,6 +21,8 @@ func set_org(org:OrgNode):
 
 var timer : Timer
 func _ready():
+	$Outline.connect("node_selected", $ChunkList, "set_org")
+	$Outline.set_org(org)
 	var hw = '45 220'
 	print("J_HOME:", OS.get_environment('J_HOME'))
 	JI.cmd("9!:7 [ (16+i.11){a.  NB. box drawing characters")
@@ -47,7 +51,7 @@ func _on_audio_finished():
 
 func _process(_dt):
 	JI.cmd("cocurrent'base'")
-	$jcmd.text = 'val_cmds =: ' + JI.cmd_s(">val__cmds''")
+	jcmd_label.text = 'val_cmds =: ' + JI.cmd_s(">val__cmds''")
 	var counts = []; var i = 0; var count_str=''
 	for k in OT.keys():
 		var c = tracks[i].count; counts.push_back(c)
@@ -90,3 +94,6 @@ func _process(_dt):
 	# we have to run update_app /before/ checking A__red
 	if not jprez_ready:
 		jprez_ready = not JI.cmd('A__red * 2') # TODO: return bools as ints
+
+	# draw the cursors on the tree control
+	$ChunkList.highlight(tracks)

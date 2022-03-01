@@ -1,6 +1,7 @@
 tool class_name OrgChunk extends Resource
 # this represensts one "chunk" (step/line) within a jprez slide
 
+export(int) var index = 0
 export(String) var file_path = ''
 export(Resource) var time_start
 export(Resource) var time_end

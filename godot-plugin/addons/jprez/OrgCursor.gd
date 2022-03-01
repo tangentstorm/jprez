@@ -3,6 +3,7 @@ tool class_name OrgCursor extends Reference
 enum S { ENTER, DESCEND, CHUNKS, NEXT, RETURN, BREAK }
 
 # tool to iterate through the nodes
+var root: OrgNode # so we can jump back to the top
 var node: OrgNode
 var stack: Array
 var count: int = 0 # global count through the whole tree
@@ -11,6 +12,7 @@ var state : int = S.ENTER
 var head : String
 
 func _init(root:OrgNode):
+	self.root = root
 	self.stack = []
 	self.node = root
 	self.state = S.ENTER
@@ -48,6 +50,14 @@ func next_chunk()->OrgChunk:
 				step += 1; count += 1
 				state = S.CHUNKS
 			S.BREAK: break
+	return res
+
+func goto_index(index, track)->OrgChunk:
+	# go to the first chunk on track where chunk.index >= index
+	_init(root)
+	var res:OrgChunk = next_chunk()
+	while res and res.track != track and res.index < index:
+		res = next_chunk()
 	return res
 
 func find_next(track)->OrgChunk:

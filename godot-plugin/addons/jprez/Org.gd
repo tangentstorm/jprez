@@ -12,10 +12,11 @@ enum Track { AUDIO, MACRO, INPUT, EVENT }
 
 class OrgParser:
 	var rx_timespan = RegEx.new()
-	var root
-	var node
-	var stack
-	var chunk
+	var root:OrgNode
+	var node:OrgNode
+	var stack:Array
+	var chunk:OrgChunk
+	var chunk_count: int = 0 # so each gets a unique id
 
 	func _init():
 		rx_timespan.compile(SPAN)
@@ -25,9 +26,8 @@ class OrgParser:
 		chunk = null
 
 	func extend_chunk(line):
-		if chunk == null:
-			chunk = OrgChunk.new()
-		chunk.lines.append(line)
+		if chunk == null: new_chunk(line)
+		else: chunk.lines.append(line)
 
 	func new_slide(lno, cut, rest):
 		if (cut-1) > len(stack):
@@ -38,13 +38,15 @@ class OrgParser:
 			if cut == len(stack): stack.push_back(node)
 			else: stack[cut] = node
 
-	func new_chunk(_lno, line):
+	func new_chunk(line):
 		var track = Track.AUDIO
 		if line.begins_with(": ."): track = Track.MACRO
 		elif line.begins_with(": "): track = Track.INPUT
 		chunk = OrgChunk.new()
 		chunk.track = track
 		chunk.lines = [line]
+		chunk.index = chunk_count
+		chunk_count += 1
 
 	func note_timespan(start, end):
 		pass
@@ -74,7 +76,7 @@ class OrgParser:
 			elif line[0] in [':','*']:
 				end_chunk()
 				if line[0] == '*': new_slide(lno, cut, rest)
-				else: new_chunk(lno, line)
+				else: new_chunk(line)
 			else:
 				var m = rx_timespan.search(line)
 				if m: note_timespan(m.get_string("start"), m.get_string("end"))

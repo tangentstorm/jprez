@@ -10,6 +10,8 @@ NB.  - verbatim lines (starting with ":") indicate repl input or macros
 NB.    - ": ." indicates that the line is a jprez keyboard macro
 NB.    - ": " (not followed by " .") indicates verbatim repl input
 
+MACROS_ONLY =: 0 NB. toggled by godot-plugin to ignore non-macro steps
+
 between =: (>:@[ +  i.@<:@-~)/           NB. between 3 7 ->  4 5 6
 parse =: monad define
   NB. parse a single slide
@@ -23,6 +25,7 @@ parse =: monad define
     code =. y {~ between 2$src           NB. only take the first source block
     text =. (1{src) }. text
   else. code =. a:  end.
+  if. MACROS_ONLY do. text =. text#~':'={.&> text end.
   (<head),(<text),(<code),<depth
 )
 

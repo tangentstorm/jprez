@@ -5,9 +5,7 @@ onready var JI = $JLang # J interpreter
 
 var org_dir = ''
 var org_path = ''
-onready var cmd_label = $PanelContainer/VBox/CurrentCmd
-onready var count_label = $PanelContainer/VBox/counts
-onready var jcmd_label = $PanelContainer/VBox/jcmd
+onready var status_label = $PanelContainer/VBox/status
 onready var scene_title = $SceneTitle
 
 var tracks: Array
@@ -45,6 +43,8 @@ func _ready():
 
 const OT = Org.Track
 
+var playing = false
+var step_ready = false
 var audio_ready = true
 var jprez_ready = true
 var event_ready = true
@@ -58,15 +58,24 @@ func _on_title_animation_finished():
 
 func _process(_dt):
 	JI.cmd("cocurrent'base'")
-	jcmd_label.text = 'val_cmds =: ' + JI.cmd_s(">val__cmds''")
-	var counts = []; var i = 0; var count_str=''
-	for k in OT.keys():
-		var c = tracks[i].count; counts.push_back(c)
-		count_str += '  ' + k + ': ' + str(c); i+=1
-	count_str += ' jprez_ready: ' + str(jprez_ready)
-	count_str += ' audio_ready: ' + str(audio_ready)
-	count_label.text = count_str
+	show_debug_state()
+	if playing or step_ready:
+		step_ready = playing
+		process_event_track()
+		process_audio_track()
+		process_input_and_macro_tracks()
+	update_jprez()
 
+func show_debug_state():
+	var status_str=''
+	status_str += ' jprez_ready: ' + str(jprez_ready)
+	status_str += ' audio_ready: ' + str(audio_ready)
+	status_str += ' event_ready: ' + str(event_ready)
+	status_label.text = status_str
+	# draw the cursors on the tree control
+	$ChunkList.highlight(tracks)
+
+func process_event_track():
 	if event_ready:
 		if tracks[OT.EVENT].count < tracks[OT.AUDIO].count:
 			event_ready = false
@@ -76,6 +85,7 @@ func _process(_dt):
 				scene_title.reveal(script)
 			else: printerr("unrecognized event: ", script)
 
+func process_audio_track():
 	if audio_ready and jprez_ready and event_ready:
 		var chunk = tracks[OT.AUDIO].this_chunk()
 		if chunk==null: audio_ready = false # no more audio
@@ -87,6 +97,7 @@ func _process(_dt):
 				$AudioStreamPlayer.play()
 			tracks[OT.AUDIO].find_next(OT.AUDIO)
 
+func process_input_and_macro_tracks():
 	if jprez_ready:
 		# which of the two jprez tracks is next to fire?
 		var which = OT.MACRO if tracks[OT.MACRO].count < tracks[OT.INPUT].count else OT.INPUT
@@ -98,16 +109,23 @@ func _process(_dt):
 			JI.cmd("advance''")
 			tracks[which].find_next(which)
 
+func update_jprez():
 	# we do this on every tick so we can watch macros play.
 	JI.cmd("update__app''")
 	if JI.cmd('R__repl * 2'): # so it's not a boolean (because j-rs-gd only does ints atm)
 		var repl = get_node('jp-repl')
 		repl.JI = JI
 		repl.refresh()
-
 	# we have to run update_app /before/ checking A__red
 	if not jprez_ready:
 		jprez_ready = not JI.cmd('A__red * 2') # TODO: return bools as ints
 
-	# draw the cursors on the tree control
-	$ChunkList.highlight(tracks)
+func _on_PlayButton_pressed():
+	playing = not playing
+
+func _on_StepButton_pressed():
+	step_ready = true
+
+func _on_ChunkList_chunk_selected(chunk):
+	for track in Org.Track.values():
+		tracks[track].goto_index(chunk.index, track)

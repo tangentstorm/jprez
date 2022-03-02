@@ -56,7 +56,7 @@ func goto_index(index, track)->OrgChunk:
 	# go to the first chunk on track where chunk.index >= index
 	_init(root)
 	var res:OrgChunk = next_chunk()
-	while res and res.track != track and res.index < index:
+	while res and (res.track != track or res.index < index):
 		res = next_chunk()
 	return res
 

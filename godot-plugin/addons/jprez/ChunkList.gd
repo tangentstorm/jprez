@@ -3,10 +3,11 @@ tool extends VBoxContainer
 
 enum Col { INDEX, START, TEXT }
 
-signal audio_chunk_selected(step)
-signal macro_chunk_selected(step)
-signal input_chunk_selected(step)
-signal event_chunk_selected(step)
+signal audio_chunk_selected(chunk)
+signal macro_chunk_selected(chunk)
+signal input_chunk_selected(chunk)
+signal event_chunk_selected(chunk)
+signal chunk_selected(chunk)
 
 export var org_dir:String = 'res://'
 onready var tree : Tree = $Tree
@@ -49,6 +50,7 @@ func _on_Tree_item_selected():
 		Org.Track.MACRO: emit_signal("macro_chunk_selected", chunk)
 		Org.Track.INPUT: emit_signal("input_chunk_selected", chunk)
 		Org.Track.EVENT: emit_signal("event_chunk_selected", chunk)
+	emit_signal("chunk_selected", chunk)
 
 func highlight(tracks:Array):
 	# tracks is an array of OrgCursor instances (used by JPrezPlayer)

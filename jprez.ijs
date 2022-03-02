@@ -92,7 +92,7 @@ editor =: 'JCodeEditor' conew~ ''
 XY__editor =: 0 0
 H__editor =: H_SPLIT
 W__editor =: 70
-
+
 show_editor =: {{ V__editor =: 1 [ XY__repl =: (W__editor+2), 0 [ W__red =: W__repl =: W__editor -~ xmax'' }}
 hide_editor =: {{ V__editor =: 0 [ XY__repl =: 0 0 [ W__red =: W__repl =: 1+xmax'' }}
 hide_editor''
@@ -135,11 +135,14 @@ getworld__repl =: {{ 'WORLD',": worldnum_base_'' }}
 
 
 NB. keyboard control
-goto =: {{
- R__editor =: R__repl =: 1
- L__cmds =: text cur =: y
- setval__editor code y
- S__cmds =: C__cmds =: 0 }}
+
+goix =: {{
+  NB. go to y =: slide,line
+  setval__editor code cur =: C__list =: 0{y
+  fwd__cmds^:(1{y)'' [go0__cmds''[ L__cmds =: text cur
+  smudge__app''}}
+
+goto =: {{ goix y,0 }}
 
 put_text =: {{ 0 0 $ slides =: (<L__cmds) (<cur,1) } slides  }}
 
@@ -192,7 +195,7 @@ flip =: {{
   XY__cmds   =: ty1 (1) } XY__cmds
   move_splitter 0
 }}
-
+
 move_splitter =: {{
   if. *./ 1 < (H__list-y),H__repl + y do.
     if. FLIP = 1 do.
@@ -242,7 +245,7 @@ playmacro =: {{
     end.
   end. }}
 
-
+
 (copush [ coinsert) 'outkeys'
 NB. -----------------------------------------------------------
 coinsert BASE
@@ -353,6 +356,8 @@ mje =: {{
   step__app loop_kvm_'base'
   reset''
   0$0}}
+
+resume =: {{ step__app loop_kvm_'base' [ smudge__app''}}
 
 NB. only run if directly invoked from command line
 {{9!:29]1[9!:27 'mje _'}}^:('jprez.ijs' {.@E.&.|. >{.}.ARGV)''

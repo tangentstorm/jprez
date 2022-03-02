@@ -49,6 +49,7 @@ var step_ready = false
 var audio_ready = true
 var jprez_ready = true
 var event_ready = true
+var old_slide = 0
 
 func _on_audio_finished():
 	audio_ready = true
@@ -96,6 +97,9 @@ func process_audio_track():
 				var sample : AudioStreamSample = load(org_dir + chunk.suggest_path())
 				$AudioStreamPlayer.stream = sample
 				$AudioStreamPlayer.play()
+				if chunk.jpxy.x > old_slide:
+					$Outline/Tree.get_selected().get_next().select(0)
+				old_slide = chunk.jpxy.x
 			tracks[OT.AUDIO].find_next(OT.AUDIO)
 
 func process_input_and_macro_tracks():

@@ -1,12 +1,14 @@
 tool class_name OrgChunk extends Resource
 # this represensts one "chunk" (step/line) within a jprez slide
 
-export(int) var index = 0
+export var index = 0
+export var track : int = 0 # Org.Track.TEXT
+export(Vector2) var jpxy = Vector2.ZERO # x=slide number, y=line on slide
 export(String) var file_path = ''
+export(Array, String) var lines
+
 export(Resource) var time_start
 export(Resource) var time_end
-export var track : int = 0 # Org.Track.TEXT
-export(Array, String) var lines
 
 func lines_to_string():
 	var res = ''

@@ -17,6 +17,7 @@ class OrgParser:
 	var stack:Array
 	var chunk:OrgChunk
 	var chunk_count: int = 0 # so each gets a unique id
+	var jpxy = Vector2(-1,0) # slide/line coordinates in jprez
 
 	func _init():
 		rx_timespan.compile(SPAN)
@@ -27,9 +28,13 @@ class OrgParser:
 
 	func extend_chunk(line):
 		if chunk == null: new_chunk(line)
-		else: chunk.lines.append(line)
+		else:
+			chunk.lines.append(line)
+			jpxy += Vector2(0,1)
 
 	func new_slide(lno, cut, rest):
+		jpxy += Vector2(1,0)
+		jpxy *= Vector2(1,0)
 		if (cut-1) > len(stack):
 			printerr("warning: too many asterisks on line ", lno)
 		else:
@@ -47,16 +52,15 @@ class OrgParser:
 		chunk.track = track
 		chunk.lines = [line]
 		chunk.index = chunk_count
+		chunk.jpxy = jpxy
 		chunk_count += 1
+		jpxy += Vector2(0,1)
 
 	func note_timespan(start, end):
 		pass
 
 	func note_audio(rest):
 		chunk.file_path = rest
-
-	func note_event(rest):
-		pass
 
 	func org_from_path(path:String):
 		root = OrgNode.new(''); node = root; stack = [root]; chunk = null
@@ -69,10 +73,11 @@ class OrgParser:
 			if in_src:
 				if line == '#+end_src': in_src = false
 				else: node.slide.append(line)
-			elif line == '': end_chunk()
+			elif line == '':
+				jpxy += Vector2(0,1)
+				end_chunk()
 			elif line.begins_with('#+title:'): root.head = rest
 			elif line.begins_with('#+audio:'): note_audio(rest)
-			elif line.begins_with('#+event:'): note_event(rest)
 			elif line.begins_with('#+begin_src j'): in_src = true
 			elif line[0] in [':','*','@']:
 				end_chunk()

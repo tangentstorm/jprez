@@ -1,7 +1,7 @@
 tool extends VBoxContainer
 # visual representation of OrgChunk list
 
-enum Col { INDEX, START, TEXT }
+enum Col { INDEX, JPXY, TEXT }
 
 signal audio_chunk_selected(chunk)
 signal macro_chunk_selected(chunk)
@@ -26,7 +26,7 @@ func set_org(org:OrgNode):
 		var item : TreeItem = tree.create_item(root)
 		item.set_text(Col.INDEX, str(chunk.index))
 		# item.set_text(Col.TRACK, track_names[chunk.track][0].to_lower())
-		item.set_text(Col.START, ' 00:00'); item.set_custom_color(Col.START, Color.darkgray)
+		item.set_text(Col.JPXY, ' %d %d'%[chunk.jpxy.x, chunk.jpxy.y]); item.set_custom_color(Col.JPXY, Color.darkgray)
 		for c in [Col.INDEX]: item.set_text_align(c, TreeItem.ALIGN_RIGHT)
 		item.set_text(Col.TEXT, chunk.to_string())
 		item.set_meta('chunk', chunk)

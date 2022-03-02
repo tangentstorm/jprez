@@ -8,6 +8,7 @@ var org_path = ''
 onready var cmd_label = $PanelContainer/VBox/CurrentCmd
 onready var count_label = $PanelContainer/VBox/counts
 onready var jcmd_label = $PanelContainer/VBox/jcmd
+onready var scene_title = $SceneTitle
 
 var tracks: Array
 func set_org(x:OrgNode):
@@ -40,14 +41,20 @@ func _ready():
 		JI.cmd("reopen''")
 		JI.cmd("goto 0")
 	$AudioStreamPlayer.connect("finished", self, "_on_audio_finished")
+	$SceneTitle.connect("animation_finished", self, "_on_title_animation_finished")
 
 const OT = Org.Track
 
 var audio_ready = true
 var jprez_ready = true
+var event_ready = true
 
 func _on_audio_finished():
 	audio_ready = true
+
+func _on_title_animation_finished():
+	event_ready = true
+	tracks[OT.EVENT].find_next(OT.EVENT)
 
 func _process(_dt):
 	JI.cmd("cocurrent'base'")
@@ -60,9 +67,16 @@ func _process(_dt):
 	count_str += ' audio_ready: ' + str(audio_ready)
 	count_label.text = count_str
 
-	# audio is the "main" cursor that controls everything else.
-	# (except possibly animation events?)
-	if audio_ready and jprez_ready:
+	if event_ready:
+		if tracks[OT.EVENT].count < tracks[OT.AUDIO].count:
+			event_ready = false
+			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
+			if script.begins_with("@title("):
+				script = script.right(8).rstrip('")')
+				scene_title.reveal(script)
+			else: printerr("unrecognized event: ", script)
+
+	if audio_ready and jprez_ready and event_ready:
 		var chunk = tracks[OT.AUDIO].this_chunk()
 		if chunk==null: audio_ready = false # no more audio
 		else:

@@ -42,6 +42,7 @@ class OrgParser:
 		var track = Track.AUDIO
 		if line.begins_with(": ."): track = Track.MACRO
 		elif line.begins_with(": "): track = Track.INPUT
+		elif line[0] == '@': track = Track.EVENT
 		chunk = OrgChunk.new()
 		chunk.track = track
 		chunk.lines = [line]
@@ -73,7 +74,7 @@ class OrgParser:
 			elif line.begins_with('#+audio:'): note_audio(rest)
 			elif line.begins_with('#+event:'): note_event(rest)
 			elif line.begins_with('#+begin_src j'): in_src = true
-			elif line[0] in [':','*']:
+			elif line[0] in [':','*','@']:
 				end_chunk()
 				if line[0] == '*': new_slide(lno, cut, rest)
 				else: new_chunk(line)

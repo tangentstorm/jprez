@@ -20,6 +20,7 @@ func set_org(x:OrgNode):
 
 var timer : Timer
 func _ready():
+	$ChunkList.org_dir = org_dir
 	$Outline.connect("node_selected", $ChunkList, "set_org")
 	$Outline.set_org(org)
 	var hw = '45 220'
@@ -33,7 +34,7 @@ func _ready():
 	JI.cmd("load 'jprez.ijs'")
 	if org_path != '':
 		JI.cmd("cocurrent'base'")
-		JI.cmd("MACROS_ONLY =: 1")
+		JI.cmd("MACROS_ONLY =: 0")
 		JI.cmd("ORG_PATH =: '%s'" % [org_path])
 		JI.cmd("reopen_base_=:reopen_outkeys_ f.")
 		JI.cmd("reopen''")
@@ -106,6 +107,8 @@ func process_input_and_macro_tracks():
 		if which == OT.INPUT: which_count += 1
 		if which_count < tracks[OT.AUDIO].count:
 			jprez_ready = false
+			var ix = tracks[which].this_chunk().jpxy
+			JI.cmd('goix %d %d' % [ix.x, ix.y])
 			JI.cmd("advance''")
 			tracks[which].find_next(which)
 
@@ -129,3 +132,5 @@ func _on_StepButton_pressed():
 func _on_ChunkList_chunk_selected(chunk):
 	for track in Org.Track.values():
 		tracks[track].goto_index(chunk.index, track)
+		var ix = chunk.jpxy
+		JI.cmd('goix %d %d' % [ix.x, ix.y])

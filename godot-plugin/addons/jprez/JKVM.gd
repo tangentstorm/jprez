@@ -13,6 +13,7 @@ export var rng_seed : int = 82076 setget _set_rng_seed
 export var grid_wh : Vector2 = Vector2(80, 25) setget _set_grid_wh
 export var cell_wh : Vector2 = Vector2(12,14) setget _set_cell_wh
 export var cursor_visible: bool = false setget _set_cursor_visible
+export var fake_focus: bool = false
 
 onready var JI = get_node(j_interpreter)
 
@@ -182,7 +183,7 @@ func refresh():
 	J(vid + "=: 'vid' conew~ |." + j_hw())
 	J("pushterm_kvm_ "+ vid)
 	J("'H__" + j_widget + " W__"+j_widget+"' =: "+j_hw())
-	J("render__" + j_widget + " " + str(int(has_focus())))
+	J("render__" + j_widget + " " + str(int(fake_focus or has_focus())))
 	J("popterm_kvm_ ''")
 	CHB = J("3 u:,CHB__" + vid)
 	FGB = _to_colors(J(",FGB__" + vid))

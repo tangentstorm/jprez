@@ -4,8 +4,9 @@
 [ext_resource path="res://addons/jprez/JPrezPlayer.gd" type="Script" id=2]
 [ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
 [ext_resource path="res://fonts/noto-24.tres" type="DynamicFont" id=5]
-[ext_resource path="res://wip/dealing-cards/0129-andyoujustmultiplyallthosen.wav" type="AudioStream" id=7]
 [ext_resource path="res://assets/SceneTitle.tscn" type="PackedScene" id=10]
+
+[sub_resource type="AudioStreamSample" id=1]
 
 [node name="JPrezPlayer" type="Control"]
 anchor_right = 1.0
@@ -16,7 +17,7 @@ __meta__ = {
 }
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 7 )
+stream = SubResource( 1 )
 
 [node name="JLang" type="Node" parent="."]
 script = ExtResource( 3 )

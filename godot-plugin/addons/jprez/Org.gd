@@ -64,6 +64,7 @@ class OrgParser:
 
 	func org_from_path(path:String):
 		root = OrgNode.new(''); node = root; stack = [root]; chunk = null
+		root.resource_path = path
 		var f = File.new(); f.open(path, File.READ)
 		var lno = -1; var in_src = false
 		for line in f.get_as_text().split("\n"):

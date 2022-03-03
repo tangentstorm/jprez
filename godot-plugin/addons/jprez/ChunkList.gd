@@ -54,7 +54,9 @@ func _on_Tree_item_selected():
 
 func highlight(tracks:Array):
 	# tracks is an array of OrgCursor instances (used by JPrezPlayer)
-	var item = tree.get_root().get_children()
+	var root = tree.get_root()
+	if not root: return
+	var item = root.get_children()
 	while item != null:
 		item.clear_custom_bg_color(0)
 		item = item.get_next()

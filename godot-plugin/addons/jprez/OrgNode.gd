@@ -16,6 +16,14 @@ func _init(depth=0, head='', slide=[], chunks=[], children=[]):
 	for child in children:
 		self.children.append(child as OrgNode)
 
+func get_dir():
+	var dir = resource_path.get_base_dir()
+	if not dir.ends_with('/'): dir += '/'
+	return  dir
+
+func get_global_path():
+	return ProjectSettings.globalize_path(resource_path)
+
 func add_child(node:OrgNode):
 	self.children.append(node)
 

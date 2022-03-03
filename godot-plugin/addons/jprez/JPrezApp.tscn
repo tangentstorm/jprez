@@ -1,0 +1,121 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://addons/jprez/JPrezApp.gd" type="Script" id=2]
+[ext_resource path="res://addons/jprez/JPrezStepper.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/jprez/JPrezPlayer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/jprez/JPrezAudioTab.tscn" type="PackedScene" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+
+[sub_resource type="ButtonGroup" id=4]
+resource_name = "tab-buttons"
+
+[node name="JPrezApp" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 2 )
+script = ExtResource( 2 )
+
+[node name="JPrezScene" parent="." instance=ExtResource( 4 )]
+
+[node name="JPrezStepper" parent="." instance=ExtResource( 3 )]
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ToolbarPanel" type="Panel" parent="VBox"]
+margin_right = 1920.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+
+[node name="Toolbar" type="HBoxContainer" parent="VBox/ToolbarPanel"]
+margin_top = 4.0
+margin_right = 1920.0
+margin_bottom = 35.0
+custom_constants/separation = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OrgPath" type="Label" parent="VBox/ToolbarPanel/Toolbar"]
+margin_top = 3.0
+margin_right = 103.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0.560784, 0.560784, 0.560784, 1 )
+text = "filename.org"
+
+[node name="padding-left" type="Control" parent="VBox/ToolbarPanel/Toolbar"]
+margin_left = 107.0
+margin_right = 939.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="audio-tab" type="Button" parent="VBox/ToolbarPanel/Toolbar"]
+margin_left = 943.0
+margin_right = 1003.0
+margin_bottom = 31.0
+custom_colors/font_color_pressed = Color( 0.152941, 0.509804, 0.964706, 1 )
+toggle_mode = true
+pressed = true
+group = SubResource( 4 )
+text = "Audio"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="preview-tab" type="Button" parent="VBox/ToolbarPanel/Toolbar"]
+margin_left = 1007.0
+margin_right = 1083.0
+margin_bottom = 31.0
+custom_colors/font_color_pressed = Color( 0.152941, 0.509804, 0.964706, 1 )
+toggle_mode = true
+group = SubResource( 4 )
+text = "Preview"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="padding-right" type="Control" parent="VBox/ToolbarPanel/Toolbar"]
+margin_left = 1087.0
+margin_right = 1920.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveButton" type="Button" parent="VBox/ToolbarPanel/Toolbar"]
+visible = false
+margin_left = 1869.0
+margin_right = 1920.0
+margin_bottom = 31.0
+text = "Save"
+
+[node name="JPrezAudioTab" parent="VBox" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 40.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+
+[connection signal="jprez_line_changed" from="JPrezStepper" to="." method="_on_JPrezStepper_jprez_line_changed"]
+[connection signal="pressed" from="VBox/ToolbarPanel/Toolbar/audio-tab" to="." method="_on_audiotab_pressed"]
+[connection signal="pressed" from="VBox/ToolbarPanel/Toolbar/preview-tab" to="." method="_on_previewtab_pressed"]

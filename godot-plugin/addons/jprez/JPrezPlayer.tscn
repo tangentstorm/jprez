@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
 [ext_resource path="res://addons/jprez/JPrezPlayer.gd" type="Script" id=2]
 [ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
-[ext_resource path="res://fonts/noto-20.tres" type="DynamicFont" id=4]
+[ext_resource path="res://fonts/noto-24.tres" type="DynamicFont" id=5]
 [ext_resource path="res://wip/dealing-cards/0129-andyoujustmultiplyallthosen.wav" type="AudioStream" id=7]
 [ext_resource path="res://assets/SceneTitle.tscn" type="PackedScene" id=10]
 
@@ -22,36 +22,37 @@ stream = ExtResource( 7 )
 script = ExtResource( 3 )
 
 [node name="jp-repl" type="Control" parent="."]
-margin_right = 2420.0
+margin_right = 3080.0
 margin_bottom = 1080.0
-rect_min_size = Vector2( 2420, 1080 )
+rect_min_size = Vector2( 3080, 1080 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-font = ExtResource( 4 )
+font = ExtResource( 5 )
 font_base = Vector2( 0, 20 )
 j_widget = "repl"
-grid_wh = Vector2( 220, 45 )
-cell_wh = Vector2( 11, 24 )
+grid_wh = Vector2( 220, 36 )
+cell_wh = Vector2( 14, 30 )
 
 [node name="jp-editor" type="Control" parent="."]
 visible = false
-margin_left = 11.1061
-margin_top = 320.438
-margin_right = 641.106
-margin_bottom = 800.438
-rect_min_size = Vector2( 630, 480 )
+margin_left = 38.1406
+margin_top = 570.697
+margin_right = 1158.14
+margin_bottom = 1050.7
+rect_min_size = Vector2( 1120, 480 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-font_base = Vector2( 0, 15 )
+font = ExtResource( 5 )
+font_base = Vector2( 0, 24 )
 j_widget = "editor"
-grid_wh = Vector2( 70, 24 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2( 80, 16 )
+cell_wh = Vector2( 14, 30 )
 
 [node name="SceneTitle" parent="." instance=ExtResource( 10 )]
 text_len = 0

@@ -16,6 +16,7 @@ var old_slide = 0
 var tracks: Array
 var this_audio_chunk
 var next_audio_chunk
+var slide_just_changed = false
 
 onready var ChunkList = find_node("ChunkList")
 onready var Outline = find_node("Outline")
@@ -65,7 +66,9 @@ func show_debug_state():
 
 func process_script_track():
 	if event_ready and jprez_ready:
-		if tracks[OT.EVENT].count < this_audio_chunk.index:
+		var event_chunk = tracks[OT.EVENT].this_chunk()
+		if not event_chunk: return
+		if this_audio_chunk == null or event_chunk.index < this_audio_chunk.index:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
 			if script_engine:
 				script_engine.execute(0, script)
@@ -102,11 +105,23 @@ func _on_PlayButton_pressed():
 func _on_StepButton_pressed():
 	step_ready = true
 
+func reset_ready_flags():
+	audio_ready = true
+	event_ready = true
+	jprez_ready = true
+
 func _on_ChunkList_chunk_selected(chunk):
+	if slide_just_changed:
+		slide_just_changed = false
+		return
 	if not tracks: return
 	for track in Org.Track.values():
+		reset_ready_flags()
 		var track_chunk = tracks[track].goto_index(chunk.index, track)
-		if track == OT.AUDIO: this_audio_chunk = track_chunk
+		if track == OT.AUDIO:
+			this_audio_chunk = track_chunk
+			next_audio_chunk = tracks[track].find_next(track)
 		old_slide = this_audio_chunk.jpxy.x
-	var ix = chunk.jpxy
-	emit_signal('jprez_line_changed', ix.x, ix.y)
+		if track == OT.MACRO:
+			var ix = chunk.jpxy
+			emit_signal('jprez_line_changed', ix.x, ix.y)

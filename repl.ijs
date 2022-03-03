@@ -38,6 +38,8 @@ render =: {{
     vputs >line
   end.
   NB. draw line editor / prompt on the last line, with 3-space prompt
+  NB. but hide special lines like @cls (valid j never starts with '@')
+  if. '@'-:{.B__ed do. C__ed=:0 [ B__ed =: '' end.
   XY__ed =: 3 0 + (0, # hist)
   termdraw__ed y
   R =: R__ed =: 0 }}

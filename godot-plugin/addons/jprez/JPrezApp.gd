@@ -3,9 +3,9 @@ class_name JPrezApp extends Control
 var org: OrgNode
 var org_path = 'res://wip/dealing-cards/dealing-cards.org'
 
-onready var Stepper = $JPrezStepper
+onready var jprez_stepper = $JPrezStepper
 onready var jprez_scene = find_node("JPrezScene")
-onready var ScriptEngine = JPrezScriptEngine.new()
+onready var script_engine = $JPrezScriptEngine
 
 const bytesPerSample = 2
 const channels = 2
@@ -20,10 +20,13 @@ func hms(samples)->String:
 
 func _ready():
 	org = Org.from_path(org_path)
-	Stepper.org = org
+	jprez_stepper.org = org
+	jprez_stepper.script_engine = script_engine
+	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
+	jprez_scene.set_org_path(org.get_global_path())
 	find_node("OrgPath").text = org_path
 	find_node("JPrezAudioTab").org = org
-	find_node("JPrezScene").set_org_path(org.get_global_path())
+
 
 func load_timeline():
 	# visually show all the clips in a timeline view
@@ -64,17 +67,21 @@ func save_org_file():
 
 func _on_previewtab_pressed():
 	$VBox/JPrezAudioTab.visible = false
-	Stepper.visible = true
+	jprez_stepper.visible = true
 
 func _on_audiotab_pressed():
 	$VBox/JPrezAudioTab.visible = true
-	Stepper.visible = false
+	jprez_stepper.visible = false
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
 		match event.scancode:
-			KEY_F12: Stepper.visible = not Stepper.visible
+			KEY_F12: jprez_stepper.visible = not jprez_stepper.visible
 			KEY_F11: $VBox.visible = not $VBox.visible
 
 func _on_JPrezStepper_jprez_line_changed(scene, cmd):
 	jprez_scene.goix(scene, cmd)
+
+func _on_JPrezScriptEngine_script_finished(id, result):
+	print_debug("app: script finished")
+	jprez_stepper._on_script_finished(id, result)

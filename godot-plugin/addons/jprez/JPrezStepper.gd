@@ -34,7 +34,8 @@ func set_org(o:OrgNode):
 func _on_audio_finished():
 	audio_ready = true
 
-func _on_script_finished():
+func _on_script_finished(_id, _result):
+	print_debug("jprez stepper _on_script_finished")
 	event_ready = true
 	tracks[OT.EVENT].find_next(OT.EVENT)
 
@@ -55,7 +56,7 @@ func process_script_track():
 		if tracks[OT.EVENT].count < tracks[OT.AUDIO].count:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
 			if script_engine:
-				script_engine.execute(script, self)
+				script_engine.execute(0, script)
 				event_ready = false
 
 func process_audio_track():
@@ -87,10 +88,6 @@ func process_input_and_macro_tracks():
 
 func _on_PlayButton_pressed():
 	playing = not playing
-	if playing:
-		jprez_ready = true
-		event_ready = true
-		audio_ready = true
 
 func _on_StepButton_pressed():
 	step_ready = true

@@ -5,7 +5,6 @@ class_name JPrezPlayer extends Node
 signal macro_finished # when a macro finishes playing
 
 onready var JI = $JLang # J interpreter
-onready var scene_title = $SceneTitle
 var jprez_ready = true # false when macro is playing
 
 func goix(scene, cmd):
@@ -16,7 +15,6 @@ func goix(scene, cmd):
 
 func _ready():
 	$AudioStreamPlayer.connect("finished", self, "_on_audio_finished")
-	$SceneTitle.connect("animation_finished", self, "_on_title_animation_finished")
 	# print("J_HOME:", OS.get_environment('J_HOME'))
 	JI.cmd("9!:7 [ (16+i.11){a.  NB. box drawing characters")
 	JI.cmd("ARGV_z_=:,<''")

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://addons/jprez/JPrezApp.gd" type="Script" id=2]
 [ext_resource path="res://addons/jprez/JPrezStepper.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/jprez/JPrezPlayer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://addons/jprez/JPrezAudioTab.tscn" type="PackedScene" id=5]
+[ext_resource path="res://addons/jprez/JPrezScriptEngine.gd" type="Script" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -21,6 +22,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
 script = ExtResource( 2 )
+
+[node name="JPrezScriptEngine" type="Node" parent="."]
+script = ExtResource( 6 )
 
 [node name="JPrezScene" parent="." instance=ExtResource( 4 )]
 
@@ -116,6 +120,7 @@ margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_vertical = 3
 
+[connection signal="script_finished" from="JPrezScriptEngine" to="." method="_on_JPrezScriptEngine_script_finished"]
 [connection signal="jprez_line_changed" from="JPrezStepper" to="." method="_on_JPrezStepper_jprez_line_changed"]
 [connection signal="pressed" from="VBox/ToolbarPanel/Toolbar/audio-tab" to="." method="_on_audiotab_pressed"]
 [connection signal="pressed" from="VBox/ToolbarPanel/Toolbar/preview-tab" to="." method="_on_previewtab_pressed"]

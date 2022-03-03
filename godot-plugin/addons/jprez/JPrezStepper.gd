@@ -13,6 +13,9 @@ var audio_ready = true
 var event_ready = true
 var jprez_ready = true
 var old_slide = 0
+var tracks: Array
+var this_audio_chunk
+var next_audio_chunk
 
 onready var ChunkList = find_node("ChunkList")
 onready var Outline = find_node("Outline")
@@ -21,7 +24,6 @@ func _ready():
 	Outline.connect("node_selected", ChunkList, "set_org")
 	$AudioStreamPlayer.connect("finished", self, "_on_audio_finished")
 
-var tracks: Array
 func set_org(o:OrgNode):
 	org = o
 	ChunkList.org_dir = org.get_dir()
@@ -30,9 +32,11 @@ func set_org(o:OrgNode):
 	for t in Org.Track.values():
 		tracks.push_back(OrgCursor.new(org))
 		tracks[t].find_next(t)
+	this_audio_chunk = tracks[OT.AUDIO].this_chunk()
 
 func _on_audio_finished():
 	audio_ready = true
+	this_audio_chunk = next_audio_chunk
 
 func _on_script_finished(_id, _result):
 	event_ready = true
@@ -49,10 +53,11 @@ func _process(_dt):
 func show_debug_state():
 	# draw the cursors on the tree control
 	ChunkList.highlight(tracks)
+	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if audio_ready else Color.gold)
 
 func process_script_track():
 	if event_ready:
-		if tracks[OT.EVENT].count < tracks[OT.AUDIO].count:
+		if tracks[OT.EVENT].count < this_audio_chunk.index:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
 			if script_engine:
 				script_engine.execute(0, script)
@@ -60,18 +65,16 @@ func process_script_track():
 
 func process_audio_track():
 	if audio_ready and jprez_ready and event_ready:
-		var chunk = tracks[OT.AUDIO].this_chunk()
-		if chunk==null: audio_ready = false # no more audio
-		else:
-			if chunk.file_exists(org.get_dir()):
+		if this_audio_chunk:
+			if this_audio_chunk.file_exists(org.get_dir()):
 				audio_ready = false
-				var sample : AudioStreamSample = load(org.get_dir() + chunk.suggest_path())
+				var sample : AudioStreamSample = load(org.get_dir() + this_audio_chunk.suggest_path())
 				$AudioStreamPlayer.stream = sample
 				$AudioStreamPlayer.play()
-				if chunk.jpxy.x > old_slide:
+				if this_audio_chunk.jpxy.x > old_slide:
 					Outline.get_node("Tree").get_selected().get_next().select(0)
-				old_slide = chunk.jpxy.x
-			tracks[OT.AUDIO].find_next(OT.AUDIO)
+				old_slide = this_audio_chunk.jpxy.x
+			next_audio_chunk = tracks[OT.AUDIO].find_next(OT.AUDIO)
 
 func process_input_and_macro_tracks():
 	if jprez_ready:

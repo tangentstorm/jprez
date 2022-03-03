@@ -97,6 +97,7 @@ func _on_StepButton_pressed():
 func _on_ChunkList_chunk_selected(chunk):
 	if not tracks: return
 	for track in Org.Track.values():
-		tracks[track].goto_index(chunk.index, track)
-		var ix = chunk.jpxy
-		emit_signal('jprez_line_changed', ix.x, ix.y)
+		var track_chunk = tracks[track].goto_index(chunk.index, track)
+		if track == OT.AUDIO: this_audio_chunk = track_chunk
+	var ix = chunk.jpxy
+	emit_signal('jprez_line_changed', ix.x, ix.y)

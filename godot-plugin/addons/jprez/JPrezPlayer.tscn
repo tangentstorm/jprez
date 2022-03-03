@@ -37,10 +37,11 @@ grid_wh = Vector2( 220, 45 )
 cell_wh = Vector2( 11, 24 )
 
 [node name="jp-editor" type="Control" parent="."]
-margin_left = 950.981
-margin_top = -538.62
-margin_right = 1580.98
-margin_bottom = -58.62
+visible = false
+margin_left = 11.1061
+margin_top = 320.438
+margin_right = 641.106
+margin_bottom = 800.438
 rect_min_size = Vector2( 630, 480 )
 focus_mode = 1
 script = ExtResource( 1 )

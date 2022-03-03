@@ -14,10 +14,14 @@ func set_scene_title(node):
 func _on_animation_finished():
 	emit_signal("script_finished", script_id, script_result)
 
+func show_editor():
+	$"../JPrezScene/jp-editor".show()
+
 func execute(id:int, script:String):
 	script_id = id
 	script_result = null
 	if script.begins_with("@title("):
 		script = script.right(8).rstrip('")')
 		if scene_title: scene_title.reveal(script)
-	else: printerr("unrecognized event: ", script)
+	elif script == '@show-editor': show_editor()
+	else: printerr("JPrezScriptEngine: unrecognized event: ", script)

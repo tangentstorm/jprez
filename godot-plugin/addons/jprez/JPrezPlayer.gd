@@ -42,8 +42,9 @@ func _process(_dt):
 	# we have to run update_app /before/ checking A__red
 	if not jprez_ready:
 		jprez_ready = not JI.cmd('A__red * 2') # TODO: return bools as ints
-		if jprez_ready: emit_signal('macro_finished')
-
+		# signal on the next frame so that macro lines always take at least one frame.
+		# (this is so the stepper doesn't play both an input line and an audio in one step)
+		if jprez_ready: call_deferred('emit_signal', 'macro_finished')
 
 func _on_JPrezStepper_cmdix_changed(scene, cmd):
 	goix(scene, cmd)

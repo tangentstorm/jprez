@@ -84,3 +84,6 @@ func _on_JPrezStepper_jprez_line_changed(scene, cmd):
 
 func _on_JPrezScriptEngine_script_finished(id, result):
 	jprez_stepper._on_script_finished(id, result)
+
+func _on_JPrezScene_macro_finished():
+	jprez_stepper._on_macro_finished()

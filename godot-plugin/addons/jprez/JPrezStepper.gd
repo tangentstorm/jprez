@@ -44,6 +44,9 @@ func _on_script_finished(_id, _result):
 	event_ready = true
 	tracks[OT.EVENT].find_next(OT.EVENT)
 
+func _on_macro_finished():
+	jprez_ready = true
+
 func _process(_dt):
 	show_debug_state()
 	if playing or step_ready:
@@ -74,16 +77,21 @@ func process_audio_track():
 				$AudioStreamPlayer.stream = sample
 				$AudioStreamPlayer.play()
 				if this_audio_chunk.jpxy.x > old_slide:
+					slide_just_changed = true
 					Outline.get_node("Tree").get_selected().get_next().select(0)
 				old_slide = this_audio_chunk.jpxy.x
 
 func process_macro_track():
-	if jprez_ready:
+	if jprez_ready and event_ready:
 		# fire if that chunk comes before the *next* audio track.
-		if tracks[OT.MACRO].count < next_audio_chunk.index:
+		var macro_chunk = tracks[OT.MACRO].this_chunk()
+		if not macro_chunk: return
+		if next_audio_chunk == null or macro_chunk.index < next_audio_chunk.index:
+			jprez_ready = false
 			var ix = tracks[OT.MACRO].this_chunk().jpxy
 			emit_signal('jprez_line_changed', ix.x, ix.y)
-			tracks[OT.MACRO].find_next(OT.MACRO)
+			var next_macro = tracks[OT.MACRO].find_next(OT.MACRO)
+			if not next_macro: jprez_ready = false
 
 func _on_PlayButton_pressed():
 	playing = not playing

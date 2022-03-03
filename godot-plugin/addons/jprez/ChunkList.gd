@@ -59,6 +59,7 @@ func highlight_chunk(chunk, color):
 		var item_chunk = item.get_meta('chunk')
 		if item_chunk.index == chunk.index:
 			item.set_custom_bg_color(0, color)
+			tree.scroll_to_item(item)
 			break
 		item = item.get_next()
 

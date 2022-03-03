@@ -56,7 +56,7 @@ func show_debug_state():
 	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if audio_ready else Color.gold)
 
 func process_script_track():
-	if event_ready:
+	if event_ready and jprez_ready:
 		if tracks[OT.EVENT].count < this_audio_chunk.index:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
 			if script_engine:
@@ -82,8 +82,8 @@ func process_input_and_macro_tracks():
 		var which = OT.MACRO if tracks[OT.MACRO].count < tracks[OT.INPUT].count else OT.INPUT
 		# fire if that chunk comes before the next audio track.
 		var which_count = tracks[which].count
-		if which == OT.INPUT: which_count += 1
-		if which_count < tracks[OT.AUDIO].count:
+		# if which == OT.INPUT: which_count += 1  # why?
+		if which_count < this_audio_chunk.index:
 			var ix = tracks[which].this_chunk().jpxy
 			emit_signal('jprez_line_changed', ix.x, ix.y)
 			tracks[which].find_next(which)
@@ -99,5 +99,6 @@ func _on_ChunkList_chunk_selected(chunk):
 	for track in Org.Track.values():
 		var track_chunk = tracks[track].goto_index(chunk.index, track)
 		if track == OT.AUDIO: this_audio_chunk = track_chunk
+		old_slide = this_audio_chunk.jpxy.x
 	var ix = chunk.jpxy
 	emit_signal('jprez_line_changed', ix.x, ix.y)

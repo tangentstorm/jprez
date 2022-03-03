@@ -49,8 +49,14 @@ func _on_Tree_item_selected():
 		Org.Track.EVENT: emit_signal("event_chunk_selected", chunk)
 	emit_signal("chunk_selected", chunk)
 
+func clear_highlights():
+	var item = tree.get_root().get_children()
+	while item != null:
+		item.clear_custom_bg_color(0)
+		item = item.get_next()
 
 func highlight_chunk(chunk, color):
+	if not chunk: return
 	var item = tree.get_root().get_children()
 	while item != null:
 		var item_chunk = item.get_meta('chunk')
@@ -59,15 +65,3 @@ func highlight_chunk(chunk, color):
 			tree.scroll_to_item(item)
 			break
 		item = item.get_next()
-
-func highlight(tracks:Array):
-	# tracks is an array of OrgCursor instances (used by JPrezPlayer)
-	var root = tree.get_root()
-	if not root: return
-	var item = root.get_children()
-	while item != null:
-		item.clear_custom_bg_color(0)
-		item = item.get_next()
-	for track in tracks:
-		var track_chunk = track.this_chunk()
-		if track_chunk: highlight_chunk(track_chunk, Color.steelblue)

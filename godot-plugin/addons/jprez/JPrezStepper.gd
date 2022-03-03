@@ -57,8 +57,11 @@ func _process(_dt):
 
 func show_debug_state():
 	# draw the cursors on the tree control
-	ChunkList.highlight(tracks)
-	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if audio_ready else Color.gold)
+	ChunkList.clear_highlights()
+	ChunkList.highlight_chunk(tracks[OT.EVENT].this_chunk(), Color.royalblue)
+	ChunkList.highlight_chunk(tracks[OT.MACRO].this_chunk(), Color.darkslategray)
+	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if audio_ready else Color.darkgoldenrod)
+	ChunkList.highlight_chunk(next_audio_chunk, Color.sienna)
 
 func process_script_track():
 	if event_ready and jprez_ready:

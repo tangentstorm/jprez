@@ -8,7 +8,7 @@ tool class_name Org
 const TIME = "\\d{2}:\\d{2}:\\d{2}.\\d{3}"
 const SPAN = "^(?<start>"+TIME+")( --> (?<end>"+TIME+"))?"
 
-enum Track { AUDIO, MACRO, INPUT, EVENT }
+enum Track { AUDIO, MACRO, EVENT }
 
 class OrgParser:
 	var rx_timespan = RegEx.new()
@@ -45,8 +45,7 @@ class OrgParser:
 
 	func new_chunk(line):
 		var track = Track.AUDIO
-		if line.begins_with(": ."): track = Track.MACRO
-		elif line.begins_with(": "): track = Track.INPUT
+		if line.begins_with(": "): track = Track.MACRO
 		elif line[0] == '@': track = Track.EVENT
 		chunk = OrgChunk.new()
 		chunk.track = track

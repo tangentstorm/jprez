@@ -5,7 +5,6 @@ enum Col { INDEX, JPXY, TEXT }
 
 signal audio_chunk_selected(chunk)
 signal macro_chunk_selected(chunk)
-signal input_chunk_selected(chunk)
 signal event_chunk_selected(chunk)
 signal chunk_selected(chunk)
 
@@ -35,7 +34,6 @@ func set_org(org:OrgNode):
 			Org.Track.AUDIO:
 				if not chunk.file_exists(org_dir): color = Color.orangered
 			Org.Track.MACRO: color = Color.lightseagreen
-			Org.Track.INPUT: color = Color.aquamarine
 			Org.Track.EVENT: color = Color.cornflower
 		item.set_custom_color(Col.TEXT, color)
 
@@ -48,7 +46,6 @@ func _on_Tree_item_selected():
 	match chunk.track:
 		Org.Track.AUDIO: emit_signal("audio_chunk_selected", chunk)
 		Org.Track.MACRO: emit_signal("macro_chunk_selected", chunk)
-		Org.Track.INPUT: emit_signal("input_chunk_selected", chunk)
 		Org.Track.EVENT: emit_signal("event_chunk_selected", chunk)
 	emit_signal("chunk_selected", chunk)
 

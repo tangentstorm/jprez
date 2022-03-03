@@ -33,10 +33,12 @@ func set_org(o:OrgNode):
 		tracks.push_back(OrgCursor.new(org))
 		tracks[t].find_next(t)
 	this_audio_chunk = tracks[OT.AUDIO].this_chunk()
+	next_audio_chunk = tracks[OT.AUDIO].next_chunk()
 
 func _on_audio_finished():
 	audio_ready = true
 	this_audio_chunk = next_audio_chunk
+	next_audio_chunk = tracks[OT.AUDIO].find_next(OT.AUDIO)
 
 func _on_script_finished(_id, _result):
 	event_ready = true
@@ -48,7 +50,7 @@ func _process(_dt):
 		step_ready = playing
 		process_script_track()
 		process_audio_track()
-		process_input_and_macro_tracks()
+		process_macro_track()
 
 func show_debug_state():
 	# draw the cursors on the tree control
@@ -74,19 +76,14 @@ func process_audio_track():
 				if this_audio_chunk.jpxy.x > old_slide:
 					Outline.get_node("Tree").get_selected().get_next().select(0)
 				old_slide = this_audio_chunk.jpxy.x
-			next_audio_chunk = tracks[OT.AUDIO].find_next(OT.AUDIO)
 
-func process_input_and_macro_tracks():
+func process_macro_track():
 	if jprez_ready:
-		# which of the two jprez tracks is next to fire?
-		var which = OT.MACRO if tracks[OT.MACRO].count < tracks[OT.INPUT].count else OT.INPUT
-		# fire if that chunk comes before the next audio track.
-		var which_count = tracks[which].count
-		# if which == OT.INPUT: which_count += 1  # why?
-		if which_count < this_audio_chunk.index:
-			var ix = tracks[which].this_chunk().jpxy
+		# fire if that chunk comes before the *next* audio track.
+		if tracks[OT.MACRO].count < next_audio_chunk.index:
+			var ix = tracks[OT.MACRO].this_chunk().jpxy
 			emit_signal('jprez_line_changed', ix.x, ix.y)
-			tracks[which].find_next(which)
+			tracks[OT.MACRO].find_next(OT.MACRO)
 
 func _on_PlayButton_pressed():
 	playing = not playing

@@ -24,9 +24,11 @@ hist_lines =: {{
   NB. appear on the screen, based on the cursor positions within the
   NB. outline.
   NB. hlen=number of history lines *at this point in timeline*
+  NB. hcsc=last time the history was cleared
   hlen =. ('EHISTL1_',(getworld''),'_')~
+  hcsc =. ('EHISTCS_',(getworld''),'_')~
   NB. leave one line at bottom for next repl input (max line is h-1, so h-2)
-  (-hlen <. H-2) {. hlen {. ehist_world_ }}
+  (-hlen <. H-2) {. hcsc }. hlen {. ehist_world_ }}
 
 render =: {{
   hist =. hist_lines''

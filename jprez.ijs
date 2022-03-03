@@ -40,7 +40,8 @@ rebuild =: {{
       if. -. line = a: do.
         line =. > line
         if. ': ' {.@E. line do. line =. 2}.line     NB. : marks code line
-          if. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
+          if. '. @cls' -: line do. cscr_world_@exec_world_''
+          elseif. '. ' {.@E. line do. line =. 2}.line   NB. : . is editor macro
             do__tmp line while. A__tmp do. update__tmp 1 end. NB. run macro
           else.
             setval__tmp line

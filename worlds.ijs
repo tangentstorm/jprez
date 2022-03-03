@@ -22,7 +22,8 @@ init =: {{
   ihist =: ''   NB. input history
   ehist =: ''   NB. echo history
   coerase (#~ #@('WORLD\d+'&rxmatches)&>) conl''
-  EHISTL0_WORLD0_=: EHISTL1_WORLD0_=: ii_world_=:0 }}
+  NB. EHISTL0 and EHISTL1 are length of buffer. EHISTCS is last clear screen.
+  EHISTCS_WORLD0_=: EHISTL0_WORLD0_=: EHISTL1_WORLD0_=: ii_world_=:0 }}
 
 NB. m in_world_ : name builder: append locative for current world to m
 in =: {{ m,'_',(this_world_''),'_' }}
@@ -36,6 +37,7 @@ boxe =: {{ y rplc"1 boxc }}
 echo =: {{
   for_line. lines boxe y do. ehist =: ehist,line end.
   ('EHISTL1'in_world_) =: #ehist }}
+cscr =: {{ ('EHISTCS'in_world_)=:#ehist }}
 
 this =: {{ 'WORLD',":ii_world_ }}
 next =: {{

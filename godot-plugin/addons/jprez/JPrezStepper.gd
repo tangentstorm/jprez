@@ -35,7 +35,6 @@ func _on_audio_finished():
 	audio_ready = true
 
 func _on_script_finished(_id, _result):
-	print_debug("jprez stepper _on_script_finished")
 	event_ready = true
 	tracks[OT.EVENT].find_next(OT.EVENT)
 

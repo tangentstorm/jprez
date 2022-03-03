@@ -9,11 +9,9 @@ var scene_title:Node setget set_scene_title
 func set_scene_title(node):
 	scene_title = node
 	if node:
-		print("making the connection")
 		scene_title.connect("animation_finished", self, "_on_animation_finished")
 
 func _on_animation_finished():
-	print_debug("engine sees animation is finished")
 	emit_signal("script_finished", script_id, script_result)
 
 func execute(id:int, script:String):

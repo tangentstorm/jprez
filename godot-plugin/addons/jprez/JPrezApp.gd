@@ -83,5 +83,4 @@ func _on_JPrezStepper_jprez_line_changed(scene, cmd):
 	jprez_scene.goix(scene, cmd)
 
 func _on_JPrezScriptEngine_script_finished(id, result):
-	print_debug("app: script finished")
 	jprez_stepper._on_script_finished(id, result)

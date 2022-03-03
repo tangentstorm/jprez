@@ -46,13 +46,21 @@ func update_editor():
 			var n = get_node_or_null(np)
 			if n: n.refresh()
 
-func refresh_repl():
+
+func refresh_jkvm_node(node_path):
 	var root = get_tree().get_edited_scene_root()
 	if not root: return
-	var repl = root.get_node_or_null('jp-repl')
+	var repl = root.get_node_or_null(node_path)
 	if repl:
 		repl.JI = JI
 		repl.refresh()
+
+func refresh_repl():
+	var r = JI.cmd('R__repl * 2') # so it's not a boolean
+	if r: refresh_jkvm_node('jp-repl')
+func refresh_editor():
+	var r = JI.cmd('R__editor * 2') # so it's not a boolean
+	if r: refresh_jkvm_node('jp-editor')
 
 func _process(_dt):
 	if Engine.editor_hint:
@@ -60,8 +68,8 @@ func _process(_dt):
 		if not JI.has_method('cmd'): return
 		JI.cmd("cocurrent'base'")
 		JI.cmd("update__app''")
-		var r = JI.cmd('R__repl * 2') # so it's not a boolean
-		if r: refresh_repl()
+		refresh_repl()
+		refresh_editor()
 
 func _on_jplist_focus_entered():
 	JI.cmd("keymode'outkeys'")

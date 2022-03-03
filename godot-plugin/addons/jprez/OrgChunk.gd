@@ -20,6 +20,9 @@ func to_string():
 	# TODO: include the path and timing
 	return lines_to_string()
 
+func get_slide()->int:
+	return int(jpxy.x)
+
 func suggest_path()->String:
 	if file_path: return file_path
 	var txt = lines_to_string().to_lower()

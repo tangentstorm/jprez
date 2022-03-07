@@ -48,7 +48,7 @@ func to_string():
 	if depth == 0: res += "#+title:%s\n\n" % head
 	else: res += "*".repeat(depth) + head + '\n'
 	if slide:
-		res += "#+begin_src: j\n"
+		res += "#+begin_src j\n"
 		res += slide_text()
 		res += "#+end_src\n"
 		res += "\n"
@@ -59,3 +59,10 @@ func to_string():
 		for chunk in self.chunks:
 			res += chunk.to_string() + '\n\n'
 	return res
+
+func save():
+	print("saving org to: ", resource_path)
+	var f = File.new()
+	f.open(resource_path, File.WRITE)
+	f.store_string(to_string())
+	f.close()

@@ -53,7 +53,7 @@ func _process(_dt):
 	if playing or step_ready:
 		step_ready = playing
 		process_script_track()
-		process_audio_track()
+		process_audio_track() # audio before macro, or macros will block audio!
 		process_macro_track()
 
 func show_debug_state():
@@ -94,7 +94,7 @@ func process_macro_track():
 		if not macro_chunk: return
 		if next_audio_chunk == null or macro_chunk.index < next_audio_chunk.index:
 			jprez_ready = false
-			var ix = tracks[OT.MACRO].this_chunk().jpxy
+			var ix = macro_chunk.jpxy
 			emit_signal('jprez_line_changed', ix.x, ix.y)
 			var next_macro = tracks[OT.MACRO].find_next(OT.MACRO)
 			if not next_macro: jprez_ready = false

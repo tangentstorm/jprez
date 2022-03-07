@@ -122,6 +122,5 @@ func _on_ChunkList_chunk_selected(chunk):
 			this_audio_chunk = track_chunk
 			next_audio_chunk = tracks[track].find_next(track)
 		old_slide = this_audio_chunk.jpxy.x
-		if track == OT.MACRO:
-			var ix = chunk.jpxy
-			emit_signal('jprez_line_changed', ix.x, ix.y)
+	var ix = chunk.jpxy
+	emit_signal('jprez_line_changed', ix.x, ix.y)

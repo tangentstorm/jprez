@@ -14,7 +14,7 @@ font_data = ExtResource( 1 )
 [sub_resource type="Theme" id=2]
 default_font = SubResource( 1 )
 
-[sub_resource type="ButtonGroup" id=4]
+[sub_resource type="ButtonGroup" id=3]
 resource_name = "tab-buttons"
 
 [node name="JPrezApp" type="Control"]
@@ -22,6 +22,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="JPrezScriptEngine" type="Node" parent="."]
 script = ExtResource( 6 )
@@ -75,7 +78,7 @@ margin_bottom = 31.0
 custom_colors/font_color_pressed = Color( 0.152941, 0.509804, 0.964706, 1 )
 toggle_mode = true
 pressed = true
-group = SubResource( 4 )
+group = SubResource( 3 )
 text = "Audio"
 flat = true
 __meta__ = {
@@ -88,7 +91,7 @@ margin_right = 1083.0
 margin_bottom = 31.0
 custom_colors/font_color_pressed = Color( 0.152941, 0.509804, 0.964706, 1 )
 toggle_mode = true
-group = SubResource( 4 )
+group = SubResource( 3 )
 text = "Preview"
 flat = true
 __meta__ = {

@@ -93,3 +93,6 @@ anchor_bottom = 0.0
 margin_top = 776.0
 margin_right = 1912.0
 margin_bottom = 1076.0
+
+[connection signal="text_changed" from="EditPanel/Panel/Prompter" to="." method="_on_Prompter_text_changed"]
+[connection signal="pressed" from="EditPanel/Panel/VBoxContainer/UpdateButton" to="." method="_on_UpdateButton_pressed"]

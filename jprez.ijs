@@ -139,6 +139,7 @@ NB. keyboard control
 
 goix =: {{
   NB. go to y =: slide,line
+  setval__red'' [ A__red =: 0 NB. halt macro
   setval__editor code cur =: C__list =: 0{y
   fwd__cmds^:(1{y)'' [go0__cmds''[ L__cmds =: text cur
   smudge__app''}}

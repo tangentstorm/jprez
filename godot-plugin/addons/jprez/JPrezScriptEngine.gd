@@ -20,6 +20,7 @@ func show_editor(cursorline):
 	node.fake_focus = true
 	node.show()
 	JI.cmd("curxy__editor 0 %d" % cursorline)
+	call_deferred("_on_animation_finished")
 
 func execute(id:int, script:String):
 	script_id = id

@@ -9,11 +9,9 @@ var org : OrgNode setget set_org
 const OT = Org.Track
 var playing = false
 var step_ready = false
-var audio_ready = true
-var event_ready = true
-var jprez_ready = true
 var old_slide = 0
 var tracks: Array
+var ready: Array
 var this_audio_chunk
 var next_audio_chunk
 var slide_just_changed = false
@@ -29,56 +27,75 @@ func set_org(o:OrgNode):
 	org = o
 	ChunkList.org_dir = org.get_dir()
 	Outline.set_org(org)
-	tracks = []
+	tracks = []; ready = []
 	for t in Org.Track.values():
 		tracks.push_back(OrgCursor.new(org))
 		tracks[t].find_next(t)
+		ready.push_back(true) # everything's ready to go at the start
 	this_audio_chunk = tracks[OT.AUDIO].this_chunk()
 	next_audio_chunk = tracks[OT.AUDIO].next_chunk()
 
 func _on_audio_finished():
-	audio_ready = true
+	ready[OT.AUDIO] = true
 	this_audio_chunk = next_audio_chunk
 	next_audio_chunk = tracks[OT.AUDIO].find_next(OT.AUDIO)
 
 func _on_script_finished(_id, _result):
-	event_ready = true
+	ready[OT.EVENT] = true
 	tracks[OT.EVENT].find_next(OT.EVENT)
 
 func _on_macro_finished():
-	jprez_ready = true
+	ready[OT.MACRO] = true
+
+func track_to_step():
+	# find the hindmost cursor:
+	var hindmost_index = next_audio_chunk.index if next_audio_chunk else INF
+	var hindmost_track = null
+	for track in OT.values():
+		if ready[track]:
+			var chunk = this_audio_chunk if track == OT.AUDIO else tracks[track].this_chunk()
+			if not chunk: continue
+			if chunk.index < hindmost_index:
+				hindmost_track = track
+				hindmost_index = chunk.index
+	if hindmost_track != null: print("hindmost track:", OT.keys()[hindmost_track])
+	else: print("<no track ready>")
+	return hindmost_track
 
 func _process(_dt):
 	show_debug_state()
+	# only one step per frame:
 	if playing or step_ready:
 		step_ready = playing
-		process_script_track()
-		process_audio_track() # audio before macro, or macros will block audio!
-		process_macro_track()
+		match track_to_step():
+			OT.EVENT: process_event_track()
+			OT.MACRO: process_macro_track()
+			OT.AUDIO: process_audio_track()
+			null: step_ready = true
 
 func show_debug_state():
 	# draw the cursors on the tree control
 	ChunkList.clear_highlights()
 	ChunkList.highlight_chunk(tracks[OT.EVENT].this_chunk(), Color.royalblue)
 	ChunkList.highlight_chunk(tracks[OT.MACRO].this_chunk(), Color.darkslategray)
-	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if audio_ready else Color.darkgoldenrod)
+	ChunkList.highlight_chunk(this_audio_chunk, Color.goldenrod if ready[OT.AUDIO] else Color.darkgoldenrod)
 	ChunkList.highlight_chunk(next_audio_chunk, Color.sienna)
 
-func process_script_track():
-	if event_ready and jprez_ready:
+func process_event_track():
+	if ready[OT.EVENT] and ready[OT.MACRO]:
 		var event_chunk = tracks[OT.EVENT].this_chunk()
 		if not event_chunk: return
 		if this_audio_chunk == null or event_chunk.index < this_audio_chunk.index:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
 			if script_engine:
 				script_engine.execute(0, script)
-				event_ready = false
+				ready[OT.EVENT] = false
 
 func process_audio_track():
-	if audio_ready and jprez_ready and event_ready:
+	if ready[OT.AUDIO] and ready[OT.MACRO] and ready[OT.EVENT]:
 		if this_audio_chunk:
 			if this_audio_chunk.file_exists(org.get_dir()):
-				audio_ready = false
+				ready[OT.AUDIO] = false
 				var sample : AudioStreamSample = load(org.get_dir() + this_audio_chunk.suggest_path())
 				$AudioStreamPlayer.stream = sample
 				$AudioStreamPlayer.play()
@@ -88,16 +105,16 @@ func process_audio_track():
 				old_slide = this_audio_chunk.jpxy.x
 
 func process_macro_track():
-	if jprez_ready and event_ready:
+	if ready[OT.MACRO] and ready[OT.EVENT]:
 		# fire if that chunk comes before the *next* audio track.
 		var macro_chunk = tracks[OT.MACRO].this_chunk()
 		if not macro_chunk: return
 		if next_audio_chunk == null or macro_chunk.index < next_audio_chunk.index:
-			jprez_ready = false
+			ready[OT.MACRO] = false
 			var ix = macro_chunk.jpxy
 			emit_signal('jprez_line_changed', ix.x, ix.y)
 			var next_macro = tracks[OT.MACRO].find_next(OT.MACRO)
-			if not next_macro: jprez_ready = false
+			if not next_macro: ready[OT.MACRO] = false
 
 func _on_PlayButton_pressed():
 	playing = not playing
@@ -106,9 +123,9 @@ func _on_StepButton_pressed():
 	step_ready = true
 
 func reset_ready_flags():
-	audio_ready = true
-	event_ready = true
-	jprez_ready = true
+	ready[OT.AUDIO] = true
+	ready[OT.EVENT] = true
+	ready[OT.MACRO] = true
 
 func _on_ChunkList_chunk_selected(chunk):
 	if slide_just_changed:

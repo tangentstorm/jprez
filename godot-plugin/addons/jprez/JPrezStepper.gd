@@ -34,6 +34,7 @@ func set_org(o:OrgNode):
 		ready.push_back(true) # everything's ready to go at the start
 	this_audio_chunk = tracks[OT.AUDIO].this_chunk()
 	next_audio_chunk = tracks[OT.AUDIO].next_chunk()
+	show_debug_state()
 
 func _on_audio_finished():
 	ready[OT.AUDIO] = true
@@ -58,12 +59,10 @@ func track_to_step():
 			if chunk.index < hindmost_index:
 				hindmost_track = track
 				hindmost_index = chunk.index
-	if hindmost_track != null: print("hindmost track:", OT.keys()[hindmost_track])
-	else: print("<no track ready>")
+	# if hindmost_track != null: print("hindmost track:", OT.keys()[hindmost_track])
 	return hindmost_track
 
 func _process(_dt):
-	show_debug_state()
 	# only one step per frame:
 	if playing or step_ready:
 		step_ready = playing
@@ -72,6 +71,7 @@ func _process(_dt):
 			OT.MACRO: process_macro_track()
 			OT.AUDIO: process_audio_track()
 			null: step_ready = true
+		show_debug_state()
 
 func show_debug_state():
 	# draw the cursors on the tree control
@@ -141,3 +141,4 @@ func _on_ChunkList_chunk_selected(chunk):
 		old_slide = this_audio_chunk.jpxy.x
 	var ix = chunk.jpxy
 	emit_signal('jprez_line_changed', ix.x, ix.y)
+	show_debug_state()

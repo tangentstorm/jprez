@@ -7,6 +7,7 @@ var script_engine: Node
 
 var org : OrgNode setget set_org
 const OT = Org.Track
+var sync_pending = false
 var playing = false
 var step_ready = false
 var old_slide = 0
@@ -63,6 +64,12 @@ func track_to_step():
 	return hindmost_track
 
 func _process(_dt):
+	# no stepping past @sync until all tracks are ready:
+	# (this generally means wait for the audio to finish before starting next step)
+	if sync_pending:
+		sync_pending = false
+		for track in OT.values():
+			if not ready[track]: sync_pending = true
 	# only one step per frame:
 	if playing or step_ready:
 		step_ready = playing
@@ -87,7 +94,11 @@ func process_event_track():
 		if not event_chunk: return
 		if this_audio_chunk == null or event_chunk.index < this_audio_chunk.index:
 			var script:String = tracks[OT.EVENT].this_chunk().lines_to_string()
-			if script_engine:
+			if script == '@sync':
+				# we handle this one separately from script_engine because it's really about the stepper.
+				sync_pending = true
+				tracks[OT.EVENT].find_next(OT.EVENT)
+			elif script_engine:
 				script_engine.execute(0, script)
 				ready[OT.EVENT] = false
 

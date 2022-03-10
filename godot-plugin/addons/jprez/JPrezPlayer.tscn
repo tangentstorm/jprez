@@ -38,7 +38,6 @@ grid_wh = Vector2( 220, 36 )
 cell_wh = Vector2( 14, 30 )
 
 [node name="jp-editor" type="Control" parent="."]
-visible = false
 margin_left = 38.1406
 margin_top = 570.697
 margin_right = 1158.14
@@ -56,11 +55,6 @@ grid_wh = Vector2( 80, 16 )
 cell_wh = Vector2( 14, 30 )
 
 [node name="SceneTitle" parent="." instance=ExtResource( 10 )]
-text_len = 0
-stripe_x = 128
-stripe_y = -32
-stripe_w = 32
-stripe_h = 32
 
 [connection signal="keypress" from="jp-repl" to="." method="_on_JKVM_keypress"]
 [connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]

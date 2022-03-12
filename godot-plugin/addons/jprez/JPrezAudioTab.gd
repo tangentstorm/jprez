@@ -34,6 +34,7 @@ func _on_headline_selected(org):
 	if org != null: editor.text = org.slide_text()
 
 func _on_chunk_selected(chunk:OrgChunk):
+	current_chunk = chunk
 	self.current_track = chunk.track
 	prompter.text = chunk.lines_to_string()
 	last_caret_position = INF
@@ -59,18 +60,17 @@ func _process(_dt):
 			# !! in jprez, modifying led notifies red to play the macro.
 			if prompter.text.begins_with(": . "):
 				var j = "notify__red '%s'" % prompter.text.left(prompter.caret_position).replace("'", "''")
-				print(prompter.caret_position, ': ', j)
 				repl.JI.cmd(j)
 				repl.refresh()
 		last_caret_position = prompter.caret_position
 
 func _on_UpdateButton_pressed():
+	var chunk = current_chunk
+	var old_path = chunk.suggest_path() if chunk.track == Org.Track.AUDIO else ''
+	chunk.lines = []
+	for line in prompter.text.split("\n"):
+		chunk.lines.push_back(line)
 	if current_track == Org.Track.AUDIO:
-		var chunk = current_chunk
-		var old_path = chunk.suggest_path()
-		chunk.lines = []
-		for line in prompter.text.split("\n"):
-			chunk.lines.push_back(line)
 		var new_path = chunk.suggest_path()
 		var d = Directory.new()
 		assert(d.open(org.get_dir()) == OK, "couldn't open org directory %s ?!" % org.get_dir())

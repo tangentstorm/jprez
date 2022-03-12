@@ -6,6 +6,7 @@ var org_path = 'res://wip/dealing-cards/dealing-cards.org'
 onready var jprez_stepper = $JPrezStepper
 onready var jprez_scene = find_node("JPrezScene")
 onready var script_engine = $JPrezScriptEngine
+onready var repl_ed = $VBox/JPrezAudioTab.find_node('REPL')
 
 const bytesPerSample = 2
 const channels = 2
@@ -24,6 +25,7 @@ func _ready():
 	jprez_stepper.script_engine = script_engine
 	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
 	script_engine.JI = $JPrezScene/JLang
+	repl_ed.JI = $JPrezScene/JLang
 	jprez_scene.set_org_path(org.get_global_path())
 	find_node("OrgPath").text = org_path
 	find_node("JPrezAudioTab").org = org

@@ -10,6 +10,7 @@ var script_id:int
 var script_result
 var JI
 var tween:Tween
+var timer:Timer
 
 var scene_title:Node setget set_scene_title
 func set_scene_title(node):
@@ -17,15 +18,19 @@ func set_scene_title(node):
 	if node:
 		scene_title.connect("animation_finished", self, "_on_animation_finished")
 
-func _on_animation_finished():
-	emit_signal("script_finished", script_id, script_result)
-
 func _ready():
-	tween = Tween.new()
-	add_child(tween)
+	timer = Timer.new(); add_child(timer)
+	timer.connect("timeout", self, "_on_timer_timeout")
+	tween = Tween.new(); add_child(tween)
 	tween.connect("tween_started", self, "_on_tween_started")
 	tween.connect("tween_step", self, "_on_tween_step")
 	tween.connect("tween_completed", self, "_on_tween_finished")
+
+func _on_animation_finished():
+	emit_signal("script_finished", script_id, script_result)
+
+func _on_timer_timeout():
+	_on_animation_finished()
 
 func _on_tween_finished(obj, path):
 	# print("tween finished", [obj, path])
@@ -99,4 +104,10 @@ func cmd_hide(node_path:String, ms=0)->bool:
 func cmd_title(text:String)->bool:
 	if scene_title == null: return false
 	scene_title.reveal(text)
+	return ANIMATED
+
+func cmd_pause(ms=0):
+	timer.wait_time = ms * 0.001
+	timer.one_shot = true
+	timer.start()
 	return ANIMATED

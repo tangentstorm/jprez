@@ -20,7 +20,7 @@ There are four sections to the screen above.
 - Bottom left: an outline of the presentation
 - Bottom right: the script ("screenplay") for this section of the presentation.
 
-The screenplay is stored in an <a href="http://orgmode.org/">org-mode</a> formatted file. The one from the screenshot is <a href="https://github.com/tangentstorm/j-talks/blob/master/s1/e3-sandpiles-in-j/sandpiles-j.org">sandpiles-j.org</a>, and is the script for the upcoming code review / code golf followup to my <a href="https://www.youtube.com/watch?v=hBdJB-BzudU">sandpiles video</a>.
+The screenplay is stored in an <a href="http://orgmode.org/">org-mode</a> formatted file. The one from the screenshot is <a href="https://github.com/tangentstorm/j-talks/blob/master/wip/sandpiles-in-j/sandpiles-j.org">sandpiles-j.org</a>, and is the script for the upcoming code review / code golf followup to my <a href="https://www.youtube.com/watch?v=hBdJB-BzudU">sandpiles video</a>.
 
 # requirements
 

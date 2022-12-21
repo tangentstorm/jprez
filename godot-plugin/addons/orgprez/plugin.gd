@@ -20,7 +20,7 @@ func get_plugin_icon():
 	return get_editor_interface().get_base_control().get_icon("AutoKey", "EditorIcons")
 
 func make_visible(x): # called at startup and when the tab is changed
-    if app: app.visible = x
+	if app: app.visible = x
 
 func _exit_tree():
 	if app: app.queue_free()

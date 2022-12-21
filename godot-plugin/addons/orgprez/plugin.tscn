@@ -1,0 +1,12 @@
+[gd_scene format=2]
+
+[node name="Control" type="Label"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1823.0
+margin_bottom = -1066.0
+rect_scale = Vector2( 50, 50 )
+text = "OrgPrez Scene!"
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -10,7 +10,7 @@
 size = 24
 font_data = ExtResource( 5 )
 
-[node name="JPrezAudioTab" type="VBoxContainer"]
+[node name="OrgPrezAudioTab" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_vertical = 3

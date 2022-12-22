@@ -17,13 +17,17 @@
 <v t="tangentstorm.20221220233138.1"><vh>_exit_tree(): cleanup scene if plugin is uninstalled</vh></v>
 </v>
 <v t="tangentstorm.20221221202409.1"><vh>TODO</vh>
+<v t="tangentstorm.20221221212658.1"><vh>docked panels for outline and chunks</vh></v>
 <v t="tangentstorm.20221221195625.1"><vh>org file resources</vh>
 <v t="tangentstorm.20221221195937.1"><vh>org importer</vh>
 <v t="tangentstorm.20221221205248.1"><vh>declare org_importer plugin</vh></v>
 <v t="tangentstorm.20221221204751.1"><vh>_enter_tree(): load the importer</vh></v>
 <v t="tangentstorm.20221221205522.1"><vh>_exit_tree(): remove the importer</vh></v>
 </v>
-<v t="tangentstorm.20221221195809.1"><vh>click to edit</vh></v>
+<v t="tangentstorm.20221221195809.1"><vh>click org file to edit</vh>
+<v t="tangentstorm.20221221212948.1"><vh>handles() method lets plugin opt-in to editing a resource</vh></v>
+<v t="tangentstorm.20221221213157.1"><vh>edit() says what to actually do when it's clicked</vh></v>
+</v>
 </v>
 <v t="tangentstorm.20221221195729.1"><vh>the editor tab</vh></v>
 <v t="tangentstorm.20221221204336.1"><vh>nav panels (outline/chunklist)</vh></v>
@@ -42,6 +46,8 @@
 <v t="tangentstorm.20221221204751.1"></v>
 </v>
 <v t="tangentstorm.20221220233113.1"></v>
+<v t="tangentstorm.20221221212948.1"></v>
+<v t="tangentstorm.20221221213157.1"></v>
 <v t="tangentstorm.20221220233209.1"><vh>_exit_tree()</vh>
 <v t="tangentstorm.20221220233138.1"></v>
 <v t="tangentstorm.20221221205522.1"></v>
@@ -92,7 +98,7 @@ __meta__ = {
 margin_right = 1808.0
 margin_bottom = 926.0
 </t>
-<t tx="tangentstorm.20221220233018.1">var scene = preload('res://addons/orgprez/plugin.tscn')
+<t tx="tangentstorm.20221220233018.1">var scene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
 var app # member variable holding instance of scene
 
 </t>
@@ -127,7 +133,8 @@ make_visible(false) # otherwise it shows up on-screen no matter what tab is acti
 switch to signals
 </t>
 <t tx="tangentstorm.20221221195729.1"></t>
-<t tx="tangentstorm.20221221195809.1"></t>
+<t tx="tangentstorm.20221221195809.1">
+</t>
 <t tx="tangentstorm.20221221195823.1"></t>
 <t tx="tangentstorm.20221221195916.1">@
 For godot 4, maybe we just want to use the "keep" importer.
@@ -159,6 +166,27 @@ add_import_plugin(org_import)
 <t tx="tangentstorm.20221221205248.1">var org_import
 </t>
 <t tx="tangentstorm.20221221205522.1">remove_import_plugin(org_import); org_import = null
+
+</t>
+<t tx="tangentstorm.20221221212658.1"></t>
+<t tx="tangentstorm.20221221212948.1">func handles(object):
+	return object is OrgNode
+
+</t>
+<t tx="tangentstorm.20221221213157.1">func edit(org):
+	# remember directory for saving wave files
+	# TODO: make this wav_dir
+	# wav_dir = org.resource_path.get_base_dir()
+	# if not wav_dir.ends_with('/'): wav_dir += '/'
+	# chunks.org_dir = wav_dir  # !! only need for waves, so update chunks code
+	# wav_dir += '.wav'
+
+	# tell the app to load that org-file
+	# chunks.set_org(org) # outln will override this with first node (if one exists)
+	# outln.set_org(org)
+	# jprez.set_org(org)
+
+	app.set_org(org)
 
 </t>
 </tnodes>

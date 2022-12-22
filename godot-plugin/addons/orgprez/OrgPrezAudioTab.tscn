@@ -1,12 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/jprez/jp-chunklist.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/waveform/waveform_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/jprez/Outline.tscn" type="PackedScene" id=3]
-[ext_resource path="res://fonts/noto-24.tres" type="DynamicFont" id=4]
 [ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://addons/orgprez/OrgPrezAudioTab.gd" type="Script" id=6]
-[ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 24
@@ -15,9 +13,7 @@ font_data = ExtResource( 5 )
 [node name="JPrezAudioTab" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_vertical = 3
 custom_constants/separation = 0
 script = ExtResource( 6 )
 __meta__ = {
@@ -25,8 +21,8 @@ __meta__ = {
 }
 
 [node name="HBox" type="HBoxContainer" parent="."]
-margin_right = 1912.0
-margin_bottom = 342.0
+margin_right = 1920.0
+margin_bottom = 646.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
@@ -35,7 +31,7 @@ custom_constants/separation = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 256.0
-margin_bottom = 342.0
+margin_bottom = 646.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_vertical = 3
 
@@ -43,41 +39,41 @@ size_flags_vertical = 3
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 256.0
-margin_right = 1272.0
-margin_bottom = 342.0
+margin_right = 1280.0
+margin_bottom = 646.0
 size_flags_horizontal = 3
 
 [node name="CodeEditor" type="TextEdit" parent="HBox"]
-margin_left = 1272.0
-margin_right = 1912.0
-margin_bottom = 342.0
+margin_left = 1280.0
+margin_right = 1920.0
+margin_bottom = 646.0
 rect_min_size = Vector2( 640, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EditPanel" type="PanelContainer" parent="."]
-margin_top = 342.0
-margin_right = 1912.0
-margin_bottom = 476.0
+margin_top = 646.0
+margin_right = 1920.0
+margin_bottom = 780.0
 
 [node name="Panel" type="HBoxContainer" parent="EditPanel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1905.0
+margin_right = 1913.0
 margin_bottom = 127.0
 rect_min_size = Vector2( 0, 120 )
 size_flags_horizontal = 3
 
 [node name="Prompter" type="LineEdit" parent="EditPanel/Panel"]
-margin_right = 1838.0
+margin_right = 1846.0
 margin_bottom = 120.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="EditPanel/Panel"]
-margin_left = 1842.0
-margin_right = 1898.0
+margin_left = 1850.0
+margin_right = 1906.0
 margin_bottom = 120.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -89,26 +85,12 @@ margin_bottom = 20.0
 disabled = true
 text = "update"
 
-[node name="REPL" type="Control" parent="."]
-margin_top = 476.0
-margin_right = 1912.0
-margin_bottom = 776.0
-rect_min_size = Vector2( 1904, 300 )
-focus_mode = 1
-script = ExtResource( 7 )
-font = ExtResource( 4 )
-font_base = Vector2( 0, 24 )
-j_widget = "red"
-grid_wh = Vector2( 136, 10 )
-cell_wh = Vector2( 14, 30 )
-fake_focus = true
-
 [node name="WaveformPanel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 776.0
-margin_right = 1912.0
-margin_bottom = 1076.0
+margin_top = 780.0
+margin_right = 1920.0
+margin_bottom = 1080.0
 
 [connection signal="text_changed" from="EditPanel/Panel/Prompter" to="." method="_on_Prompter_text_changed"]
 [connection signal="pressed" from="EditPanel/Panel/VBoxContainer/UpdateButton" to="." method="_on_UpdateButton_pressed"]

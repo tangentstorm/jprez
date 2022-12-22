@@ -1,4 +1,5 @@
-class_name JPrezAudioTab extends VBoxContainer
+tool
+class_name OrgPrezAudioTab extends VBoxContainer
 
 onready var wavepanel = find_node("WaveformPanel")
 onready var chunklist = find_node("ChunkList")

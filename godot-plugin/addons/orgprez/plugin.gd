@@ -13,6 +13,12 @@ func _enter_tree():
 	org_import = preload("res://addons/orgprez/org_import.gd").new()
 	add_import_plugin(org_import)
 
+	var org_path = ProjectSettings.get("global/default_org_file")
+	if org_path:
+		var org = load(org_path)
+		if org:
+			edit(org)
+
 func has_main_screen():
 	return true
 

@@ -1,7 +1,7 @@
 class_name JPrezApp extends Control
 
 var org: OrgNode
-var org_path = 'res://wip/dealing-cards/dealing-cards.org'
+var org_path = ProjectSettings.get("global/default_org_file")
 
 onready var jprez_stepper = $JPrezStepper
 onready var jprez_scene = find_node("JPrezScene")

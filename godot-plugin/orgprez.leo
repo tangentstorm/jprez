@@ -8,7 +8,7 @@
 <vnodes>
 <v t="tangentstorm.20221220215232.2"><vh>godot presentation tool  ("orgprez")</vh>
 <v t="tangentstorm.20221220223801.1"><vh>creating a plugin</vh>
-<v t="tangentstorm.20221220230106.2"><vh>@clean plugin.cfg</vh></v>
+<v t="tangentstorm.20221220230106.2"><vh>@clean orgprez/plugin.cfg</vh></v>
 </v>
 <v t="tangentstorm.20221220223850.1"><vh>creating a new top-level tab in godot</vh>
 <v t="tangentstorm.20221220233018.1"><vh>declare app and scene variables</vh></v>
@@ -31,8 +31,8 @@
 <v t="tangentstorm.20221221195646.1"><vh>jprez interface</vh></v>
 </v>
 </v>
-<v t="tangentstorm.20221220224342.1"><vh>orgprez source code</vh>
-<v t="tangentstorm.20221220230106.4"><vh>@clean plugin.gd</vh>
+<v t="tangentstorm.20221220224342.1"><vh>@path addons</vh>
+<v t="tangentstorm.20221220230106.4"><vh>@clean orgprez/plugin.gd</vh>
 <v t="tangentstorm.20221221205119.1"><vh>declarations</vh>
 <v t="tangentstorm.20221220233018.1"></v>
 <v t="tangentstorm.20221221205248.1"></v>
@@ -48,7 +48,7 @@
 </v>
 </v>
 <v t="tangentstorm.20221220230106.2"></v>
-<v t="tangentstorm.20221220232645.2"><vh>@clean plugin.tscn</vh></v>
+<v t="tangentstorm.20221220232645.2"><vh>@clean orgprez/plugin.tscn</vh></v>
 </v>
 <v t="tangentstorm.20221221195916.1"><vh>notes</vh></v>
 </vnodes>

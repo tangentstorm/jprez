@@ -1,6 +1,6 @@
 tool class_name Org
 # Represent emacs org-mode files as trees of objects.
-# (The jprez file format is a subset of org syntax)
+# (The orgprez file format is a subset of org syntax)
 # https://orgmode.org/
 # timespan syntax is borrowed from:
 # https://en.wikipedia.org/wiki/SubRip

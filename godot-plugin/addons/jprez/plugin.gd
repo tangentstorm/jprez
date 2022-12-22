@@ -5,12 +5,9 @@ var jprez
 var org : OrgNode
 var outln
 var chunks
-var org_import
 var org_dir = 'res://'
 
 func _enter_tree():
-	org_import = preload("res://addons/jprez/org_import.gd").new()
-	add_import_plugin(org_import)
 
 	outln = preload("res://addons/jprez/Outline.tscn").instance()
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, outln)
@@ -36,7 +33,6 @@ func edit(org):
 	jprez.set_org(org)
 
 func _exit_tree():
-	remove_import_plugin(org_import); org_import = null
 	remove_control_from_bottom_panel(jprez); jprez.queue_free()
 	remove_control_from_docks(outln); outln.queue_free()
 

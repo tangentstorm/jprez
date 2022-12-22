@@ -3,10 +3,10 @@
 tool extends EditorImportPlugin
 
 func get_importer_name():
-	return "org.jprez"
+	return "org.prez"
 
 func get_visible_name():
-	return "jprez screenplay (*.org)"
+	return "orgprez screenplay (*.org)"
 
 func get_recognized_extensions():
 	return ["org"]

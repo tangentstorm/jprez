@@ -2,7 +2,7 @@
 tool
 extends EditorPlugin
 
-var scene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
+const scene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
 var app # member variable holding instance of scene
 
 var org_import

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
 [ext_resource path="res://addons/jprez/JPrezPlayer.gd" type="Script" id=2]
 [ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
+[ext_resource path="res://addons/jprez/OrgCommands.gd" type="Script" id=4]
 [ext_resource path="res://fonts/noto-24.tres" type="DynamicFont" id=5]
 [ext_resource path="res://assets/SceneTitle.tscn" type="PackedScene" id=10]
 
@@ -54,7 +55,10 @@ j_widget = "editor"
 grid_wh = Vector2( 80, 16 )
 cell_wh = Vector2( 14, 30 )
 
-[node name="SceneTitle" parent="." instance=ExtResource( 10 )]
+[node name="OrgSceneTitle" parent="." instance=ExtResource( 10 )]
+
+[node name="OrgCommands" type="Node" parent="."]
+script = ExtResource( 4 )
 
 [connection signal="keypress" from="jp-repl" to="." method="_on_JKVM_keypress"]
 [connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]

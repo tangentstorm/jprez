@@ -4,8 +4,8 @@ var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")
 
 onready var stepper = $OrgPrezStepper
-onready var jprez_scene = find_node("JPrezPlayer")
 onready var script_engine = $OrgPrezScriptEngine
+onready var user_scene = find_node("OrgUserScene")
 
 const bytesPerSample = 2
 const channels = 2
@@ -23,9 +23,8 @@ func _ready():
 	stepper.org = org
 	stepper.script_engine = script_engine
 	stepper.popup()
-	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
-	script_engine.JI = $JPrezPlayer/JLang  # !!
-	jprez_scene.set_org_path(org.get_global_path())
+	script_engine.user_scene = user_scene
+	user_scene.set_org_path(org.get_global_path())
 
 
 func load_timeline():
@@ -71,7 +70,7 @@ func _input(event):
 			KEY_F12: stepper.visible = not stepper.visible
 
 func _on_OrgPrezStepper_orgprez_line_changed(scene, cmd):
-	jprez_scene.goix(scene, cmd)
+	user_scene.goix(scene, cmd)
 
 func _on_OrgPrezScriptEngine_script_finished(id, result):
 	stepper._on_script_finished(id, result)

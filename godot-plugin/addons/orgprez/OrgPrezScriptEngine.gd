@@ -8,17 +8,22 @@ class_name OrgPrezScriptEngine extends Node
 signal script_finished(id, result)
 var script_id:int
 var script_result
-var JI
 var tween:Tween
 var timer:Timer
+var user_scene:Node setget set_user_scene
+var scene_title:Node
+var commander:Node
 
-onready var commander:Node = $"../JPrezPlayer".get_node_or_null('Commander')
-
-var scene_title:Node setget set_scene_title
-func set_scene_title(node):
-	scene_title = node
+func set_user_scene(node):
+	user_scene = node
 	if node:
-		scene_title.connect("animation_finished", self, "_on_animation_finished")
+		commander = user_scene.get_node_or_null('OrgCommands')
+		scene_title = user_scene.find_node("OrgSceneTitle")
+		if scene_title:
+			scene_title.connect("animation_finished", self, "_on_animation_finished")
+	else:
+		commander = null
+		scene_title = null
 
 func _ready():
 	timer = Timer.new(); add_child(timer)
@@ -72,7 +77,7 @@ func _tween(node:Node, prop:String, a, z, ms)->bool:
 	return ANIMATED if ms > 0 else IMMEDIATE
 
 func _find(node_path, cmd):
-	var node = $"../JPrezPlayer/".get_node_or_null(node_path)
+	var node = user_scene.get_node_or_null(node_path)
 	if node == null: printerr('not found: @%s("%s"):' % [cmd, node_path])
 	return node
 
@@ -82,14 +87,6 @@ const ANIMATED = true
 const IMMEDIATE = false
 const SHOW = Color(1,1,1,1)
 const HIDE = Color.transparent
-
-func cmd_editor_goxy(x,y, force_visible:bool=false):
-	var node = $"../JPrezPlayer/jp-editor"
-	if force_visible: node.show()
-	print("editor_goxy: ", x, ", ", y)
-	node.fake_focus = true
-	JI.cmd("curxy__editor %d %d" % [x,y])
-	return IMMEDIATE
 
 func cmd_move(node_path:String, x, y, ms=0)->bool:
 	var node = _find(node_path, 'move')

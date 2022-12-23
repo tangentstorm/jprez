@@ -29,5 +29,6 @@ script = ExtResource( 2 )
 
 [node name="OrgPrezStepper" parent="." instance=ExtResource( 4 )]
 
+[connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_OrgPrezScriptEngine_script_finished"]
 [connection signal="macro_finished" from="JPrezPlayer" to="." method="_on_JPrezScene_macro_finished"]
 [connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]

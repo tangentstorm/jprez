@@ -73,9 +73,8 @@ func _input(event):
 func _on_OrgPrezStepper_orgprez_line_changed(scene, cmd):
 	jprez_scene.goix(scene, cmd)
 
-func _on_JPrezScriptEngine_script_finished(id, result):
+func _on_OrgPrezScriptEngine_script_finished(id, result):
 	stepper._on_script_finished(id, result)
 
 func _on_JPrezScene_macro_finished():
 	stepper._on_macro_finished()
-

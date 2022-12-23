@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://addons/orgprez/OrgPrezRuntime.gd" type="Script" id=1]
+[ext_resource path="res://addons/jprez/JPrezScriptEngine.gd" type="Script" id=2]
+[ext_resource path="res://addons/jprez/JPrezPlayer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/jprez/JPrezStepper.tscn" type="PackedScene" id=4]
+[ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+
+[node name="OrgPrezRuntime" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JPrezScriptEngine" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="JPrezPlayer" parent="." instance=ExtResource( 3 )]
+
+[node name="JPrezStepper" parent="." instance=ExtResource( 4 )]
+visible = true
+
+[connection signal="script_finished" from="JPrezScriptEngine" to="." method="_on_JPrezScriptEngine_script_finished"]
+[connection signal="macro_finished" from="JPrezPlayer" to="." method="_on_JPrezScene_macro_finished"]
+[connection signal="jprez_line_changed" from="JPrezStepper" to="." method="_on_JPrezStepper_jprez_line_changed"]

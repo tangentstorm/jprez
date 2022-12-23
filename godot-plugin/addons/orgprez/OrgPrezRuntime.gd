@@ -4,9 +4,8 @@ var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")
 
 onready var jprez_stepper = $JPrezStepper
-onready var jprez_scene = find_node("JPrezScene")
+onready var jprez_scene = find_node("JPrezPlayer")
 onready var script_engine = $JPrezScriptEngine
-onready var repl_ed = $VBox/JPrezAudioTab.find_node('REPL')
 
 const bytesPerSample = 2
 const channels = 2
@@ -23,12 +22,10 @@ func _ready():
 	org = Org.from_path(org_path)
 	jprez_stepper.org = org
 	jprez_stepper.script_engine = script_engine
+	jprez_stepper.popup()
 	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
-	script_engine.JI = $JPrezScene/JLang
-	#repl_ed.JI = $JPrezScene/JLang
+	script_engine.JI = $JPrezScene/JLang  # !!
 	jprez_scene.set_org_path(org.get_global_path())
-	find_node("OrgPath").text = org_path
-	find_node("JPrezAudioTab").org = org
 
 
 func load_timeline():
@@ -68,19 +65,10 @@ func save_org_file():
 	f.store_string(org.to_string())
 	f.close()
 
-func _on_previewtab_pressed():
-	$VBox/JPrezAudioTab.visible = false
-	jprez_stepper.visible = true
-
-func _on_audiotab_pressed():
-	$VBox/JPrezAudioTab.visible = true
-	jprez_stepper.visible = false
-
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
 		match event.scancode:
 			KEY_F12: jprez_stepper.visible = not jprez_stepper.visible
-			KEY_F11: $VBox.visible = not $VBox.visible
 
 func _on_JPrezStepper_jprez_line_changed(scene, cmd):
 	jprez_scene.goix(scene, cmd)

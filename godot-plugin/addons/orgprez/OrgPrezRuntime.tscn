@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/orgprez/OrgPrezRuntime.gd" type="Script" id=1]
 [ext_resource path="res://addons/jprez/JPrezScriptEngine.gd" type="Script" id=2]
 [ext_resource path="res://addons/jprez/JPrezPlayer.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/jprez/JPrezStepper.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/orgprez/OrgPrezStepper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="DynamicFont" id=1]
@@ -27,9 +27,8 @@ script = ExtResource( 2 )
 
 [node name="JPrezPlayer" parent="." instance=ExtResource( 3 )]
 
-[node name="JPrezStepper" parent="." instance=ExtResource( 4 )]
-visible = true
+[node name="OrgPrezStepper" parent="." instance=ExtResource( 4 )]
 
 [connection signal="script_finished" from="JPrezScriptEngine" to="." method="_on_JPrezScriptEngine_script_finished"]
 [connection signal="macro_finished" from="JPrezPlayer" to="." method="_on_JPrezScene_macro_finished"]
-[connection signal="jprez_line_changed" from="JPrezStepper" to="." method="_on_JPrezStepper_jprez_line_changed"]
+[connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]

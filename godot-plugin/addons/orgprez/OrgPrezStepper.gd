@@ -1,7 +1,6 @@
-class_name JPrezStepper extends WindowDialog
-# This component works with an org-file. It knows nothing about J directly.
+class_name OrgPrezStepper extends WindowDialog
 
-signal jprez_line_changed(scene, cmd)
+signal orgprez_line_changed(scene, cmd)
 
 var script_engine: Node
 
@@ -123,7 +122,7 @@ func process_macro_track():
 		if next_audio_chunk == null or macro_chunk.index < next_audio_chunk.index:
 			ready[OT.MACRO] = false
 			var ix = macro_chunk.jpxy
-			emit_signal('jprez_line_changed', ix.x, ix.y)
+			emit_signal('orgprez_line_changed', ix.x, ix.y)
 			var next_macro = tracks[OT.MACRO].find_next(OT.MACRO)
 			if not next_macro: ready[OT.MACRO] = false
 
@@ -151,5 +150,5 @@ func _on_ChunkList_chunk_selected(chunk):
 			next_audio_chunk = tracks[track].find_next(track)
 		old_slide = this_audio_chunk.jpxy.x
 	var ix = chunk.jpxy
-	emit_signal('jprez_line_changed', ix.x, ix.y)
+	emit_signal('orgprez_line_changed', ix.x, ix.y)
 	show_debug_state()

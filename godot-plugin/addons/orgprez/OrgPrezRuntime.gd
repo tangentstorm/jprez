@@ -3,7 +3,7 @@ class_name JPrezApp extends Control
 var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")
 
-onready var jprez_stepper = $JPrezStepper
+onready var stepper = $OrgPrezStepper
 onready var jprez_scene = find_node("JPrezPlayer")
 onready var script_engine = $JPrezScriptEngine
 
@@ -20,9 +20,9 @@ func hms(samples)->String:
 
 func _ready():
 	org = Org.from_path(org_path)
-	jprez_stepper.org = org
-	jprez_stepper.script_engine = script_engine
-	jprez_stepper.popup()
+	stepper.org = org
+	stepper.script_engine = script_engine
+	stepper.popup()
 	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
 	script_engine.JI = $JPrezPlayer/JLang  # !!
 	jprez_scene.set_org_path(org.get_global_path())
@@ -68,13 +68,14 @@ func save_org_file():
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
 		match event.scancode:
-			KEY_F12: jprez_stepper.visible = not jprez_stepper.visible
+			KEY_F12: stepper.visible = not stepper.visible
 
-func _on_JPrezStepper_jprez_line_changed(scene, cmd):
+func _on_OrgPrezStepper_orgprez_line_changed(scene, cmd):
 	jprez_scene.goix(scene, cmd)
 
 func _on_JPrezScriptEngine_script_finished(id, result):
-	jprez_stepper._on_script_finished(id, result)
+	stepper._on_script_finished(id, result)
 
 func _on_JPrezScene_macro_finished():
-	jprez_stepper._on_macro_finished()
+	stepper._on_macro_finished()
+

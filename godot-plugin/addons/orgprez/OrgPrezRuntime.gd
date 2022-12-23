@@ -24,7 +24,7 @@ func _ready():
 	jprez_stepper.script_engine = script_engine
 	jprez_stepper.popup()
 	script_engine.scene_title = jprez_scene.find_node("SceneTitle")
-	script_engine.JI = $JPrezScene/JLang  # !!
+	script_engine.JI = $JPrezPlayer/JLang  # !!
 	jprez_scene.set_org_path(org.get_global_path())
 
 

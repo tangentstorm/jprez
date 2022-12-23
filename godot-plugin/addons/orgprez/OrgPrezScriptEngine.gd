@@ -1,4 +1,4 @@
-class_name JPrezScriptEngine extends Node
+class_name OrgPrezScriptEngine extends Node
 # simple interpreter for the '@event(x,y,z) lines in presentations.
 # these lines trigger the corresponding cmd_event(x,y,z) methods on this node.
 # the methods return true if they trigger an animation,
@@ -48,10 +48,16 @@ func execute(id:int, script:String):
 	var e = Expression.new()
 	assert(script.begins_with('@'), 'event lines must start with "@"')
 	script = 'cmd_' + script.right(1)
+	# TODO: check that there's actually a '('
+	var meth = script.split('(')[0]
 	if OK == e.parse(script):
-		var animated = e.execute([], self)
+		var target = self
+		var other:Node = _find('Commander', script)
+		if other != null:
+			if other.has_method(meth): target = other
+		var animated = e.execute([], target)
 		if not animated: call_deferred("_on_animation_finished")
-	else: printerr("JPrezScriptEngine parse error: ", script)
+	else: printerr("OrgPrezScriptEngine parse error: ", script)
 
 ### helper methods ###########################################
 
@@ -66,7 +72,7 @@ func _tween(node:Node, prop:String, a, z, ms)->bool:
 	return ANIMATED if ms > 0 else IMMEDIATE
 
 func _find(node_path, cmd):
-	var node = $"../JPrezScene/".get_node_or_null(node_path)
+	var node = $"../JPrezPlayer/".get_node_or_null(node_path)
 	if node == null: printerr('not found: @%s("%s"):' % [cmd, node_path])
 	return node
 
@@ -78,7 +84,7 @@ const SHOW = Color(1,1,1,1)
 const HIDE = Color.transparent
 
 func cmd_editor_goxy(x,y, force_visible:bool=false):
-	var node = $"../JPrezScene/jp-editor"
+	var node = $"../JPrezPlayer/jp-editor"
 	if force_visible: node.show()
 	print("editor_goxy: ", x, ", ", y)
 	node.fake_focus = true
@@ -86,7 +92,7 @@ func cmd_editor_goxy(x,y, force_visible:bool=false):
 	return IMMEDIATE
 
 func cmd_move(node_path:String, x, y, ms=0)->bool:
-	var node = _find(node_path, 'show')
+	var node = _find(node_path, 'move')
 	if node == null: return IMMEDIATE
 	var prop = 'rect_position' if node is Control else 'position'
 	var xy0 = node.get(prop)

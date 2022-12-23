@@ -5,7 +5,7 @@ var org_path = ProjectSettings.get("global/default_org_file")
 
 onready var stepper = $OrgPrezStepper
 onready var jprez_scene = find_node("JPrezPlayer")
-onready var script_engine = $JPrezScriptEngine
+onready var script_engine = $OrgPrezScriptEngine
 
 const bytesPerSample = 2
 const channels = 2

@@ -12,6 +12,8 @@ var JI
 var tween:Tween
 var timer:Timer
 
+onready var commander:Node = $"../JPrezPlayer".get_node_or_null('Commander')
+
 var scene_title:Node setget set_scene_title
 func set_scene_title(node):
 	scene_title = node
@@ -52,9 +54,7 @@ func execute(id:int, script:String):
 	var meth = script.split('(')[0]
 	if OK == e.parse(script):
 		var target = self
-		var other:Node = _find('Commander', script)
-		if other != null:
-			if other.has_method(meth): target = other
+		if commander and commander.has_method(meth): target = commander
 		var animated = e.execute([], target)
 		if not animated: call_deferred("_on_animation_finished")
 	else: printerr("OrgPrezScriptEngine parse error: ", script)

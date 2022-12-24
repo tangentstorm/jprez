@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/orgprez/OrgPrezRuntime.gd" type="Script" id=1]
 [ext_resource path="res://addons/orgprez/OrgPrezScriptEngine.gd" type="Script" id=2]
-[ext_resource path="res://addons/jprez/JPrezPlayer.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/orgprez/OrgPrezStepper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=5]
 
@@ -25,10 +24,7 @@ __meta__ = {
 [node name="OrgPrezScriptEngine" type="Node" parent="."]
 script = ExtResource( 2 )
 
-[node name="OrgUserScene" parent="." instance=ExtResource( 3 )]
-
 [node name="OrgPrezStepper" parent="." instance=ExtResource( 4 )]
 
 [connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_OrgPrezScriptEngine_script_finished"]
-[connection signal="macro_finished" from="OrgUserScene" to="." method="_on_JPrezScene_macro_finished"]
 [connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]

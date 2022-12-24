@@ -23,8 +23,18 @@ func _ready():
 	stepper.org = org
 	stepper.script_engine = script_engine
 	stepper.popup()
+
+	var tscn = org_path.replace('.org','.tscn')
+	if not ResourceLoader.exists(tscn):
+		tscn = 'res://addons/jprez/JPrezPlayer.tscn'
+
+	var packed:PackedScene = load(tscn)
+	user_scene = packed.instance()
+	add_child(user_scene)
+	if user_scene.has_method('set_org_path'):
+		user_scene.set_org_path(org.get_global_path())
+
 	script_engine.user_scene = user_scene
-	user_scene.set_org_path(org.get_global_path())
 
 
 func load_timeline():
@@ -70,7 +80,8 @@ func _input(event):
 			KEY_F12: stepper.visible = not stepper.visible
 
 func _on_OrgPrezStepper_orgprez_line_changed(scene, cmd):
-	user_scene.goix(scene, cmd)
+	if user_scene.has_method('goix'):
+		user_scene.goix(scene, cmd)
 
 func _on_OrgPrezScriptEngine_script_finished(id, result):
 	stepper._on_script_finished(id, result)

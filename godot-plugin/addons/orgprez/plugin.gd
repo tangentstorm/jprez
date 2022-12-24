@@ -48,6 +48,8 @@ func edit(org):
 	# jprez.set_org(org)
 
 	app.set_org(org)
+	ProjectSettings.set_setting("global/default_org_file", org.resource_path)
+	ProjectSettings.save()
 
 func _exit_tree():
 	if app: app.queue_free()

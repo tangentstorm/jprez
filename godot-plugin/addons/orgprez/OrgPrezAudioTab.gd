@@ -1,7 +1,8 @@
 tool
 class_name OrgPrezAudioTab extends VBoxContainer
 
-onready var wavepanel = find_node("WaveformPanel")
+signal audio_path_selected(path)
+
 onready var chunklist = find_node("ChunkList")
 onready var outline = find_node("Outline")
 onready var editor = find_node("CodeEditor")
@@ -17,9 +18,8 @@ var last_caret_position = INF
 func set_current_track(t):
 	current_track = t
 	#repl.visible = false; 
-	wavepanel.visible = false
-	match t:
-		Org.Track.AUDIO: wavepanel.visible = true
+	#match t:
+		#Org.Track.AUDIO: wavepanel.visible = true
 		#Org.Track.MACRO: repl.visible = true
 
 func set_org(o:OrgNode):
@@ -43,7 +43,8 @@ func _on_chunk_selected(chunk:OrgChunk):
 	update_button.disabled = true
 
 func _on_audio_chunk_selected(chunk:OrgChunk):
-	wavepanel.edit_path(org.get_dir() + chunk.suggest_path())
+	var wavepath = org.get_dir() + chunk.suggest_path()
+	emit_signal("audio_path_selected", wavepath)
 
 func _on_macro_chunk_selected(chunk:OrgChunk):
 	return

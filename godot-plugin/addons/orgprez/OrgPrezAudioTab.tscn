@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/jprez/jp-chunklist.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/waveform/waveform_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/jprez/Outline.tscn" type="PackedScene" id=3]
 [ext_resource path="res://fonts/FiraSansCondensed-Regular.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://addons/orgprez/OrgPrezAudioTab.gd" type="Script" id=6]
@@ -22,7 +21,7 @@ __meta__ = {
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 1920.0
-margin_bottom = 646.0
+margin_bottom = 946.0
 rect_min_size = Vector2( 0, 100 )
 size_flags_vertical = 3
 
@@ -30,14 +29,14 @@ size_flags_vertical = 3
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 256.0
-margin_bottom = 646.0
+margin_bottom = 946.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_vertical = 3
 
 [node name="HSplit" type="HSplitContainer" parent="HBoxContainer"]
 margin_left = 260.0
 margin_right = 1920.0
-margin_bottom = 646.0
+margin_bottom = 946.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 320
@@ -49,22 +48,22 @@ __meta__ = {
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1144.0
-margin_bottom = 646.0
+margin_bottom = 946.0
 size_flags_horizontal = 3
 
 [node name="CodeEditor" type="TextEdit" parent="HBoxContainer/HSplit"]
 margin_left = 1156.0
 margin_right = 1660.0
-margin_bottom = 646.0
+margin_bottom = 946.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EditPanel" type="PanelContainer" parent="."]
-margin_top = 646.0
+margin_top = 946.0
 margin_right = 1920.0
-margin_bottom = 780.0
+margin_bottom = 1080.0
 
 [node name="Panel" type="HBoxContainer" parent="EditPanel"]
 margin_left = 7.0
@@ -93,13 +92,6 @@ margin_right = 56.0
 margin_bottom = 20.0
 disabled = true
 text = "update"
-
-[node name="WaveformPanel" parent="." instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 780.0
-margin_right = 1920.0
-margin_bottom = 1080.0
 
 [connection signal="text_changed" from="EditPanel/Panel/Prompter" to="." method="_on_Prompter_text_changed"]
 [connection signal="pressed" from="EditPanel/Panel/VBoxContainer/UpdateButton" to="." method="_on_UpdateButton_pressed"]

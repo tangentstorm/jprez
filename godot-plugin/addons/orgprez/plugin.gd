@@ -2,13 +2,15 @@
 tool
 extends EditorPlugin
 
-const scene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
-var app # member variable holding instance of scene
+const audioTabScene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
+var audioTabNode # member variable holding instance of audioTabScene
 
 var org_import
 func _enter_tree():
-	app = scene.instance()
-	get_editor_interface().get_editor_viewport().add_child(app)
+	audioTabNode = audioTabScene.instance()
+	get_editor_interface().get_editor_viewport().add_child(audioTabNode)
+	audioTabNode.connect("audio_path_selected", self, "_on_audioTab_audio_path_selected")
+
 	make_visible(false) # otherwise it shows up on-screen no matter what tab is active
 	org_import = preload("res://addons/orgprez/org_import.gd").new()
 	add_import_plugin(org_import)
@@ -29,7 +31,7 @@ func get_plugin_icon():
 	return get_editor_interface().get_base_control().get_icon("AutoKey", "EditorIcons")
 
 func make_visible(x): # called at startup and when the tab is changed
-	if app: app.visible = x
+	if audioTabNode: audioTabNode.visible = x
 
 func handles(object):
 	return object is OrgNode
@@ -42,17 +44,23 @@ func edit(org):
 	# chunks.org_dir = wav_dir  # !! only need for waves, so update chunks code
 	# wav_dir += '.wav'
 
-	# tell the app to load that org-file
+	# tell the audioTabNode to load that org-file
 	# chunks.set_org(org) # outln will override this with first node (if one exists)
 	# outln.set_org(org)
 	# jprez.set_org(org)
 
-	app.set_org(org)
+	audioTabNode.set_org(org)
 	ProjectSettings.set_setting("global/default_org_file", org.resource_path)
 	ProjectSettings.save()
 
 func _exit_tree():
-	if app: app.queue_free()
+	if audioTabNode: audioTabNode.queue_free()
 	remove_import_plugin(org_import); org_import = null
 
-
+func _on_audioTab_audio_path_selected(path):
+	var clip : AudioStreamSample
+	if ResourceLoader.exists(path): clip = load(path)
+	else:
+		clip = AudioStreamSample.new()
+		clip.resource_path = path
+	get_editor_interface().edit_resource(clip)

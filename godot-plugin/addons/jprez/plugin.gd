@@ -2,27 +2,14 @@
 tool extends EditorPlugin
 
 var jprez
-var outln
-var chunks
 var wav_dir = 'res://'
 
 func _enter_tree():
-
-	outln = preload("res://addons/jprez/Outline.tscn").instance()
-	add_control_to_dock(DOCK_SLOT_LEFT_UL, outln)
-
-	chunks = preload("res://addons/jprez/jp-chunklist.tscn").instance()
-	add_control_to_dock(DOCK_SLOT_LEFT_BL, chunks)
-
 	jprez = preload("res://addons/jprez/jprez-plugin.tscn").instance()
 	add_control_to_bottom_panel(jprez, "jprez")
 
-	outln.connect("node_selected", chunks, "set_org")
-	chunks.connect("audio_chunk_selected", self, "_on_audio_chunk_selected")
-
 func _exit_tree():
 	remove_control_from_bottom_panel(jprez); jprez.queue_free()
-	remove_control_from_docks(outln); outln.queue_free()
 
 func edit_sample(path):
 	var samp:AudioStreamSample = ResourceLoader.load(path)

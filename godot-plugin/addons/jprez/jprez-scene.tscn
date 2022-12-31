@@ -23,9 +23,6 @@ margin_bottom = 480.0
 rect_min_size = Vector2( 1080, 480 )
 focus_mode = 1
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 font_base = Vector2( 0, 15 )
 j_widget = "repl"
 grid_wh = Vector2( 120, 24 )

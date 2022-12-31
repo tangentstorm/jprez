@@ -30,3 +30,14 @@ func show_only(node:Node):
 	if not node.visible:
 		node.visible = true
 
+func hide_all():
+	for child in self.get_children(): child.visible = false
+
+func show_slide(name:String):
+	if name == '': hide_all()
+	else:
+		var slide = get_node_or_null(name)
+		if slide: show_only(slide)
+		else:
+			hide_all()
+			printerr("no such slide found:", name)

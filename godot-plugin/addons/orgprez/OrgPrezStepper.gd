@@ -1,6 +1,7 @@
 class_name OrgPrezStepper extends WindowDialog
 
 signal orgprez_line_changed(scene, cmd)
+signal orgprez_node_changed(orgNode)
 
 var script_engine: Node
 
@@ -17,10 +18,11 @@ var next_audio_chunk
 var slide_just_changed = false
 
 onready var ChunkList = find_node("ChunkList")
-onready var Outline = find_node("Outline")
+onready var Outline:OrgPrezOutline = find_node("Outline")
 
 func _ready():
 	Outline.connect("node_selected", ChunkList, "set_org")
+	Outline.connect("node_selected", self, "_on_outline_node_selected")
 	$AudioStreamPlayer.connect("finished", self, "_on_audio_finished")
 
 func set_org(o:OrgNode):
@@ -112,6 +114,8 @@ func process_audio_track():
 				if this_audio_chunk.jpxy.x > old_slide:
 					slide_just_changed = true
 					Outline.get_node("Tree").get_selected().get_next().select(0)
+					# !! do i need next line? maybe it just works..?
+					# emit_signal('orgprez_node_changed', Outline.get_current_org_node())
 				old_slide = this_audio_chunk.jpxy.x
 
 func process_macro_track():
@@ -152,3 +156,9 @@ func _on_ChunkList_chunk_selected(chunk):
 	var ix = chunk.jpxy
 	emit_signal('orgprez_line_changed', ix.x, ix.y)
 	show_debug_state()
+
+func _on_outline_node_selected(orgNode):
+	emit_signal("orgprez_node_changed", orgNode)
+
+func get_current_org_node():
+	return Outline.get_current_org_node()

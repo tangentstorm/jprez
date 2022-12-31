@@ -61,7 +61,7 @@ class OrgParser:
 	func note_audio(rest):
 		chunk.file_path = rest
 
-	func org_from_path(path:String):
+	func org_from_path(path:String)->OrgNode:
 		root = OrgNode.new(''); node = root; stack = [root]; chunk = null
 		root.resource_path = path
 		var f = File.new(); f.open(path, File.READ)
@@ -69,7 +69,7 @@ class OrgParser:
 		for line in f.get_as_text().split("\n"):
 			lno += 1
 			var cut = line.find(" ")
-			var rest = line.right(cut)
+			var rest = line.right(cut).strip_edges()
 			if in_src:
 				if line == '#+end_src': in_src = false
 				else: node.slide.append(line)
@@ -77,6 +77,7 @@ class OrgParser:
 				jpxy += Vector2(0,1)
 				end_chunk()
 			elif line.begins_with('#+title:'): root.head = rest
+			elif line.begins_with('#+scene:'): node.scene = rest
 			elif line.begins_with('#+audio:'): note_audio(rest)
 			elif line.begins_with('#+begin_src j'): in_src = true
 			elif line[0] in [':','*','@']:

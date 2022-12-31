@@ -17,17 +17,16 @@ border_color = Color( 0.141176, 0.396078, 0.568627, 1 )
 size = 15
 font_data = ExtResource( 3 )
 
-[node name="JPrezStepper" type="WindowDialog"]
-visible = true
+[node name="OrgPrezStepper" type="WindowDialog"]
 margin_left = 1000.0
 margin_top = 50.0
 margin_right = 1800.0
 margin_bottom = 1050.0
 rect_min_size = Vector2( 500, 500 )
 rect_clip_content = true
-custom_styles/panel = SubResource( 1 )
 custom_colors/title_color = Color( 1, 1, 1, 1 )
 custom_constants/title_height = -32
+custom_styles/panel = SubResource( 1 )
 popup_exclusive = true
 resizable = true
 script = ExtResource( 1 )
@@ -76,8 +75,8 @@ margin_top = 1.0
 margin_right = 800.0
 margin_bottom = 21.0
 rect_min_size = Vector2( 400, 20 )
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

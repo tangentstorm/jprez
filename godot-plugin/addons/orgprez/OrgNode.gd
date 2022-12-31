@@ -5,6 +5,7 @@ tool class_name OrgNode extends Resource
 export var depth : int
 export var head : String
 export(Array,String) var slide
+export var scene : String
 export var chunks : Array
 export var children : Array
 

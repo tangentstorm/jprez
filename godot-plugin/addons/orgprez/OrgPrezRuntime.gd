@@ -2,10 +2,11 @@ class_name OrgPrezRuntime extends Control
 
 var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")
+var user_scene
+var org_deck : OrgDeck
 
-onready var stepper = $OrgPrezStepper
+onready var stepper:OrgPrezStepper = $OrgPrezStepper
 onready var script_engine = $OrgPrezScriptEngine
-onready var user_scene = find_node("OrgUserScene")
 
 const bytesPerSample = 2
 const channels = 2
@@ -26,16 +27,21 @@ func _ready():
 
 	var tscn = org_path.replace('.org','.tscn')
 	if not ResourceLoader.exists(tscn):
-		tscn = 'res://addons/jprez/JPrezPlayer.tscn'
-
-	var packed:PackedScene = load(tscn)
-	user_scene = packed.instance()
+		tscn = 'res://addons/jprez/JPrezPlayer.tscn' # !! todo: new default scene
+	user_scene = load(tscn).instance()
 	add_child(user_scene)
 	if user_scene.has_method('set_org_path'):
 		user_scene.set_org_path(org.get_global_path())
-
 	script_engine.user_scene = user_scene
 
+	var d = user_scene.get_node_or_null('OrgDeck')
+	if not d:
+		push_warning("couldn't find OrgDeck node")
+		d = OrgDeck.new()
+		user_scene.add_child(d)
+	org_deck = d
+	stepper.connect('orgprez_node_changed', self, '_on_orgnode_changed')
+	_on_orgnode_changed(stepper.get_current_org_node())
 
 func load_timeline():
 	# visually show all the clips in a timeline view
@@ -88,3 +94,8 @@ func _on_OrgPrezScriptEngine_script_finished(id, result):
 
 func _on_JPrezScene_macro_finished():
 	stepper._on_macro_finished()
+
+func _on_orgnode_changed(orgNode):
+	if orgNode: org_deck.show_slide(orgNode.scene)
+	else: org_deck.hide_all()
+

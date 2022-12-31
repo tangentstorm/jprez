@@ -1,4 +1,5 @@
-tool extends VBoxContainer
+tool
+class_name OrgPrezOutline extends VBoxContainer
 
 signal node_selected(org_node)
 
@@ -9,7 +10,13 @@ func set_org(org:OrgNode):
 	var blank = $Tree.create_item(); blank.set_text(0, '')
 	$Tree.get_root().get_children().select(0)
 
-func _on_Tree_item_selected():
+func get_org_tree()->Tree:
 	var tree : Tree = $Tree
-	var org = tree.get_selected().get_metadata(0)
+	return tree
+
+func _on_Tree_item_selected():
+	var org = get_org_tree().get_selected().get_metadata(0)
 	emit_signal("node_selected", org)
+
+func get_current_org_node() -> OrgNode:
+	return get_org_tree().get_selected().get_metadata(0)

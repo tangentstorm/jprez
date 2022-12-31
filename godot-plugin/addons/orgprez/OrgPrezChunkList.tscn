@@ -1,21 +1,26 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/jprez/Outline.gd" type="Script" id=1]
+[ext_resource path="res://addons/jprez/OrgPrezChunkList.gd" type="Script" id=1]
 
-[node name="Outline" type="VBoxContainer"]
+[node name="ChunkList" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Tree" type="Tree" parent="."]
-margin_right = 1920.0
-margin_bottom = 1080.0
+margin_right = 1025.0
+margin_bottom = 601.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-allow_reselect = true
+columns = 3
 hide_root = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]

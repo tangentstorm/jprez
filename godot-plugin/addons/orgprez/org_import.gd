@@ -1,4 +1,4 @@
-# importer for jprez-flavored .org files
+# importer for orgprez-flavored .org files
 # https://docs.godotengine.org/en/stable/tutorials/plugins/editor/import_plugins.html
 tool extends EditorImportPlugin
 

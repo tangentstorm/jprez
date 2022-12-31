@@ -1,5 +1,5 @@
 tool class_name OrgChunk extends Resource
-# this represensts one "chunk" (step/line) within a jprez slide
+# this represensts one "chunk" (step/line) within an orgprez slide
 
 export var index = 0
 export var track : int = 0 # Org.Track.TEXT

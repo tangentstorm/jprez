@@ -1,4 +1,4 @@
-class_name JPrezApp extends Control
+class_name OrgPrezRuntime extends Control
 
 var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")

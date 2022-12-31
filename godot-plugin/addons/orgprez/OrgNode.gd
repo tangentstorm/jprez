@@ -1,6 +1,6 @@
 tool class_name OrgNode extends Resource
 # This is a recursive structure that represents
-# the content of a jprez-flavored *.org file.
+# the content of an orgprez-flavored *.org file.
 
 export var depth : int
 export var head : String

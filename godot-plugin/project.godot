@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "AudioLoader",
+"language": "GDScript",
+"path": "res://addons/waveform/AudioLoader.gd"
+}, {
 "base": "Control",
 "class": "JKVM",
 "language": "GDScript",
@@ -49,6 +54,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/orgprez/OrgPrezAudioTab.gd"
 }, {
+"base": "VBoxContainer",
+"class": "OrgPrezOutline",
+"language": "GDScript",
+"path": "res://addons/orgprez/OrgPrezOutline.gd"
+}, {
 "base": "Control",
 "class": "OrgPrezRuntime",
 "language": "GDScript",
@@ -68,8 +78,19 @@ _global_script_classes=[ {
 "class": "OrgTime",
 "language": "GDScript",
 "path": "res://addons/orgprez/OrgTime.gd"
+}, {
+"base": "ColorRect",
+"class": "Waveform",
+"language": "GDScript",
+"path": "res://addons/waveform/Waveform.gd"
+}, {
+"base": "PanelContainer",
+"class": "WaveformPanel",
+"language": "GDScript",
+"path": "res://addons/waveform/WaveformPanel.gd"
 } ]
 _global_script_class_icons={
+"AudioLoader": "",
 "JKVM": "",
 "JPrezPlayer": "",
 "Org": "",
@@ -78,10 +99,13 @@ _global_script_class_icons={
 "OrgDeck": "",
 "OrgNode": "",
 "OrgPrezAudioTab": "",
+"OrgPrezOutline": "",
 "OrgPrezRuntime": "",
 "OrgPrezScriptEngine": "",
 "OrgPrezStepper": "",
-"OrgTime": ""
+"OrgTime": "",
+"Waveform": "",
+"WaveformPanel": ""
 }
 
 [application]
@@ -96,7 +120,7 @@ enable_audio_input=true
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/jprez/plugin.cfg", "res://addons/waveform/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/jprez/plugin.cfg", "res://addons/orgprez/plugin.cfg", "res://addons/waveform/plugin.cfg" )
 
 [importer_defaults]
 

@@ -16,8 +16,6 @@
 <v t="tangentstorm.20221220233133.1"><vh>_enter_tree(): instantiate the editor tab's scene</vh></v>
 <v t="tangentstorm.20221220233138.1"><vh>_exit_tree(): cleanup scene if plugin is uninstalled</vh></v>
 </v>
-<v t="tangentstorm.20221221202409.1"><vh>TODO</vh>
-<v t="tangentstorm.20221221212658.1"><vh>docked panels for outline and chunks</vh></v>
 <v t="tangentstorm.20221221195625.1"><vh>org file resources</vh>
 <v t="tangentstorm.20221221195937.1"><vh>org importer</vh>
 <v t="tangentstorm.20221221205248.1"><vh>declare org_importer plugin</vh></v>
@@ -29,11 +27,20 @@
 <v t="tangentstorm.20221221213157.1"><vh>edit() says what to actually do when it's clicked</vh></v>
 </v>
 </v>
-<v t="tangentstorm.20221221195729.1"><vh>the editor tab</vh></v>
-<v t="tangentstorm.20221221204336.1"><vh>nav panels (outline/chunklist)</vh></v>
-<v t="tangentstorm.20221221195823.1"><vh>decks and slides</vh></v>
-<v t="tangentstorm.20221221195646.1"><vh>jprez interface</vh></v>
+<v t="tangentstorm.20221221202409.1"><vh>TODO</vh>
+<v t="tangentstorm.20221221195823.1"><vh>introduce decks and slides</vh></v>
+<v t="tangentstorm.20221223114848.1"><vh>slides panel to manage editor text, linked scene</vh></v>
+<v t="tangentstorm.20221221204336.1"><vh>restore nav panels (outline/chunklist)</vh></v>
+<v t="tangentstorm.20221223114755.1"><vh>outline panel to manage headline tree</vh></v>
+<v t="tangentstorm.20221223115029.1"><vh>preview panel in middle shows the linked scene?</vh></v>
+<v t="tangentstorm.20221222011143.1"><vh>do some QA and make sure audio recorder actually works</vh></v>
+<v t="tangentstorm.20221222011355.1"><vh>introduce the .wav subfolder to avoid clutter</vh></v>
+<v t="tangentstorm.20221221195646.1"><vh>decouple from jprez repl</vh></v>
+<v t="tangentstorm.20221222012013.1"><vh>move the "JPrezApp" to OrgPrezPlayer scene</vh></v>
+<v t="tangentstorm.20221222011506.1"><vh>someday/maybe</vh></v>
+<v t="tangentstorm.20221221195729.1"><vh>explain the editor tab</vh></v>
 </v>
+<v t="tangentstorm.20221222010757.1"><vh>how to use it</vh></v>
 </v>
 <v t="tangentstorm.20221220224342.1"><vh>@path addons</vh>
 <v t="tangentstorm.20221220230106.4"><vh>@clean orgprez/plugin.gd</vh>
@@ -130,12 +137,34 @@ make_visible(false) # otherwise it shows up on-screen no matter what tab is acti
 </t>
 <t tx="tangentstorm.20221221195625.1"></t>
 <t tx="tangentstorm.20221221195646.1">@
-switch to signals
+search for references to REPL
+move this code into a signal
+the repl can just register to receive those signals
+
+maybe that would be something that lives in a custom version of the main scene,
+alongside the player object?
+
 </t>
-<t tx="tangentstorm.20221221195729.1"></t>
+<t tx="tangentstorm.20221221195729.1">@
+
+Here's the tutorial for editing these scenes:
+
+https://docs.godotengine.org/en/stable/tutorials/plugins/editor/making_main_screen_plugins.html
+
+Important is the Vertical Expand checkbox for the top level Control.
+
+things i did in this step:
+
+  - set up the default org file  (TODO: maybe change this when you open an org file)</t>
 <t tx="tangentstorm.20221221195809.1">
 </t>
-<t tx="tangentstorm.20221221195823.1"></t>
+<t tx="tangentstorm.20221221195823.1">each org file has one associated deck.
+  (either specified or just same name but .tscn)
+this gets loaded INTO the top-level jprez scene
+  (so orgprez has some generic player logic and run-time debugging tools like the stepper)
+  
+
+</t>
 <t tx="tangentstorm.20221221195916.1">@
 For godot 4, maybe we just want to use the "keep" importer.
 (we may not actually need a resource)
@@ -147,14 +176,27 @@ For godot 4, maybe we just want to use the "keep" importer.
   
 
 
-Org
-OrgNode
-OrgParser</t>
+make_visible:
+	#var efp = EditorFeatureProfile.new()
+	#efp.set_disable_feature(EditorFeatureProfile.FEATURE_IMPORT_DOCK, not v)
+
+_enter_tree:
+	var efp = EditorFeatureProfile.new()
+	efp.set_disable_feature(EditorFeatureProfile.FEATURE_3D, true)
+
+
+
+res://wip/dealing-cards/dealing-cards.org
+res://wip/mandelbrot/mandelbrot.org</t>
 <t tx="tangentstorm.20221221195937.1">@
 this works by loading an importer class from the plugin.gd
 </t>
 <t tx="tangentstorm.20221221202409.1"></t>
 <t tx="tangentstorm.20221221204336.1">@
+- the editor uses both
+- consider making one panel for debugging animations in the editor
+  (basically do as much of the "stepping" stuff as possible at edit time)
+
 - merge into one panel (use dropdown to select the slide/section)
 - should be used to control animations
 - may or may not still directly edit.
@@ -168,7 +210,6 @@ add_import_plugin(org_import)
 <t tx="tangentstorm.20221221205522.1">remove_import_plugin(org_import); org_import = null
 
 </t>
-<t tx="tangentstorm.20221221212658.1"></t>
 <t tx="tangentstorm.20221221212948.1">func handles(object):
 	return object is OrgNode
 
@@ -189,5 +230,31 @@ add_import_plugin(org_import)
 	app.set_org(org)
 
 </t>
+<t tx="tangentstorm.20221222010757.1">- for now still create and edit the org file in a text editor.
+
+
+- set main scene to be the org player
+- each org file should have a corresponding deck
+- based on which org file you click to edit, the project setting is changed
+- both the editor and main scene check the project settings to remember this decision
+- keep all your talks in different directories in the same git repot
+  (they can be but do not have to be separate godot projects)
+  </t>
+<t tx="tangentstorm.20221222011143.1"></t>
+<t tx="tangentstorm.20221222011355.1"></t>
+<t tx="tangentstorm.20221222011506.1">@
+actually create org files and add headings and add/edit lines frOm godot
+instead of using an outside editor.
+</t>
+<t tx="tangentstorm.20221222012013.1">this becomes the main scene for your project (as a user).
+- need to move the Outline and Chunklist controls over
+- rename them to OrgOutline and OrgChunklist (??)
+
+</t>
+<t tx="tangentstorm.20221223114755.1"></t>
+<t tx="tangentstorm.20221223114848.1">@
+could step through the animations as well?
+</t>
+<t tx="tangentstorm.20221223115029.1"></t>
 </tnodes>
 </leo_file>

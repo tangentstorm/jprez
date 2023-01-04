@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Reference",
-"class": "AudioLoader",
-"language": "GDScript",
-"path": "res://addons/waveform/AudioLoader.gd"
-}, {
 "base": "Control",
 "class": "JKVM",
 "language": "GDScript",
@@ -23,89 +18,10 @@ _global_script_classes=[ {
 "class": "JPrezPlayer",
 "language": "GDScript",
 "path": "res://addons/jprez/JPrezPlayer.gd"
-}, {
-"base": "Reference",
-"class": "Org",
-"language": "GDScript",
-"path": "res://addons/orgprez/Org.gd"
-}, {
-"base": "Resource",
-"class": "OrgChunk",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgChunk.gd"
-}, {
-"base": "Reference",
-"class": "OrgCursor",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgCursor.gd"
-}, {
-"base": "Node",
-"class": "OrgDeck",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgDeck.gd"
-}, {
-"base": "Resource",
-"class": "OrgNode",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgNode.gd"
-}, {
-"base": "VBoxContainer",
-"class": "OrgPrezAudioTab",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgPrezAudioTab.gd"
-}, {
-"base": "VBoxContainer",
-"class": "OrgPrezOutline",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgPrezOutline.gd"
-}, {
-"base": "Control",
-"class": "OrgPrezRuntime",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgPrezRuntime.gd"
-}, {
-"base": "Node",
-"class": "OrgPrezScriptEngine",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgPrezScriptEngine.gd"
-}, {
-"base": "WindowDialog",
-"class": "OrgPrezStepper",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgPrezStepper.gd"
-}, {
-"base": "Resource",
-"class": "OrgTime",
-"language": "GDScript",
-"path": "res://addons/orgprez/OrgTime.gd"
-}, {
-"base": "ColorRect",
-"class": "Waveform",
-"language": "GDScript",
-"path": "res://addons/waveform/Waveform.gd"
-}, {
-"base": "PanelContainer",
-"class": "WaveformPanel",
-"language": "GDScript",
-"path": "res://addons/waveform/WaveformPanel.gd"
 } ]
 _global_script_class_icons={
-"AudioLoader": "",
 "JKVM": "",
-"JPrezPlayer": "",
-"Org": "",
-"OrgChunk": "",
-"OrgCursor": "",
-"OrgDeck": "",
-"OrgNode": "",
-"OrgPrezAudioTab": "",
-"OrgPrezOutline": "",
-"OrgPrezRuntime": "",
-"OrgPrezScriptEngine": "",
-"OrgPrezStepper": "",
-"OrgTime": "",
-"Waveform": "",
-"WaveformPanel": ""
+"JPrezPlayer": ""
 }
 
 [application]
@@ -117,10 +33,6 @@ run/main_scene="res://addons/jprez/jprez-scene.tscn"
 
 default_bus_layout="res://addons/waveform/waveform_bus_layout.tres"
 enable_audio_input=true
-
-[editor_plugins]
-
-enabled=PoolStringArray( "res://addons/jprez/plugin.cfg", "res://addons/orgprez/plugin.cfg", "res://addons/waveform/plugin.cfg" )
 
 [importer_defaults]
 

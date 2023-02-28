@@ -1,0 +1,5 @@
+[configuration]
+entry_symbol = "gdextension_rust_init"
+
+[libraries]
+windows.64 = "res://addons/jlang-rs-gd/jlang_rs_gd.dll"

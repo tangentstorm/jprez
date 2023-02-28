@@ -6,28 +6,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Control",
-"class": "JKVM",
-"language": "GDScript",
-"path": "res://addons/jprez/JKVM.gd"
-}, {
-"base": "Node",
-"class": "JPrezPlayer",
-"language": "GDScript",
-"path": "res://addons/jprez/JPrezPlayer.gd"
-} ]
-_global_script_class_icons={
-"JKVM": "",
-"JPrezPlayer": ""
-}
+config_version=5
 
 [application]
 
 config/name="jprez godot plugin"
 run/main_scene="res://addons/jprez/jprez-scene.tscn"
+config/features=PackedStringArray("4.0")
 
 [audio]
 
@@ -36,8 +21,7 @@ enable_audio_input=true
 
 [importer_defaults]
 
-org.jprez={
-}
+org.jprez={}
 
 [physics]
 

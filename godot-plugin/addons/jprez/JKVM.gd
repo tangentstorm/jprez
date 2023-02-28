@@ -1,31 +1,32 @@
-tool class_name JKVM extends Control
+@tool class_name JKVM extends Control
 
 signal keypress(code, ch, fns)
 
-export var font : Font = preload("res://fonts/noto-font.tres")
-export var font_base : Vector2 = Vector2(1,12)
+@export var font : Font = preload("res://fonts/noto-font.tres")
+@export var font_base : Vector2 = Vector2(1,12)
+@export var font_size : int = 24
 
-export var j_interpreter = "../JLang"
-export var j_widget : String = "app"
-export var j_locale : String = "base"
+@export var jlang_nodepath = "../JLang"
+@export var j_widget : String = "app"
+@export var j_locale : String = "base"
 
-export var rng_seed : int = 82076 setget _set_rng_seed
-export var grid_wh : Vector2 = Vector2(80, 25) setget _set_grid_wh
-export var cell_wh : Vector2 = Vector2(12,14) setget _set_cell_wh
-export var cursor_visible: bool = false setget _set_cursor_visible
-export var fake_focus: bool = false
+@export var rng_seed : int = 82076 : set = _set_rng_seed
+@export var grid_wh : Vector2 = Vector2(80, 25) : set = _set_grid_wh
+@export var cell_wh : Vector2 = Vector2(12,14) : set = _set_cell_wh
+@export var cursor_visible: bool = false : set = _set_cursor_visible
+@export var fake_focus: bool = false
 
-onready var JI = get_node(j_interpreter)
+@onready var JI = get_node(jlang_nodepath)
 
 var cursor_xy : Vector2 = Vector2.ZERO
-var fg : Color = Color.gray
-var bg : Color = Color.black
+var fg : Color = Color.GRAY
+var panel : Color = Color.BLACK
 
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
-var FGB : PoolColorArray
-var BGB : PoolColorArray
-var CHB : PoolIntArray # unicode code points
+var FGB : PackedColorArray
+var BGB : PackedColorArray
+var CHB : PackedInt32Array # unicode code points
 
 func _set_rng_seed(v):
 	rng_seed = v
@@ -44,15 +45,15 @@ func _set_cell_wh(v):
 	recalc_size()
 
 func recalc_size():
-	rect_min_size = grid_wh * cell_wh
-	rect_size = rect_min_size
-	update()
+	custom_minimum_size = grid_wh * cell_wh
+	size = custom_minimum_size
+	queue_redraw()
 
 func _ready():
 	focus_mode = FOCUS_CLICK
 	var cursor = ColorRect.new()
-	cursor.color = Color.transparent
-	cursor.rect_size = cell_wh
+	cursor.color = Color.TRANSPARENT
+	cursor.size = cell_wh
 	cursor.name = "cursor"
 	add_child(cursor)
 	_set_cursor_visible(cursor_visible)
@@ -62,16 +63,16 @@ func _ready():
 		call_deferred('refresh')
 
 func _reset():
-	fg = Color.gray
-	bg = Color.black
+	fg = Color.GRAY
+	panel = Color.BLACK
 
 func _cscr():
-	FGB = PoolColorArray()
-	BGB = PoolColorArray()
-	CHB = PoolIntArray()
+	FGB = PackedColorArray()
+	BGB = PackedColorArray()
+	CHB = PackedInt32Array()
 	for i in range(grid_wh.x * grid_wh.y):
 		FGB.append(fg)
-		BGB.append(bg)
+		BGB.append(panel)
 		CHB.append(32)
 
 func _rnd():
@@ -79,9 +80,9 @@ func _rnd():
 	# ("screen saver" for debugging / fps checks)
 	for i in range(grid_wh.x * grid_wh.y):
 		FGB[i] = 0x333333ff + (rng.randi_range(0, 0xcccccc) << 8)
-		BGB[i] = Color.black
+		BGB[i] = Color.BLACK
 		CHB[i] = rng.randi_range(33,126)
-	update()
+	queue_redraw()
 
 func _draw():
 	var w = 80; var h = 16	
@@ -90,11 +91,11 @@ func _draw():
 			var xy = Vector2(x,y)*cell_wh
 			var p = y * grid_wh.x + x
 			draw_rect(Rect2(xy, cell_wh), BGB[p])
-			draw_char(font, xy+font_base, char(CHB[p]), ' ', FGB[p])
+			draw_char(font, xy+font_base, char(CHB[p]), font_size, FGB[p])
 
-onready var pal : PoolColorArray = _make_palette()
+@onready var pal : PackedColorArray = _make_palette()
 func _make_palette():
-	var res = PoolColorArray()
+	var res = PackedColorArray()
 	var ansi = [ # -- ansi colors --
 		0x000000, # black
 		0xaa0000, # red
@@ -122,9 +123,10 @@ func _make_palette():
 				res.append(Color(((r << 16 ) + ( g << 8 ) + b) * 0x100 + 0xff))
 
 	# 232..255 are a black to gray gradiant:
-	var grays = [ 0x00, 0x12, 0x1C, 0x26, 0x30, 0x3A, 0x44, 0x4E,
-			  0x58, 0x62, 0x6C, 0x76, 0x80, 0x8A, 0x94, 0x9E,
-			  0xA8, 0xB2, 0xBC, 0xC6, 0xD0, 0xDA, 0xE4, 0xEE ]
+	var grays = [
+		0x00, 0x12, 0x1C, 0x26, 0x30, 0x3A, 0x44, 0x4E,
+		0x58, 0x62, 0x6C, 0x76, 0x80, 0x8A, 0x94, 0x9E,
+		0xA8, 0xB2, 0xBC, 0xC6, 0xD0, 0xDA, 0xE4, 0xEE ]
 	for v in grays:
 		res.append(Color((( v << 16 ) + ( v << 8 ) + v) * 0x100 + 0xff))
 
@@ -132,15 +134,15 @@ func _make_palette():
 
 func _gui_input(e):
 	if e is InputEventKey and e.pressed:
-		var code = e.scancode
+		var code = e.keycode
 		var ch = char(e.unicode)
 		var fns = []
 		if code >= 32 and code < 127:
 			var fn = 'k'
 			var asc = true
-			if e.control: fn +='c'
-			if e.alt: fn += 'a'
-			if e.alt or e.control:
+			if e.ctrl_pressed: fn +='c'
+			if e.alt_pressed: fn += 'a'
+			if e.alt_pressed or e.ctrl_pressed:
 				asc = false
 				ch = char(code).to_lower()
 			match ch:
@@ -153,7 +155,7 @@ func _gui_input(e):
 			if asc: fns.append('k_asc')
 		else:
 			match code:
-				KEY_SHIFT, KEY_ALT, KEY_CONTROL: return
+				KEY_SHIFT, KEY_ALT, KEY_CTRL: return
 				KEY_UP: fns.append('k_arup')
 				KEY_DOWN: fns.append('k_ardn')
 				KEY_RIGHT: fns.append('k_arrt')
@@ -164,7 +166,7 @@ func _gui_input(e):
 		emit_signal('keypress', code, ch, fns)
 
 func _to_colors(ints):
-	var res = PoolColorArray()
+	var res = PackedColorArray()
 	for i in ints:
 		if i < 0: res.append(pal[-i])
 		else: res.append(Color(i*0x100+0xFF))
@@ -173,9 +175,15 @@ func _to_colors(ints):
 func j_hw():
 	return str(grid_wh.y) + ' ' + str(grid_wh.x)
 
-func J(cmd):
-	# print(cmd)
-	return JI.cmd(cmd)
+func J(cmd:String):
+	#print('  '+cmd)
+	#print(JI.cmd_s(cmd))
+	JI.cmd_s(cmd)
+
+func Jv(cmd)->Variant:
+	#print('  '+cmd)
+	var res = JI.cmd(cmd)
+	return res
 
 func refresh():
 	var vid = 'scratch'
@@ -185,8 +193,8 @@ func refresh():
 	J("'H__" + j_widget + " W__"+j_widget+"' =: "+j_hw())
 	J("render__" + j_widget + " " + str(int(fake_focus or has_focus())))
 	J("popterm_kvm_ ''")
-	CHB = J("3 u:,CHB__" + vid)
-	FGB = _to_colors(J(",FGB__" + vid))
-	BGB = _to_colors(J(",BGB__" + vid))
+	CHB = Jv("3 u:,CHB__" + vid)
+	FGB = _to_colors(Jv(",FGB__" + vid))
+	BGB = _to_colors(Jv(",BGB__" + vid))
 	J('codestroy__' + vid + "''")
-	update()
+	queue_redraw()

@@ -2,12 +2,11 @@
 
 [ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
 [ext_resource path="res://addons/jprez/JPrezPlayer.gd" type="Script" id=2]
-[ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
 [ext_resource path="res://addons/jprez/OrgCommands.gd" type="Script" id=4]
-[ext_resource path="res://fonts/noto-24.tres" type="DynamicFont" id=5]
+[ext_resource path="res://fonts/noto-24.tres" type="FontFile" id=5]
 [ext_resource path="res://assets/SceneTitle.tscn" type="PackedScene" id=10]
 
-[sub_resource type="AudioStreamSample" id=1]
+[sub_resource type="AudioStreamWAV" id=1]
 
 [node name="JPrezPlayer" type="Control"]
 anchor_right = 1.0
@@ -20,13 +19,10 @@ __meta__ = {
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 1 )
 
-[node name="JLang" type="Node" parent="."]
-script = ExtResource( 3 )
-
 [node name="jp-repl" type="Control" parent="."]
-margin_right = 3080.0
-margin_bottom = 1080.0
-rect_min_size = Vector2( 3080, 1080 )
+offset_right = 3080.0
+offset_bottom = 1080.0
+minimum_size = Vector2( 3080, 1080 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -39,11 +35,11 @@ grid_wh = Vector2( 220, 36 )
 cell_wh = Vector2( 14, 30 )
 
 [node name="jp-editor" type="Control" parent="."]
-margin_left = 38.1406
-margin_top = 570.697
-margin_right = 1158.14
-margin_bottom = 1050.7
-rect_min_size = Vector2( 1120, 480 )
+offset_left = 38.1406
+offset_top = 570.697
+offset_right = 1158.14
+offset_bottom = 1050.7
+minimum_size = Vector2( 1120, 480 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {

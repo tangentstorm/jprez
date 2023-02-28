@@ -2,27 +2,23 @@
 
 [ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
 [ext_resource path="res://addons/jprez/jprez.gd" type="Script" id=2]
-[ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
 
 [node name="JPrez" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 40.0
-margin_bottom = -280.0
-rect_min_size = Vector2( 0, 320 )
+offset_right = 40.0
+offset_bottom = -280.0
+minimum_size = Vector2( 0, 320 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="JLang" type="Node" parent="."]
-script = ExtResource( 3 )
-
 [node name="jp-list" type="Control" parent="."]
-margin_top = 58.0
-margin_right = 288.0
-margin_bottom = 298.0
-rect_min_size = Vector2( 288, 240 )
+offset_top = 58.0
+offset_right = 288.0
+offset_bottom = 298.0
+minimum_size = Vector2( 288, 240 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -34,11 +30,11 @@ grid_wh = Vector2( 32, 12 )
 cell_wh = Vector2( 9, 20 )
 
 [node name="jp-cmds" type="Control" parent="."]
-margin_left = 297.0
-margin_top = 58.0
-margin_right = 1413.0
-margin_bottom = 298.0
-rect_min_size = Vector2( 1116, 240 )
+offset_left = 297.0
+offset_top = 58.0
+offset_right = 1413.0
+offset_bottom = 298.0
+minimum_size = Vector2( 1116, 240 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -52,10 +48,10 @@ cell_wh = Vector2( 9, 20 )
 [node name="jp-led" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 18.0
-margin_right = 1134.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 1116, 20 )
+offset_left = 18.0
+offset_right = 1134.0
+offset_bottom = 20.0
+minimum_size = Vector2( 1116, 20 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {

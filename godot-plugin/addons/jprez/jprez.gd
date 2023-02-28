@@ -1,15 +1,10 @@
-tool extends Control
+@tool extends Control
 
-onready var JI = $JLang # J interpreter
+@export var jlang_nodepath = 'JLang'
+@onready var JI = get_node(jlang_nodepath) # J interpreter
 
-func cmd(src):
-	print("src: ", src)
-	var res = JI.cmd(src)
-	print("--> ", res)
-	return res
-
-func set_org(org:OrgNode):
-	var org_path = ProjectSettings.globalize_path(org.resource_path)
+func set_org(absolute_org_path): # :OrgNode):
+	var org_path = ProjectSettings.globalize_path(absolute_org_path) # org.resource_path)
 	JI.cmd("ORG_PATH =: '%s'" % [org_path])
 	JI.cmd("reopen''")
 	update_editor()
@@ -24,7 +19,7 @@ func _ready():
 	JI.cmd("1!:44 'd:/ver/jprez'")
 	JI.cmd('gethw_vt_ =: {{ ' +hw+ '}}')
 	JI.cmd("load 'jprez.ijs'")
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		var cmds = get_node_or_null("jp-cmds")
 		if cmds:cmds.grab_focus()
 	else:
@@ -32,7 +27,7 @@ func _ready():
 		if repl: repl.grab_focus()
 
 func _on_JKVM_keypress(code, ch, fns):
-	# print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
+	print('keypress('+str({'code':code, 'ch':ch, 'fns':fns})+')')
 	var s = ""
 	for fn in fns: s += "'"+fn+"';"
 	s = "("+s+"'k_any')"
@@ -41,19 +36,15 @@ func _on_JKVM_keypress(code, ch, fns):
 	update_editor()
 
 func update_editor():
-	if Engine.editor_hint:
+	if true: # Engine.is_editor_hint():
 		for np in ['jp-cmds', 'jp-list']:
 			var n = get_node_or_null(np)
 			if n: n.refresh()
 
-
 func refresh_jkvm_node(node_path):
-	var root = get_tree().get_edited_scene_root()
-	if not root: return
-	var repl = root.get_node_or_null(node_path)
-	if repl:
-		repl.JI = JI
-		repl.refresh()
+	var node = get_node_or_null(node_path)
+	if node:
+		node.refresh()
 
 func refresh_repl():
 	var r = JI.cmd('R__repl * 2') # so it's not a boolean
@@ -63,7 +54,7 @@ func refresh_editor():
 	if r: refresh_jkvm_node('jp-editor')
 
 func _process(_dt):
-	if Engine.editor_hint:
+	if true: #Engine.is_editor_hint():
 		if not JI: return
 		if not JI.has_method('cmd'): return
 		JI.cmd("cocurrent'base'")
@@ -76,3 +67,9 @@ func _on_jplist_focus_entered():
 
 func _on_jpcmds_focus_entered():
 	JI.cmd("keymode'outkeys'")
+
+func _on_jprepl_focus_entered():
+	JI.cmd("keymode'replkeys'")
+
+func _on_jpeditor_focus_entered():
+	JI.cmd("keymode'edkeys'")

@@ -1,47 +1,49 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://b814tmrtq1geo"]
 
-[ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
-[ext_resource path="res://addons/jprez/jprez.gd" type="Script" id=2]
-[ext_resource path="res://addons/jlang-rs-gd/jlang-rs-gd.gdns" type="Script" id=3]
+[ext_resource type="Script" path="res://addons/jprez/JKVM.gd" id="1"]
+[ext_resource type="Script" path="res://addons/jprez/jprez.gd" id="2"]
 
 [node name="JPrez" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 40.0
-margin_bottom = 40.0
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
 
-[node name="JLang" type="Node" parent="."]
-script = ExtResource( 3 )
+[node name="JLang" type="JLang" parent="."]
 
 [node name="jp-repl" type="Control" parent="."]
-margin_right = 1080.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 1080, 480 )
+custom_minimum_size = Vector2(1080, 480)
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 480.0
 focus_mode = 1
-script = ExtResource( 1 )
-font_base = Vector2( 0, 15 )
+script = ExtResource("1")
+font_base = Vector2(0, 15)
+font_size = 16
 j_widget = "repl"
-grid_wh = Vector2( 120, 24 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2(120, 24)
+cell_wh = Vector2(9, 20)
 
 [node name="jp-editor" type="Control" parent="."]
-margin_left = 1115.0
-margin_right = 1745.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 630, 480 )
+custom_minimum_size = Vector2(630, 480)
+anchors_preset = 0
+offset_left = 1115.0
+offset_right = 1745.0
+offset_bottom = 480.0
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font_base = Vector2( 0, 15 )
+script = ExtResource("1")
+font_base = Vector2(0, 15)
+font_size = 16
 j_widget = "editor"
-grid_wh = Vector2( 70, 24 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2(70, 24)
+cell_wh = Vector2(9, 20)
 
+[connection signal="focus_entered" from="jp-repl" to="." method="_on_jprepl_focus_entered"]
 [connection signal="keypress" from="jp-repl" to="." method="_on_JKVM_keypress"]
+[connection signal="focus_entered" from="jp-editor" to="." method="_on_jpeditor_focus_entered"]
 [connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]

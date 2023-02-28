@@ -1,18 +1,18 @@
 # jprez godot plugin
-tool extends EditorPlugin
+@tool extends EditorPlugin
 
 var jprez
 var wav_dir = 'res://'
 
 func _enter_tree():
-	jprez = preload("res://addons/jprez/jprez-plugin.tscn").instance()
+	jprez = preload("res://addons/jprez/jprez-plugin.tscn").instantiate()
 	add_control_to_bottom_panel(jprez, "jprez")
 
 func _exit_tree():
 	remove_control_from_bottom_panel(jprez); jprez.queue_free()
 
 func edit_sample(path):
-	var samp:AudioStreamSample = ResourceLoader.load(path)
+	var samp:AudioStreamWAV = ResourceLoader.load(path)
 	get_editor_interface().edit_resource(samp)
 
 func _on_audio_chunk_selected(chunk:OrgChunk):
@@ -22,8 +22,8 @@ func _on_audio_chunk_selected(chunk:OrgChunk):
 		# !! make a stub resource and edit that instead. this is so we don't
 		# have to make some hard-coded reference to the godot-waveform plugin,
 		# though I admit it still feels rather clunky.
-		var samp = AudioStreamSample.new()
+		var samp = AudioStreamWAV.new()
 		samp.resource_path = path
-		samp.format = AudioStreamSample.FORMAT_16_BITS
+		samp.format = AudioStreamWAV.FORMAT_16_BITS
 		samp.stereo = true
 		get_editor_interface().edit_resource(samp)

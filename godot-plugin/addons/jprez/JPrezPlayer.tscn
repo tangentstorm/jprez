@@ -49,6 +49,7 @@ grid_wh = Vector2(80, 16)
 cell_wh = Vector2(14, 30)
 
 [node name="OrgSceneTitle" parent="." instance=ExtResource("10")]
+text_len = 0
 
 [node name="OrgCommands" type="Node" parent="."]
 script = ExtResource("4")

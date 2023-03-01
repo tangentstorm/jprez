@@ -12,3 +12,8 @@ func cmd_editor_goxy(x,y, force_visible:bool=false):
 	node.fake_focus = true
 	JI.cmd("curxy__editor %d %d" % [x,y])
 	return IMMEDIATE
+
+func run_macro(_macro:String):
+	# !! we ignore OrgPrez's copy of the macro because jprez
+	#    already knows it from when goix was called.
+	pass

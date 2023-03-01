@@ -49,7 +49,3 @@ func goix(scene, cmd):
 	JI.cmd("cocurrent'base'")
 	JI.cmd('goix %d %d' % [scene, cmd])
 	JI.cmd("advance''")
-
-func _on_JPrezStepper_cmdix_changed(scene, cmd):
-	goix(scene, cmd)
-

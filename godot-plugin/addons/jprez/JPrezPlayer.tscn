@@ -1,60 +1,59 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://bdvpq8fotx3fy"]
 
-[ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
-[ext_resource path="res://addons/jprez/JPrezPlayer.gd" type="Script" id=2]
-[ext_resource path="res://addons/jprez/OrgCommands.gd" type="Script" id=4]
-[ext_resource path="res://fonts/noto-24.tres" type="FontFile" id=5]
-[ext_resource path="res://assets/SceneTitle.tscn" type="PackedScene" id=10]
+[ext_resource type="Script" path="res://addons/jprez/JKVM.gd" id="1"]
+[ext_resource type="Script" path="res://addons/jprez/JPrezPlayer.gd" id="2"]
+[ext_resource type="Script" path="res://addons/jprez/OrgCommands.gd" id="4"]
+[ext_resource type="FontFile" uid="uid://0ddyd3wbehih" path="res://fonts/noto-24.tres" id="5"]
+[ext_resource type="PackedScene" uid="uid://b4eolliry53vi" path="res://assets/SceneTitle.tscn" id="10"]
 
-[sub_resource type="AudioStreamWAV" id=1]
+[sub_resource type="AudioStreamWAV" id="1"]
 
 [node name="JPrezPlayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = SubResource( 1 )
+stream = SubResource("1")
 
 [node name="jp-repl" type="Control" parent="."]
+custom_minimum_size = Vector2(3080, 1080)
+anchors_preset = 0
 offset_right = 3080.0
 offset_bottom = 1080.0
-minimum_size = Vector2( 3080, 1080 )
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font = ExtResource( 5 )
-font_base = Vector2( 0, 20 )
+script = ExtResource("1")
+font = ExtResource("5")
+font_base = Vector2(0, 20)
 j_widget = "repl"
-grid_wh = Vector2( 220, 36 )
-cell_wh = Vector2( 14, 30 )
+grid_wh = Vector2(220, 36)
+cell_wh = Vector2(14, 30)
 
 [node name="jp-editor" type="Control" parent="."]
+custom_minimum_size = Vector2(1120, 480)
+anchors_preset = 0
 offset_left = 38.1406
 offset_top = 570.697
 offset_right = 1158.14
 offset_bottom = 1050.7
-minimum_size = Vector2( 1120, 480 )
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font = ExtResource( 5 )
-font_base = Vector2( 0, 24 )
+script = ExtResource("1")
+font = ExtResource("5")
+font_base = Vector2(0, 24)
 j_widget = "editor"
-grid_wh = Vector2( 80, 16 )
-cell_wh = Vector2( 14, 30 )
+grid_wh = Vector2(80, 16)
+cell_wh = Vector2(14, 30)
 
-[node name="OrgSceneTitle" parent="." instance=ExtResource( 10 )]
+[node name="OrgSceneTitle" parent="." instance=ExtResource("10")]
 
 [node name="OrgCommands" type="Node" parent="."]
-script = ExtResource( 4 )
+script = ExtResource("4")
+
+[node name="JLang" type="JLang" parent="."]
 
 [connection signal="keypress" from="jp-repl" to="." method="_on_JKVM_keypress"]
 [connection signal="keypress" from="jp-editor" to="." method="_on_JKVM_keypress"]

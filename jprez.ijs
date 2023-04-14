@@ -8,6 +8,7 @@ NB. that I should probably have it under version control.
 (<'z') copath 'base' NB. clear previous path
 load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
 load'worlds.ijs org.ijs tok.ijs repl.ijs jedit.ijs macro.ijs'
+load'convert/misc/md5' NB. for wavpath (filename calculation)
 coinsert 'kvm'
 dbg 1
 copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
@@ -347,6 +348,22 @@ kc_i =: focus_on_outline  NB. tab to unfocus
 copop''
 
 
+NB. -----------------------------------------------------------
+
+calc_wavpath =: {{
+  NB. calculate *.wav filename for line of text y.
+  ok =. e.&'abcdefghijklmnopqrstuvwxyz0123456789'
+  s =. tolower y
+  r =. ({.~ 27<.#) (#~ ok) s
+  r =. (4 {. md5 s),'-',r,'.wav' }}
+
+NB. wavpath for the current line of text
+wavpath =: {{
+  line =. > C__cmds { L__cmds
+  if. ':' -: {.line do. ''
+  else. calc_wavpath line end. }}
+
+NB. -----------------------------------------------------------
 rl =: {{ load'jprez.ijs' }} NB. reload command (for development)
 
 NB. event loop

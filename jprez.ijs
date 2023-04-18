@@ -78,13 +78,17 @@ H__cmds =: H__list
 XY__cmds =: ((W__list+2),0) + XY__list
 TX_BG__cmds =: 16b111122
 render_item__cmds =: {{
-  x NB. current line (S+i)... for comparison with cursor C
+  NB. x  is current line number
   s =. >y
   select. {. s
     case. ':' do.
       if. C=x do. fg _14 [ bg _6 else. fg _6 end.
     case. '#' do.
       fg _1
+    case. do.
+      if. C~:x do. NB. if not current line, show whether .wav exist
+        if. fexist calc_wavpath_base_ s do. fg _15 end.
+      end.
   end.
   puts W{.s }}
 

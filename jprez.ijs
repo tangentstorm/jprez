@@ -188,6 +188,13 @@ kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
+WD_PLAYAUDIO =: 8000
+k_spc =: {{
+  if. a: ~: val__cmds'' do.
+    if. fexist wp=.wavpath'' do. (11!:WD_PLAYAUDIO) ::0: wp end.
+  end.
+  fwd_cmd''}}
+
 k_f2 =: flip
 k_f3 =: move_splitter@_1
 k_f4 =: move_splitter@1

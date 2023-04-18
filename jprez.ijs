@@ -77,6 +77,18 @@ W__cmds =: (xmax'')-(W__list)
 H__cmds =: H__list
 XY__cmds =: ((W__list+2),0) + XY__list
 TX_BG__cmds =: 16b111122
+render_item__cmds =: {{
+  x NB. current line (S+i)... for comparison with cursor C
+  s =. >y
+  select. {. s
+    case. ':' do.
+      if. C=x do. fg _14 [ bg _6 else. fg _6 end.
+    case. '#' do.
+      fg _1
+  end.
+  puts W{.s }}
+
+
 
 NB. led is the line editor for editing a line of text in the outline
 led =: 'MacroWidget' conew~ ''

@@ -10,7 +10,7 @@ load'tangentstorm/j-kvm tangentstorm/j-kvm/ui tangentstorm/j-lex'
 load'worlds.ijs org.ijs tok.ijs repl.ijs jedit.ijs macro.ijs'
 load'convert/misc/md5' NB. for wavpath (filename calculation)
 coinsert 'kvm'
-dbg 1
+dbg 0 NB. cannot debug from pascal shell at the moment
 copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
@@ -288,6 +288,7 @@ coinsert BASE
 FOCUS =: list__BASE [ ''`inscmd =: inscmd__BASE
 
 k_any =: {{
+  if. 0=#y do. return. end.
   select. 0{y
   case.'9'do. goto bak__list''
   case.'0'do. goto fwd__list''

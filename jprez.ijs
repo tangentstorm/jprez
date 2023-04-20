@@ -15,10 +15,10 @@ copush_z_ =: {{ 18!:4 y [ BASE__y =: coname'' [ y=.<y }}
 copop_z_ =: {{ y [ 18!:4 BASE [ y=.coname'' }}
 
 NB. main code
-ORG_PATH =: {{
-  if. '.org' {.@E.&.|. arg=.>{:ARGV do. arg
-  else. './screenplay.org' end. }}''
-
+{{ NB. initialize ORG_PATH, but let it survive a rl''
+  if. 0 = 4!:0<'ORG_PATH' do. return. end.
+  if. '.org' {.@E.&.|. arg=.>{:ARGV do. ORG_PATH =:arg
+  else. ORG_PATH =:'./screenplay.org' end. }}''
 
 NB. org-mode stuff
 open =: {{

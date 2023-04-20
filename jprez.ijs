@@ -183,12 +183,15 @@ reset_rhist =: {{ goz__hist__repl'' [ L__hist__repl =: (1+worldnum'') {. ihist_w
 
 NB. global keyboard shortcuts
 NB. ----------------------------------------------------
+NB. pascal frontend commands
+WD_PLAYAUDIO =: 8000
+WD_OPEN_FILE =: 8010
+
 kc_l =: smudge__app
 kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
-WD_PLAYAUDIO =: 8000
 k_spc =: {{
   if. a: ~: val__cmds'' do.
     if. fexist wp=.wavpath'' do. (11!:WD_PLAYAUDIO) ::0: wp end.
@@ -203,6 +206,7 @@ k_f6 =: goto@bak__list
 k_f7 =: goto@fwd__list
 k_f8 =: bak_cmd
 k_f9 =: advance
+k_f10 =: (11!:WD_OPEN_FILE) :: 0:
 
 advance =: {{
   if. ': . ' {.@E. >val__cmds'' do. playmacro''

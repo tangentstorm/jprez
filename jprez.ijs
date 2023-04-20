@@ -192,7 +192,7 @@ kc_o =: reopen
 kc_s =: save
 kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
 
-k_spc =: {{
+k_f12 =: {{
   if. a: ~: val__cmds'' do.
     if. fexist wp=.wavpath'' do. (11!:WD_PLAYAUDIO) ::0: wp end.
   end.

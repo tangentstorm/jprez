@@ -190,7 +190,7 @@ WD_OPEN_FILE =: 8010
 kc_l =: smudge__app
 kc_o =: reopen
 kc_s =: save
-kc_spc =: k_nul =: halt  NB. 'kc_spc' does nothing yet
+kc_q =: halt
 
 k_f12 =: {{
   if. a: ~: val__cmds'' do.

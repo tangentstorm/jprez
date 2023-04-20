@@ -259,7 +259,7 @@ bak_cmd =: {{
   else. bak__cmds'' end. }}
 
 fwd_cmd =: {{
-  if. atz__cmds'' do. goto fwd__list''
+  if. atz__cmds'' do. goto@fwd__list^:(-.@atz__list)''
   else. fwd__cmds'' end. }}
 
 playmacro =: {{

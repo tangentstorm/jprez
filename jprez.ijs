@@ -180,6 +180,12 @@ keymode =: {{
 NB. 1+worldnum includes the completed macro.
 reset_rhist =: {{ goz__hist__repl'' [ L__hist__repl =: (1+worldnum'') {. ihist_world_ }}
 
+reopen =: {{
+  lc =. cur [ rc =. C__cmds
+  open'' [ init_world_''
+  R__list =: 1 [ L__list =: heads
+  goto lc <. <: #slides
+  C__cmds =: rc <. <: #L__cmds }}
 
 NB. global keyboard shortcuts
 NB. ----------------------------------------------------
@@ -302,14 +308,6 @@ focus_on_repl =: {{
   R__list =: R__repl =: 1 NB. to redraw focus
   keymode__BASE 'replkeys' }}
 
-reopen =: {{
-  lc =. cur
-  rc =. C__cmds
-  init_world_''
-  open''
-  R__list =: 1 [ L__list =: heads
-  goto lc <. <: #slides
-  C__cmds =: rc <. <: #L__cmds }}
 
 NB. outline / macro editor
 

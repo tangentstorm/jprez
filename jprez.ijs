@@ -82,7 +82,9 @@ render_item__cmds =: {{
   s =. >y
   select. {. s
     case. ':' do.
-      if. C=x do. fg _14 [ bg _6 else. fg _6 end.
+      if. ': .' -: 3 {. s do.
+        if. C=x do. fg _4  [ bg _12 else. fg _12 end.
+      else. if. C=x do. fg _14 [ bg _6 else. fg _6 end. end.
     case. '#' do.
       fg _1
     case. do.

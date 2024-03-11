@@ -32,7 +32,7 @@ Run the following code from J to install the two required libraries:
 
 ```
 install'github:tangentstorm/j-lex@main'
-install'github:tangentstorm/j-kvm@work'  NB. dev branch. not main!!
+install'github:tangentstorm/j-kvm@main'
 ```
 
 Code for the dependencies are at:

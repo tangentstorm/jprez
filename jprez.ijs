@@ -23,7 +23,8 @@ NB. main code
 NB. org-mode stuff
 open =: {{
   if. -. y -: '' do. ORG_PATH =: y end.
-  reorg freads ORG_PATH }}
+  reorg freads ORG_PATH
+  L__list =: heads}}
 
 goix =: ] NB. stub because we call 'open' before drawing widgets :/
 reorg =: {{
@@ -66,13 +67,12 @@ rebuild =: {{
   emit_vm_ =: emit0_vm_ NB. restore j-kvm/vm
   0 0$0}}
 
-open''  NB. TODO: move to bottom
 
 NB. --  screen setup ---------------------------------------------------
 H_SPLIT =: 24 NB. initial height of horizontal splitter
 
 NB. indent headings based on depth
-list =: 'UiList' conew~ heads
+list =: 'UiList' conew~ EMPTY
 H__list =: (>:ymax'')-H_SPLIT
 XY__list =: 0,H_SPLIT
 TX_BG__list =: 16b111122
@@ -412,6 +412,8 @@ mje =: {{
   0$0}}
 
 resume =: {{ step__app loop_kvm_'base' [ smudge__app''}}
+
+open''
 
 NB. only run if directly invoked from command line
 {{9!:29]1[9!:27 'mje _'}}^:('jprez.ijs' {.@E.&.|. >{.}.ARGV)''

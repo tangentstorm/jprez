@@ -29,14 +29,14 @@ parse =: monad define
   (<head),(<text),(<code),<depth
 )
 
-org_slides =: verb define
-  org =. 'b'freads y                     NB. returns a vector of boxed strings
-  org =. 7 u: L:0 org
+org_slides =: org_from_str @ fread
+
+org_from_str =: {{
+  org =: 7 u: L:0 LF splitstring y
   headbits =. '*' = {.&> org             NB. 1 if org line starts with '*' (a headline)
   slide0 =. headbits <;.1 org            NB. group lines: each headline starts a new slide
   title =: {.org
-  slides =: > parse each slide0
-)
+  slides =: > parse each slide0 }}
 
 
 slide_lines =: {{

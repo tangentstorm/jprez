@@ -22,9 +22,15 @@ NB. main code
 
 NB. org-mode stuff
 open =: {{
-  org_slides ORG_PATH  NB. defines title =: ... and  slides =: ...
+  if. -. y -: '' do. ORG_PATH =: y end.
+  reorg freads ORG_PATH }}
+
+goix =: ] NB. stub because we call 'open' before drawing widgets :/
+reorg =: {{
+  if. -. y -: '' do. org =: org_from_str orgs =: y end.
   NB. heads is the indented outline that shows up on the left
   heads =: <@;"1((' '#~+:@<:) each 3 {"1 slides),.(0{"1 slides)
+  goix 0 0
   rebuild''}}
 
 rebuild =: {{
@@ -89,7 +95,7 @@ render_item__cmds =: {{
       fg _1
     case. do.
       if. C~:x do. NB. if not current line, show whether .wav exist
-        if. fexist calc_wavpath_base_ s do. fg _15 end.
+        if. fexist 'wav/',calc_wavpath_base_ s do. fg _15 end.
       end.
   end.
   puts W{.s }}
@@ -389,6 +395,7 @@ NB. wavpath for the current line of text
 wavpath =: {{
   line =. > C__cmds { L__cmds
   if. ':' -: {.line do. ''
+  elseif. line -: '' do. ''
   else. calc_wavpath line end. }}
 
 NB. -----------------------------------------------------------

@@ -26,7 +26,7 @@ func _ready():
 func set_org_path(org_path):
 	JI.cmd("cocurrent'base'")
 	JI.cmd("MACROS_ONLY =: 0")
-	JI.cmd("ORG_PATH =: '%s'" % [org_path])
+	JI.cmd("open '%s'" % [org_path])
 	JI.cmd("reopen_base_=:reopen_outkeys_ f.")
 	JI.cmd("reopen''")
 	JI.cmd("goto 0")

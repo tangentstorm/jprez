@@ -1,66 +1,58 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://6ddxmusg1p8l"]
 
-[ext_resource path="res://addons/jprez/JKVM.gd" type="Script" id=1]
-[ext_resource path="res://addons/jprez/jprez.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://addons/jprez/JKVM.gd" id="1"]
+[ext_resource type="Script" path="res://addons/jprez/jprez.gd" id="2"]
 
 [node name="JPrez" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 40.0
 offset_bottom = -280.0
-minimum_size = Vector2( 0, 320 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("2")
 
 [node name="jp-list" type="Control" parent="."]
+custom_minimum_size = Vector2(288, 240)
+anchors_preset = 0
 offset_top = 58.0
 offset_right = 288.0
 offset_bottom = 298.0
-minimum_size = Vector2( 288, 240 )
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font_base = Vector2( 0, 15 )
+script = ExtResource("1")
+font_base = Vector2(0, 15)
 j_widget = "list"
-grid_wh = Vector2( 32, 12 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2(32, 12)
+cell_wh = Vector2(9, 20)
 
 [node name="jp-cmds" type="Control" parent="."]
+custom_minimum_size = Vector2(1116, 240)
+anchors_preset = 0
 offset_left = 297.0
 offset_top = 58.0
 offset_right = 1413.0
 offset_bottom = 298.0
-minimum_size = Vector2( 1116, 240 )
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font_base = Vector2( 0, 15 )
+script = ExtResource("1")
+font_base = Vector2(0, 15)
 j_widget = "cmds"
-grid_wh = Vector2( 124, 12 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2(124, 12)
+cell_wh = Vector2(9, 20)
 
 [node name="jp-led" type="Control" parent="."]
+custom_minimum_size = Vector2(1116, 20)
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 18.0
 offset_right = 1134.0
 offset_bottom = 20.0
-minimum_size = Vector2( 1116, 20 )
 focus_mode = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-font_base = Vector2( 0, 15 )
+script = ExtResource("1")
+font_base = Vector2(0, 15)
 j_widget = "led"
-grid_wh = Vector2( 124, 1 )
-cell_wh = Vector2( 9, 20 )
+grid_wh = Vector2(124, 1)
+cell_wh = Vector2(9, 20)
 
 [connection signal="focus_entered" from="jp-list" to="." method="_on_jplist_focus_entered"]
 [connection signal="keypress" from="jp-list" to="." method="_on_JKVM_keypress"]

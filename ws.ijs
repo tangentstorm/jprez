@@ -4,7 +4,7 @@ NB. make websocket server non-blocking.
 NB. combined with ws_onstep, this will allow us to
 NB. run the j-kvm loop 'inside' the websocket event
 NB. loop.
-WaitTimeout_jws_ =: 0
+WaitTimeout_jws_ =: 0.2
 
 {{ NB. monkeypatch initrun_jws_
   src =. '-'
@@ -21,8 +21,8 @@ WaitTimeout_jws_ =: 0
   0
 }}''
 
-TICK_jws_ =: 0
-ws_onstep_jws_ =: {{ if. 0=3 | TICK =: TICK + 1 do. echo TICK; (6!:1)'' end.}}
+OLDT_jws_=:0
+ws_onstep_jws_ =: {{ if. 0.2<:(t=.6!:1'')-OLDT do. echo <.OLDT=:t end.}}
 
 ws_onmessage_jws_ =: {{
   logcmd y
